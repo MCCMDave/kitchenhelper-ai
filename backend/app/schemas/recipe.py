@@ -4,12 +4,13 @@ from typing import List, Optional, Dict
 
 # Request Schemas (Input)
 class RecipeGenerateRequest(BaseModel):
-    """Rezepte generieren Request"""
-    ingredient_ids: List[int] = Field(..., min_length=1, description="IDs der verfügbaren Zutaten")
+    """Recipe generation request"""
+    ingredient_ids: List[int] = Field(..., min_length=1, description="IDs of available ingredients")
     ai_provider: str = Field(default="mock", description="mock, anthropic, openai, gemini")
-    diet_profiles: List[str] = Field(default=[], description="z.B. ['diabetic', 'vegan']")
-    diabetes_unit: Optional[str] = Field(default="KE", description="BE oder KE")
-    servings: int = Field(default=2, ge=1, le=10, description="Anzahl Portionen")
+    diet_profiles: List[str] = Field(default=[], description="e.g. ['diabetic', 'vegan']")
+    diabetes_unit: Optional[str] = Field(default="KE", description="BE or KE")
+    servings: int = Field(default=2, ge=1, le=10, description="Number of servings")
+    language: str = Field(default="en", description="Recipe language: en or de")
 
 # Nested Schemas für Recipe Response
 class RecipeIngredient(BaseModel):

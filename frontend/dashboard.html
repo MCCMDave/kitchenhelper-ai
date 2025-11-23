@@ -43,10 +43,10 @@
                                     <span id="dropdown-email">email@test.de</span>
                                 </div>
                                 <hr>
-                                <button onclick="UserMenu.goToSettings()">⚙️ Einstellungen</button>
-                                <button onclick="UserMenu.goToProfiles()">👤 Profile</button>
+                                <button onclick="UserMenu.goToSettings()" data-i18n="nav.settings">⚙️ Settings</button>
+                                <button onclick="UserMenu.goToProfiles()" data-i18n="nav.profiles">👤 Profiles</button>
                                 <hr>
-                                <button onclick="Auth.logout()">🚪 Abmelden</button>
+                                <button onclick="Auth.logout()" data-i18n="auth.logout">🚪 Logout</button>
                             </div>
                         </div>
                     </div>
@@ -57,25 +57,23 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="container">
-                <!-- Navigation Tabs -->
+                <!-- Navigation Tabs (Profile/Settings accessible via dropdown menu) -->
                 <nav class="tabs nav-tabs">
-                    <button class="tab active" data-section="ingredients">Zutaten</button>
-                    <button class="tab" data-section="recipes">Rezepte</button>
-                    <button class="tab" data-section="favorites">Favoriten</button>
-                    <button class="tab" data-section="profiles">Profile</button>
-                    <button class="tab" data-section="settings">Einstellungen</button>
+                    <button class="tab active" data-section="ingredients" data-i18n="nav.ingredients">Ingredients</button>
+                    <button class="tab" data-section="recipes" data-i18n="nav.recipes">Recipes</button>
+                    <button class="tab" data-section="favorites" data-i18n="nav.favorites">Favorites</button>
                 </nav>
 
                 <!-- Sections -->
                 <!-- Ingredients Section -->
                 <section id="ingredients-section" class="section active">
                     <div class="page-header">
-                        <h1 class="page-title">🥗 Meine Zutaten</h1>
-                        <button class="btn btn-primary" onclick="Ingredients.showAddModal()">+ Zutat hinzufügen</button>
+                        <h1 class="page-title" data-i18n="ingredients.title">🥗 My Ingredients</h1>
+                        <button class="btn btn-primary" onclick="Ingredients.showAddModal()" data-i18n="ingredients.add">+ Add Ingredient</button>
                     </div>
                     <div class="filters" style="margin-bottom: var(--spacing-lg);">
                         <select id="ingredient-category-filter" class="form-control" style="max-width: 200px;" onchange="Ingredients.load()">
-                            <option value="">Alle Kategorien</option>
+                            <option value="" data-i18n="ingredients.all_categories">All Categories</option>
                         </select>
                     </div>
                     <div id="ingredients-list" class="grid grid-3"></div>
@@ -84,58 +82,58 @@
                 <!-- Recipes Section -->
                 <section id="recipes-section" class="section">
                     <div class="page-header">
-                        <h1 class="page-title">🍽️ Rezepte generieren</h1>
+                        <h1 class="page-title" data-i18n="recipes.title">🍽️ Generate Recipes</h1>
                     </div>
 
                     <!-- Ingredient Selection -->
                     <div class="ingredient-selection card">
-                        <h3 class="ingredient-selection-title">Wähle deine Zutaten</h3>
+                        <h3 class="ingredient-selection-title" data-i18n="recipes.select_ingredients">Select your ingredients</h3>
                         <div id="ingredient-checkboxes" class="ingredient-checkboxes"></div>
                         <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-md); flex-wrap: wrap; align-items: center;">
                             <button class="btn btn-primary btn-lg" onclick="Recipes.generate()" id="generate-btn">
-                                🤖 Rezepte generieren
+                                🤖 <span data-i18n="recipes.generate">Generate Recipes</span>
                             </button>
-                            <span id="selected-count" style="color: var(--text-muted);">0 Zutaten ausgewählt</span>
+                            <span id="selected-count" style="color: var(--text-muted);">0 <span data-i18n="recipes.selected">ingredients selected</span></span>
                         </div>
                     </div>
 
                     <!-- Generated Recipes -->
-                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);">Generierte Rezepte</h2>
+                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);" data-i18n="recipes.generated">Generated Recipes</h2>
                     <div id="recipes-list" class="grid grid-2"></div>
 
                     <!-- Recipe History -->
-                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);">Letzte Rezepte</h2>
+                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);" data-i18n="recipes.history">Recent Recipes</h2>
                     <div id="recipe-history" class="grid grid-2"></div>
                 </section>
 
                 <!-- Favorites Section -->
                 <section id="favorites-section" class="section">
                     <div class="page-header">
-                        <h1 class="page-title">⭐ Meine Favoriten</h1>
+                        <h1 class="page-title" data-i18n="favorites.title">⭐ My Favorites</h1>
                     </div>
                     <div id="favorites-list" class="grid grid-2"></div>
                 </section>
 
-                <!-- Profiles Section -->
+                <!-- Profiles Section (accessible via dropdown menu) -->
                 <section id="profiles-section" class="section">
                     <div class="page-header">
-                        <h1 class="page-title">👤 Ernährungsprofile</h1>
-                        <button class="btn btn-primary" onclick="Profiles.showAddModal()">+ Profil hinzufügen</button>
+                        <h1 class="page-title" data-i18n="profiles.title">👤 Diet Profiles</h1>
+                        <button class="btn btn-primary" onclick="Profiles.showAddModal()" data-i18n="profiles.add">+ Add Profile</button>
                     </div>
                     <div id="profiles-list" class="grid grid-3"></div>
                 </section>
 
-                <!-- Settings Section -->
+                <!-- Settings Section (accessible via dropdown menu) -->
                 <section id="settings-section" class="section">
                     <div class="page-header">
-                        <h1 class="page-title">⚙️ Einstellungen</h1>
+                        <h1 class="page-title" data-i18n="settings.title">⚙️ Settings</h1>
                     </div>
 
                     <div class="settings-section">
-                        <h2 class="settings-title">Profil bearbeiten</h2>
+                        <h2 class="settings-title" data-i18n="settings.profile">Edit Profile</h2>
                         <form id="settings-form">
                             <div class="form-group">
-                                <label class="form-label">Avatar-Emoji</label>
+                                <label class="form-label" data-i18n="settings.avatar_emoji">Avatar Emoji</label>
                                 <div class="emoji-picker-container">
                                     <input type="text" id="settings-emoji" class="form-control emoji-input" placeholder="👤" maxlength="2">
                                     <div class="emoji-suggestions">
@@ -155,44 +153,44 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Benutzername</label>
-                                <input type="text" id="settings-username" class="form-control" placeholder="meinusername" minlength="3" maxlength="20">
-                                <small class="form-hint">3-20 Zeichen, nur Buchstaben, Zahlen, - und _</small>
+                                <label class="form-label" data-i18n="auth.username">Username</label>
+                                <input type="text" id="settings-username" class="form-control" placeholder="myusername" minlength="3" maxlength="20">
+                                <small class="form-hint" data-i18n="auth.username_hint">3-20 characters, letters, numbers, - and _ only</small>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">E-Mail</label>
-                                <input type="email" id="settings-email" class="form-control" placeholder="deine@email.de">
+                                <label class="form-label" data-i18n="auth.email">Email</label>
+                                <input type="email" id="settings-email" class="form-control" placeholder="your@email.com">
                             </div>
-                            <button type="submit" class="btn btn-primary">Speichern</button>
+                            <button type="submit" class="btn btn-primary" data-i18n="common.save">Save</button>
                         </form>
                     </div>
 
                     <div class="settings-section">
-                        <h2 class="settings-title">Passwort ändern</h2>
+                        <h2 class="settings-title" data-i18n="settings.change_password">Change Password</h2>
                         <form id="password-form">
                             <div class="form-group">
-                                <label class="form-label">Neues Passwort</label>
-                                <input type="password" id="settings-password" class="form-control" placeholder="Mind. 6 Zeichen" minlength="6">
+                                <label class="form-label" data-i18n="settings.new_password">New Password</label>
+                                <input type="password" id="settings-password" class="form-control" placeholder="Min. 6 characters" minlength="6">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Passwort bestätigen</label>
-                                <input type="password" id="settings-password-confirm" class="form-control" placeholder="Passwort wiederholen">
+                                <label class="form-label" data-i18n="settings.confirm_password">Confirm Password</label>
+                                <input type="password" id="settings-password-confirm" class="form-control" placeholder="Repeat password">
                             </div>
-                            <button type="submit" class="btn btn-primary">Passwort ändern</button>
+                            <button type="submit" class="btn btn-primary" data-i18n="settings.change_password">Change Password</button>
                         </form>
                     </div>
 
                     <div class="settings-section">
-                        <h2 class="settings-title">Account-Info</h2>
+                        <h2 class="settings-title" data-i18n="settings.account_info">Account Info</h2>
                         <div id="account-info"></div>
                     </div>
 
                     <div class="settings-section" style="border-left: 4px solid var(--danger);">
-                        <h2 class="settings-title" style="color: var(--danger);">⚠️ Gefahrenzone</h2>
-                        <p style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
-                            Achtung: Diese Aktion kann nicht rückgängig gemacht werden!
+                        <h2 class="settings-title" style="color: var(--danger);" data-i18n="settings.danger_zone">⚠️ Danger Zone</h2>
+                        <p style="margin-bottom: var(--spacing-md); color: var(--text-muted);" data-i18n="settings.danger_warning">
+                            Warning: This action cannot be undone!
                         </p>
-                        <button class="btn btn-danger" onclick="Settings.deleteAccount()">Account löschen</button>
+                        <button class="btn btn-danger" onclick="Settings.deleteAccount()" data-i18n="settings.delete_account">Delete Account</button>
                     </div>
                 </section>
             </div>

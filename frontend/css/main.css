@@ -948,6 +948,114 @@ body {
     font-size: var(--font-size-xs);
 }
 
+/* ==================== LARGE MODAL ==================== */
+.modal-large {
+    max-width: 600px;
+    width: 95%;
+}
+
+.modal-large .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* ==================== FAVORITE MODAL CONTENT ==================== */
+.favorite-modal-content {
+    padding: var(--spacing-sm) 0;
+}
+
+.favorite-modal-description {
+    color: var(--text-light);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
+}
+
+.favorite-modal-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.favorite-modal-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.favorite-modal-meta .meta-icon {
+    font-size: var(--font-size-lg);
+}
+
+.favorite-modal-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.favorite-modal-section h4 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-semibold);
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.favorite-modal-section .used-ingredients-list {
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+}
+
+.favorite-modal-section .ingredients-list {
+    list-style: disc;
+    padding-left: var(--spacing-lg);
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+}
+
+.favorite-modal-section .ingredients-list li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.favorite-modal-section .leftover-tips {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.favorite-modal-section .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: var(--spacing-sm);
+    background: var(--bg);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+.favorite-modal-footer {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-light);
+    color: var(--text-muted);
+    font-size: var(--font-size-xs);
+}
+
+.favorite-modal-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.favorite-modal-actions .btn {
+    flex: 1;
+    min-width: 140px;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     .header-content {

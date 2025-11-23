@@ -88,8 +88,70 @@ const UI = {
     },
 
     // ==================== MODAL ====================
-    showModal(options) {
-        const { title, content, onConfirm, onCancel, confirmText = 'OK', cancelText = 'Abbrechen', showCancel = true } = options;
+    // Content modal (for displaying content, title as string + content as string)
+    showModal(title, content, options = {}) {
+        // Handle old API format (options object)
+        if (typeof title === 'object') {
+            return this._showConfirmModal(title);
+        }
+
+        const { size = 'normal' } = options;
+        const sizeClass = size === 'large' ? 'modal-large' : '';
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.id = 'content-modal';
+        overlay.innerHTML = `
+            <div class="modal ${sizeClass}">
+                <div class="modal-header">
+                    <h3 class="modal-title">${title}</h3>
+                    <button class="modal-close" onclick="UI.closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    ${content}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+
+        // Animate in
+        setTimeout(() => overlay.classList.add('show'), 10);
+
+        // Close on overlay click
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                this.closeModal();
+            }
+        };
+
+        // Close on Escape key
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+
+        return overlay;
+    },
+
+    // Close content modal
+    closeModal() {
+        const overlay = document.getElementById('content-modal');
+        if (overlay) {
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    },
+
+    // Confirmation modal (old API)
+    _showConfirmModal(options) {
+        const { title, content, onConfirm, onCancel, confirmText = 'OK', cancelText = i18n?.t('common.cancel') || 'Cancel', showCancel = true } = options;
 
         // Create overlay
         const overlay = document.createElement('div');
@@ -151,12 +213,12 @@ const UI = {
 
     // Confirmation dialog
     confirm(message, onConfirm) {
-        return this.showModal({
-            title: 'Bestätigung',
+        return this._showConfirmModal({
+            title: i18n?.t('common.confirm') || 'Confirm',
             content: `<p>${message}</p>`,
             onConfirm,
-            confirmText: 'Ja',
-            cancelText: 'Nein'
+            confirmText: i18n?.t('common.yes') || 'Yes',
+            cancelText: i18n?.t('common.no') || 'No'
         });
     },
 

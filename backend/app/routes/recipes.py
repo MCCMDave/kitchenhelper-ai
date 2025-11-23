@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime, date
 import json
+import re
 
 from app.schemas.recipe import (
     RecipeGenerateRequest,
@@ -18,6 +20,7 @@ from app.models.diet_profile import DietProfile
 from app.utils.database import get_db
 from app.utils.auth import get_current_user
 from app.services.mock_recipe_generator import mock_generator
+from app.services.pdf_generator import pdf_generator
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
 
@@ -102,14 +105,15 @@ def generate_recipes(
         except (json.JSONDecodeError, TypeError):
             pass
 
-    # 4. Rezepte generieren (Mock - kostenlos!)
+    # 4. Generate recipes (Mock - free!)
     if request.ai_provider == "mock":
         generated_recipes = mock_generator.generate_recipes(
             ingredients=ingredient_names,
             count=3,
             servings=request.servings,
             diet_profiles=request.diet_profiles,
-            diabetes_unit=diabetes_unit
+            diabetes_unit=diabetes_unit,
+            language=request.language
         )
     else:
         # Spaeter: Echte AI-Integration
@@ -245,4 +249,58 @@ def get_recipe(
         nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
         ai_provider=recipe.ai_provider,
         generated_at=recipe.generated_at
+    )
+
+
+@router.get("/{recipe_id}/export/pdf")
+def export_recipe_as_pdf(
+    recipe_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Export recipe as PDF
+
+    - **recipe_id**: ID of the recipe
+
+    Returns: PDF Download
+    """
+    # Load recipe
+    recipe = db.query(Recipe).filter(
+        Recipe.id == recipe_id,
+        Recipe.user_id == current_user.id
+    ).first()
+
+    if not recipe:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Recipe not found"
+        )
+
+    # Prepare recipe data for PDF
+    recipe_data = {
+        "name": recipe.name,
+        "description": recipe.description,
+        "difficulty": recipe.difficulty,
+        "cooking_time": recipe.cooking_time,
+        "method": recipe.method,
+        "servings": recipe.servings,
+        "ingredients": json.loads(recipe.ingredients_json) if recipe.ingredients_json else [],
+        "nutrition_per_serving": json.loads(recipe.nutrition_json) if recipe.nutrition_json else {}
+    }
+
+    # Generate PDF
+    pdf_buffer = pdf_generator.generate(recipe_data)
+
+    # Safe filename (no special characters)
+    safe_name = re.sub(r'[^\w\s-]', '', recipe.name).replace(' ', '_')[:50]
+    filename = f"recipe_{safe_name}.pdf"
+
+    # Return PDF as download
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        }
     )

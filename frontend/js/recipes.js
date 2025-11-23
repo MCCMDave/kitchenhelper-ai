@@ -16,7 +16,7 @@ const Recipes = {
         const items = Ingredients.getItems();
 
         if (!items || items.length === 0) {
-            container.innerHTML = '<p style="padding: var(--spacing-md); color: var(--text-muted);">Keine Zutaten vorhanden. Füge zuerst Zutaten hinzu!</p>';
+            container.innerHTML = `<p style="padding: var(--spacing-md); color: var(--text-muted);">${i18n.t('ingredients.empty')}</p>`;
             return;
         }
 
@@ -43,13 +43,13 @@ const Recipes = {
     // Update selected count display
     updateSelectedCount() {
         const count = this.selectedIngredients.size;
-        document.getElementById('selected-count').textContent = `${count} Zutat${count !== 1 ? 'en' : ''} ausgewählt`;
+        document.getElementById('selected-count').textContent = `${count} ${i18n.t('recipes.selected')}`;
     },
 
     // Generate recipes
     async generate() {
         if (this.selectedIngredients.size === 0) {
-            UI.warning('Bitte wähle mindestens eine Zutat aus!');
+            UI.warning(i18n.t('recipes.select_warning') || 'Please select at least one ingredient!');
             return;
         }
 
@@ -74,7 +74,8 @@ const Recipes = {
                 ingredient_ids: Array.from(this.selectedIngredients),
                 ai_provider: 'mock',
                 diet_profiles: dietProfiles,
-                servings: 2
+                servings: 2,
+                language: i18n.currentLang
             });
 
             this.generatedRecipes = response.recipes || [];

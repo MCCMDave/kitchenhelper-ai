@@ -13,8 +13,12 @@ from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker
 from passlib.context import CryptContext
 
-# Import models
+# Import ALL models (needed for relationships)
 from app.models.user import User
+from app.models.ingredient import Ingredient
+from app.models.recipe import Recipe
+from app.models.favorite import Favorite
+from app.models.diet_profile import DietProfile
 from app.utils.database import Base
 
 # Database path
@@ -122,9 +126,9 @@ def create_test_users():
     engine, db = get_db()
 
     test_users = [
-        {"email": "a@a.a", "username": "aaa", "password": "aaa"},
-        {"email": "b@b.b", "username": "bbb", "password": "bbb"},
-        {"email": "test@test.de", "username": "testuser", "password": "testuser"},
+        {"email": "a@a.a", "username": "aaa", "password": "aaaaaa", "emoji": "🅰️"},
+        {"email": "b@b.b", "username": "bbb", "password": "bbbbbb", "emoji": "🅱️"},
+        {"email": "test@test.de", "username": "testuser", "password": "test123", "emoji": "🧪"},
     ]
 
     print("\nCreating test users...")
@@ -147,7 +151,7 @@ def create_test_users():
                 email=user_data["email"],
                 username=user_data["username"],
                 hashed_password=hashed_password,
-                emoji="👤",
+                emoji=user_data.get("emoji", "👤"),
                 subscription_tier="demo"
             )
             db.add(user)
@@ -170,9 +174,9 @@ def full_reset_with_test_users():
     show_users()
 
     print("\nDone! Test users created:")
-    print("  - a@a.a / aaa / aaa")
-    print("  - b@b.b / bbb / bbb")
-    print("  - test@test.de / testuser / testuser")
+    print("  - a@a.a / aaa / aaaaaa (🅰️)")
+    print("  - b@b.b / bbb / bbbbbb (🅱️)")
+    print("  - test@test.de / testuser / test123 (🧪)")
 
 def main():
     """Interactive menu"""

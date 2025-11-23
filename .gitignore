@@ -20,5 +20,8 @@ backend/database/*.db
 .DS_Store
 Thumbs.db
 
+# Claude Code local history (never commit)
+claude_history.json
+
 # Logs
 *.log

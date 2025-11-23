@@ -78,10 +78,28 @@ const translations = {
         'favorites.remove': 'Aus Favoriten entfernen',
         'favorites.details': 'Details',
         'favorites.less': 'Weniger',
+        'favorites.export_pdf': 'Als PDF exportieren',
+        'favorites.added': 'Hinzugefuegt',
+        'favorites.used_ingredients': 'Verwendete Zutaten',
+        'favorites.all_ingredients': 'Alle Zutaten',
+        'favorites.leftover_tips': 'Reste-Tipps',
+        'favorites.nutrition': 'Naehrwerte pro Portion',
+        'favorites.confirm_remove': 'Favorit wirklich entfernen?',
+        'favorites.removed': 'Favorit entfernt!',
+        'favorites.pdf_creating': 'PDF wird erstellt...',
+        'favorites.pdf_success': 'PDF erfolgreich heruntergeladen!',
+        'favorites.pdf_error': 'Fehler beim PDF-Export',
 
         // Profiles
         'profiles.title': 'Ernaehrungsprofile',
         'profiles.add': 'Profil hinzufuegen',
+        'profiles.all_added': 'Alle Profile bereits hinzugefuegt!',
+        'profiles.new': 'Neues Ernaehrungsprofil',
+        'profiles.type': 'Profil-Typ',
+        'profiles.name': 'Name',
+        'profiles.name_placeholder': 'z.B. Mein Diabetes Profil',
+        'profiles.activate_now': 'Sofort aktivieren',
+        'recipes.select_warning': 'Bitte waehle mindestens eine Zutat aus!',
 
         // Settings
         'settings.title': 'Einstellungen',
@@ -106,6 +124,7 @@ const translations = {
         'common.error': 'Fehler',
         'common.yes': 'Ja',
         'common.no': 'Nein',
+        'common.confirm': 'Bestaetigung',
     },
 
     en: {
@@ -185,10 +204,28 @@ const translations = {
         'favorites.remove': 'Remove from favorites',
         'favorites.details': 'Details',
         'favorites.less': 'Less',
+        'favorites.export_pdf': 'Export as PDF',
+        'favorites.added': 'Added',
+        'favorites.used_ingredients': 'Used Ingredients',
+        'favorites.all_ingredients': 'All Ingredients',
+        'favorites.leftover_tips': 'Leftover Tips',
+        'favorites.nutrition': 'Nutrition per Serving',
+        'favorites.confirm_remove': 'Really remove this favorite?',
+        'favorites.removed': 'Favorite removed!',
+        'favorites.pdf_creating': 'Creating PDF...',
+        'favorites.pdf_success': 'PDF downloaded successfully!',
+        'favorites.pdf_error': 'Error exporting PDF',
 
         // Profiles
         'profiles.title': 'Diet Profiles',
         'profiles.add': 'Add Profile',
+        'profiles.all_added': 'All profiles already added!',
+        'profiles.new': 'New Diet Profile',
+        'profiles.type': 'Profile Type',
+        'profiles.name': 'Name',
+        'profiles.name_placeholder': 'e.g. My Diabetes Profile',
+        'profiles.activate_now': 'Activate immediately',
+        'recipes.select_warning': 'Please select at least one ingredient!',
 
         // Settings
         'settings.title': 'Settings',
@@ -213,11 +250,12 @@ const translations = {
         'common.error': 'Error',
         'common.yes': 'Yes',
         'common.no': 'No',
+        'common.confirm': 'Confirm',
     }
 };
 
 const i18n = {
-    currentLang: localStorage.getItem('kitchenhelper_lang') || 'de',
+    currentLang: localStorage.getItem('kitchenhelper_lang') || 'en',
 
     init() {
         this.setLanguage(this.currentLang, false);

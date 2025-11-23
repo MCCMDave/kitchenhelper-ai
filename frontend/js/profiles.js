@@ -226,21 +226,21 @@ const Profiles = {
     showAddModal() {
         // Filter out already existing profile types
         const existingTypes = this.items.map(p => p.profile_type);
-        const availableTypes = CONFIG.PROFILE_TYPES.filter(
+        const availableTypes = CONFIG.getProfileTypes().filter(
             t => !existingTypes.includes(t.value)
         );
 
         if (availableTypes.length === 0) {
-            UI.warning('Alle verfügbaren Profile bereits hinzugefügt!');
+            UI.warning(i18n.t('profiles.all_added') || 'All profiles already added!');
             return;
         }
 
         UI.showFormModal({
-            title: 'Neues Ernährungsprofil',
+            title: i18n.t('profiles.new') || 'New Diet Profile',
             fields: [
                 {
                     name: 'profile_type',
-                    label: 'Profil-Typ',
+                    label: i18n.t('profiles.type') || 'Profile Type',
                     type: 'select',
                     required: true,
                     options: availableTypes.map(t => ({
@@ -250,18 +250,18 @@ const Profiles = {
                 },
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: i18n.t('profiles.name') || 'Name',
                     required: true,
-                    placeholder: 'z.B. Mein Diabetes Profil'
+                    placeholder: i18n.t('profiles.name_placeholder') || 'e.g. My Diabetes Profile'
                 },
                 {
                     name: 'is_active',
-                    label: 'Sofort aktivieren',
+                    label: i18n.t('profiles.activate_now') || 'Activate immediately',
                     type: 'checkbox',
                     value: true
                 }
             ],
-            submitText: 'Erstellen',
+            submitText: i18n.t('common.save') || 'Create',
             onSubmit: async (data) => {
                 await this.createWithDisclaimer(data);
             }

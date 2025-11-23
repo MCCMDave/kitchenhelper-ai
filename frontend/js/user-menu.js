@@ -33,19 +33,25 @@ const UserMenu = {
     // Navigate to settings
     goToSettings() {
         this.close();
-        const settingsTab = document.querySelector('[data-section="settings"]');
-        if (settingsTab) {
-            settingsTab.click();
-        }
+        // Deactivate all tabs and sections
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Activate settings section
+        document.getElementById('settings-section').classList.add('active');
+        // Load settings data
+        if (typeof loadSettingsData === 'function') loadSettingsData();
     },
 
     // Navigate to profiles
     goToProfiles() {
         this.close();
-        const profilesTab = document.querySelector('[data-section="profiles"]');
-        if (profilesTab) {
-            profilesTab.click();
-        }
+        // Deactivate all tabs and sections
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Activate profiles section
+        document.getElementById('profiles-section').classList.add('active');
+        // Load profiles
+        if (typeof Profiles !== 'undefined') Profiles.load();
     },
 
     // Update user info in menu
