@@ -150,6 +150,18 @@ const Recipes = {
             `<li>${UI.escapeHtml(ing.amount || '')} ${UI.escapeHtml(ing.name || '')}</li>`
         ).join('');
 
+        // Get translated labels
+        const difficultyLabel = i18n.t('recipes.difficulty');
+        const timeLabel = i18n.t('recipes.time');
+        const servingsLabel = i18n.t('recipes.servings');
+        const methodLabel = i18n.t('recipes.method');
+        const usedIngredientsLabel = i18n.t('recipes.used_ingredients');
+        const allIngredientsLabel = i18n.t('recipes.all_ingredients');
+        const leftoverTipsLabel = i18n.t('recipes.leftover_tips');
+        const nutritionLabel = i18n.t('recipes.nutrition');
+        const addFavoriteLabel = i18n.t('recipes.add_favorite');
+        const fatLabel = i18n.currentLang === 'de' ? 'Fett' : 'Fat';
+
         return `
             <div class="recipe-card" data-id="${recipe.id}">
                 <div class="recipe-header">
@@ -157,7 +169,7 @@ const Recipes = {
                         <h3 class="recipe-title">${UI.escapeHtml(recipe.name)}</h3>
                         ${fromHistory ? `<small style="opacity: 0.8;">${UI.formatDateTime(recipe.generated_at)}</small>` : ''}
                     </div>
-                    <button class="favorite-btn" onclick="Recipes.toggleFavorite(${recipe.id}, this)" title="Zu Favoriten hinzufügen">
+                    <button class="favorite-btn" onclick="Recipes.toggleFavorite(${recipe.id}, this)" title="${addFavoriteLabel}">
                         ⭐
                     </button>
                 </div>
@@ -165,41 +177,41 @@ const Recipes = {
                     ${recipe.description ? `<p class="recipe-description">${UI.escapeHtml(recipe.description)}</p>` : ''}
 
                     <div class="recipe-meta">
-                        <span class="recipe-meta-item">⚡ Schwierigkeit: ${UI.getDifficultyStars(recipe.difficulty || 2)}</span>
-                        <span class="recipe-meta-item">⏱️ Zeit: ${recipe.cooking_time || '?'}</span>
-                        <span class="recipe-meta-item">👥 Portionen: ${recipe.servings || 2}</span>
-                        ${recipe.method ? `<span class="recipe-meta-item">🍳 Methode: ${recipe.method}</span>` : ''}
+                        <span class="recipe-meta-item">⚡ ${difficultyLabel}: ${UI.getDifficultyStars(recipe.difficulty || 2)}</span>
+                        <span class="recipe-meta-item">⏱️ ${timeLabel}: ${recipe.cooking_time || '?'}</span>
+                        <span class="recipe-meta-item">👥 ${servingsLabel}: ${recipe.servings || 2}</span>
+                        ${recipe.method ? `<span class="recipe-meta-item">🍳 ${methodLabel}: ${recipe.method}</span>` : ''}
                     </div>
 
                     ${usedIngredients.length > 0 ? `
                         <div class="recipe-section">
-                            <h4 class="recipe-section-title">Verwendete Zutaten</h4>
+                            <h4 class="recipe-section-title">${usedIngredientsLabel}</h4>
                             <p style="color: var(--text-light);">${usedIngredients.map(i => UI.escapeHtml(i)).join(', ')}</p>
                         </div>
                     ` : ''}
 
                     ${ingredients.length > 0 ? `
                         <div class="recipe-section">
-                            <h4 class="recipe-section-title">Alle Zutaten</h4>
+                            <h4 class="recipe-section-title">${allIngredientsLabel}</h4>
                             <ul class="recipe-ingredients-list">${ingredientsList}</ul>
                         </div>
                     ` : ''}
 
                     ${recipe.leftover_tips ? `
                         <div class="recipe-section">
-                            <h4 class="recipe-section-title">Reste-Tipps</h4>
+                            <h4 class="recipe-section-title">${leftoverTipsLabel}</h4>
                             <p style="color: var(--text-light); font-style: italic;">${UI.escapeHtml(recipe.leftover_tips)}</p>
                         </div>
                     ` : ''}
 
                     ${Object.keys(nutrition).length > 0 ? `
                         <div class="recipe-section">
-                            <h4 class="recipe-section-title">Nährwerte pro Portion</h4>
+                            <h4 class="recipe-section-title">${nutritionLabel}</h4>
                             <div class="recipe-nutrition">
                                 ${nutrition.calories ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.calories}</div><div class="nutrition-label">kcal</div></div>` : ''}
                                 ${nutrition.protein ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.protein}g</div><div class="nutrition-label">Protein</div></div>` : ''}
                                 ${nutrition.carbs ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.carbs}g</div><div class="nutrition-label">Carbs</div></div>` : ''}
-                                ${nutrition.fat ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.fat}g</div><div class="nutrition-label">Fett</div></div>` : ''}
+                                ${nutrition.fat ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.fat}g</div><div class="nutrition-label">${fatLabel}</div></div>` : ''}
                                 ${nutrition.ke ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.ke}</div><div class="nutrition-label">KE</div></div>` : ''}
                                 ${nutrition.be ? `<div class="nutrition-item"><div class="nutrition-value">${nutrition.be}</div><div class="nutrition-label">BE</div></div>` : ''}
                             </div>
@@ -217,13 +229,13 @@ const Recipes = {
             await api.addFavorite(recipeId);
             btn.classList.add('active');
             btn.textContent = '⭐';
-            UI.success('Zu Favoriten hinzugefügt!');
+            UI.success(i18n.t('recipes.added_favorite'));
         } catch (error) {
             console.error('[Recipes] Favorite error:', error);
             if (error.message.includes('already')) {
-                UI.warning('Bereits in Favoriten!');
+                UI.warning(i18n.t('recipes.already_favorite'));
             } else if (error.message.includes('limit')) {
-                UI.error('Favoriten-Limit erreicht!');
+                UI.error(i18n.t('recipes.favorite_limit'));
             } else {
                 UI.error(error.message);
             }

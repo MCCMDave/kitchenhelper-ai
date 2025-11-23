@@ -274,6 +274,7 @@ const INGREDIENT_SUGGESTIONS = [
 
 // ==================== KATEGORIE-EMOJIS ====================
 const CATEGORY_EMOJIS = {
+    // German
     'Fisch': '🐟',
     'Fleisch': '🥩',
     'Gemüse': '🥦',
@@ -286,7 +287,21 @@ const CATEGORY_EMOJIS = {
     'Obst': '🍎',
     'Öle & Fette': '🫒',
     'Saucen': '🥫',
-    'Sonstiges': '📦'
+    'Sonstiges': '📦',
+    // English
+    'Fish': '🐟',
+    'Meat': '🥩',
+    'Vegetables': '🥦',
+    'Beverages': '🥤',
+    'Grains': '🌾',
+    'Spices': '🌿',
+    'Carbohydrates': '🍚',
+    'Dairy': '🧀',
+    'Nuts & Seeds': '🥜',
+    'Fruits': '🍎',
+    'Oils & Fats': '🫒',
+    'Sauces': '🥫',
+    'Other': '📦'
 };
 
 // ==================== HELPER FUNKTIONEN ====================
@@ -325,10 +340,25 @@ const Ingredients = {
     items: [],
     autocompleteDropdown: null,
 
+    // Initialize category filter dropdown
+    initCategoryFilter() {
+        const filter = document.getElementById('ingredient-category-filter');
+        if (!filter) return;
+
+        const categories = CONFIG.getCategories();
+        const allCategoriesLabel = i18n.t('ingredients.all_categories');
+
+        filter.innerHTML = `<option value="">${allCategoriesLabel}</option>` +
+            categories.map(c => `<option value="${c}">${getCategoryEmoji(c)} ${c}</option>`).join('');
+    },
+
     // Load all ingredients
     async load() {
         const container = document.getElementById('ingredients-list');
         UI.showLoading(container);
+
+        // Update filter dropdown on load (for language changes)
+        this.initCategoryFilter();
 
         try {
             const category = document.getElementById('ingredient-category-filter')?.value || '';
@@ -340,7 +370,7 @@ const Ingredients = {
             this.render();
         } catch (error) {
             console.error('[Ingredients] Load error:', error);
-            UI.showError(container, 'Fehler beim Laden der Zutaten: ' + error.message);
+            UI.showError(container, i18n.t('error.fetch_failed'));
         }
     },
 

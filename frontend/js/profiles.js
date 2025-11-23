@@ -1,116 +1,112 @@
-// KitchenHelper-AI Profiles Module
+// KitchenHelper-AI Profiles Module - Simplified Checkbox System
 
-// ==================== PROFILE INFO MIT DISCLAIMERN ====================
+// ==================== PROFILE INFO WITH DISCLAIMERS ====================
 const PROFILE_INFO = {
     diabetic: {
-        name: 'Diabetiker',
         emoji: '💉',
-        description: 'Kohlenhydrat-bewusste Rezepte mit BE/KE-Berechnung',
-        disclaimer: `
-            <div class="profile-disclaimer warning">
-                <strong>⚠️ Medizinischer Hinweis:</strong><br>
-                Diese Berechnungen sind nur Richtwerte! Bitte konsultieren Sie Ihren Arzt
-                oder Diabetesberater für individuelle Ernährungsempfehlungen.
-                KE/BE-Werte können je nach Produkt variieren. Überprüfen Sie immer
-                die Nährwertangaben auf Verpackungen und passen Sie Ihre Insulin-Dosis
-                entsprechend an.
-            </div>
-        `,
         color: '#e74c3c',
-        settings: {
-            unit: 'KE',
-            daily_carb_limit: 180
-        }
+        disclaimer_de: `
+            <strong>⚠️ Medizinischer Hinweis:</strong><br>
+            Diese Berechnungen sind nur Richtwerte! Bitte konsultieren Sie Ihren Arzt
+            oder Diabetesberater für individuelle Ernährungsempfehlungen.
+            KE/BE-Werte können je nach Produkt variieren. Überprüfen Sie immer
+            die Nährwertangaben auf Verpackungen und passen Sie Ihre Insulin-Dosis
+            entsprechend an.
+        `,
+        disclaimer_en: `
+            <strong>⚠️ Medical Notice:</strong><br>
+            These calculations are only guidelines! Please consult your doctor
+            or diabetes counselor for individual dietary recommendations.
+            KE/BE values may vary depending on the product. Always check
+            the nutritional information on packaging and adjust your insulin dose
+            accordingly.
+        `
     },
-
     gluten_free: {
-        name: 'Glutenfrei',
         emoji: '🌾',
-        description: 'Rezepte ohne Weizen, Roggen, Gerste, Dinkel',
-        disclaimer: `
-            <div class="profile-disclaimer info">
-                <strong>ℹ️ Hinweis:</strong><br>
-                Bei Zöliakie oder schwerer Glutenunverträglichkeit beachten Sie bitte
-                Kreuzkontaminationen in Ihrer Küche. Prüfen Sie alle Zutaten auf
-                glutenfreie Zertifizierung. Im Zweifelsfall konsultieren Sie einen
-                Ernährungsberater.
-            </div>
+        color: '#f39c12',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Bei Zöliakie oder schwerer Glutenunverträglichkeit beachten Sie bitte
+            Kreuzkontaminationen in Ihrer Küche. Prüfen Sie alle Zutaten auf
+            glutenfreie Zertifizierung.
         `,
-        color: '#f39c12'
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            For celiac disease or severe gluten intolerance, please be aware of
+            cross-contamination in your kitchen. Check all ingredients for
+            gluten-free certification.
+        `
     },
-
     high_protein: {
-        name: 'High Protein',
         emoji: '💪',
-        description: 'Proteinreiche Rezepte für Muskelaufbau',
-        disclaimer: null,
-        color: '#9b59b6'
+        color: '#9b59b6',
+        disclaimer_de: null,
+        disclaimer_en: null
     },
-
     keto: {
-        name: 'Keto',
         emoji: '🥑',
-        description: 'Sehr kohlenhydratarm (<20g/Tag), fettreich',
-        disclaimer: `
-            <div class="profile-disclaimer info">
-                <strong>ℹ️ Hinweis:</strong><br>
-                Die ketogene Diät ist nicht für jeden geeignet. Bitte sprechen Sie mit
-                Ihrem Arzt, besonders bei Vorerkrankungen wie Nierenproblemen,
-                Schwangerschaft oder Stillzeit.
-            </div>
+        color: '#27ae60',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Die ketogene Diät ist nicht für jeden geeignet. Bitte sprechen Sie mit
+            Ihrem Arzt, besonders bei Vorerkrankungen wie Nierenproblemen,
+            Schwangerschaft oder Stillzeit.
         `,
-        color: '#27ae60'
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            The ketogenic diet is not suitable for everyone. Please consult your
+            doctor, especially if you have pre-existing conditions such as kidney
+            problems, pregnancy or breastfeeding.
+        `
     },
-
     lactose_free: {
-        name: 'Laktosefrei',
         emoji: '🥛',
-        description: 'Rezepte ohne Milchzucker',
-        disclaimer: `
-            <div class="profile-disclaimer info">
-                <strong>ℹ️ Hinweis:</strong><br>
-                Laktosefreie Alternativen (Laktase-Tabletten, laktosefreie Milch)
-                können verwendet werden. Bei schwerer Laktoseintoleranz achten Sie
-                auf versteckte Laktose in verarbeiteten Produkten.
-            </div>
+        color: '#3498db',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Laktosefreie Alternativen können verwendet werden. Bei schwerer
+            Laktoseintoleranz achten Sie auf versteckte Laktose in verarbeiteten Produkten.
         `,
-        color: '#3498db'
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            Lactose-free alternatives can be used. For severe lactose intolerance,
+            watch out for hidden lactose in processed products.
+        `
     },
-
     low_carb: {
-        name: 'Low Carb',
         emoji: '🥗',
-        description: 'Reduzierte Kohlenhydrate (<100g/Tag)',
-        disclaimer: null,
-        color: '#16a085'
+        color: '#16a085',
+        disclaimer_de: null,
+        disclaimer_en: null
     },
-
     vegan: {
-        name: 'Vegan',
         emoji: '🌱',
-        description: 'Komplett pflanzlich, keine tierischen Produkte',
-        disclaimer: `
-            <div class="profile-disclaimer info">
-                <strong>ℹ️ Hinweis:</strong><br>
-                Achten Sie auf ausreichende Versorgung mit Vitamin B12, Eisen, Calcium
-                und Omega-3-Fettsäuren. Erwägen Sie Nahrungsergänzungsmittel nach
-                Rücksprache mit Ihrem Arzt.
-            </div>
+        color: '#2ecc71',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Achten Sie auf ausreichende Versorgung mit Vitamin B12, Eisen, Calcium
+            und Omega-3-Fettsäuren. Erwägen Sie Nahrungsergänzungsmittel nach
+            Rücksprache mit Ihrem Arzt.
         `,
-        color: '#2ecc71'
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            Make sure you get enough Vitamin B12, Iron, Calcium and Omega-3 fatty acids.
+            Consider supplements after consulting your doctor.
+        `
     },
-
     vegetarian: {
-        name: 'Vegetarisch',
         emoji: '🥕',
-        description: 'Ohne Fleisch und Fisch',
-        disclaimer: null,
-        color: '#95a5a6'
+        color: '#95a5a6',
+        disclaimer_de: null,
+        disclaimer_en: null
     }
 };
 
 const Profiles = {
     items: [],
+    activeProfiles: new Set(),
+    disclaimerShown: JSON.parse(localStorage.getItem('profiles_disclaimer_shown') || '{}'),
 
     // Load all profiles
     async load() {
@@ -120,10 +116,15 @@ const Profiles = {
         try {
             const response = await api.getProfiles();
             this.items = response.profiles || [];
+
+            // Update active profiles set
+            this.activeProfiles.clear();
+            this.items.filter(p => p.is_active).forEach(p => this.activeProfiles.add(p.profile_type));
+
             this.render();
             this.updateActiveProfilesBadge();
         } catch (error) {
-            UI.showError(container, 'Fehler beim Laden: ' + error.message);
+            UI.showError(container, i18n.t('error.fetch_failed'));
         }
     },
 
@@ -144,8 +145,14 @@ const Profiles = {
             return;
         }
 
+        const profileNames = activeProfiles.map(p => {
+            const types = CONFIG.getProfileTypes();
+            const type = types.find(t => t.value === p.profile_type);
+            return type ? type.label : p.profile_type;
+        }).join(', ');
+
         badge.innerHTML = `
-            <div class="active-profiles-group" title="Aktive Profile: ${activeProfiles.map(p => PROFILE_INFO[p.profile_type]?.name || p.profile_type).join(', ')}">
+            <div class="active-profiles-group" title="${i18n.t('profiles.active')}: ${profileNames}">
                 ${activeProfiles.map(p => {
                     const info = PROFILE_INFO[p.profile_type] || {};
                     return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};">${info.emoji || ''}</span>`;
@@ -154,301 +161,164 @@ const Profiles = {
         `;
     },
 
-    // Render profiles list
+    // Render profiles as checkboxes
     render() {
         const container = document.getElementById('profiles-list');
+        const profileTypes = CONFIG.getProfileTypes();
+        const lang = i18n.currentLang;
 
-        if (!this.items || this.items.length === 0) {
-            UI.showEmpty(container, 'Keine Ernährungsprofile vorhanden. Erstelle dein erstes Profil!', '👤');
-            return;
-        }
+        // Group: existing profiles and available ones
+        const existingMap = new Map(this.items.map(p => [p.profile_type, p]));
 
-        container.innerHTML = this.items.map(profile => this.renderCard(profile)).join('');
-    },
+        const checkboxesHtml = profileTypes.map(type => {
+            const info = PROFILE_INFO[type.value] || {};
+            const existing = existingMap.get(type.value);
+            const isActive = existing?.is_active || false;
+            const hasDisclaimer = info.disclaimer_de || info.disclaimer_en;
 
-    // Render single profile card
-    renderCard(profile) {
-        const info = PROFILE_INFO[profile.profile_type] || {};
-        const settings = profile.settings || {};
-        const settingsText = this.formatSettings(profile.profile_type, settings);
-        const hasDisclaimer = info.disclaimer;
-
-        return `
-            <div class="profile-card ${!profile.is_active ? 'inactive' : ''}"
-                 data-id="${profile.id}"
-                 style="border-left-color: ${info.color || 'var(--primary)'}">
-                <div class="profile-header">
-                    <span class="profile-name">
-                        ${info.emoji || ''} ${UI.escapeHtml(profile.name)}
-                    </span>
-                    <span class="badge ${profile.is_active ? 'badge-success' : 'badge-secondary'}">
-                        ${info.name || profile.profile_type}
-                    </span>
-                </div>
-                ${info.description ? `<p class="profile-description">${info.description}</p>` : ''}
-                ${hasDisclaimer ? info.disclaimer : ''}
-                <div class="profile-settings">
-                    ${settingsText || 'Keine besonderen Einstellungen'}
-                </div>
-                <div class="profile-actions">
-                    <label class="toggle">
-                        <input type="checkbox" ${profile.is_active ? 'checked' : ''} onchange="Profiles.toggleActive(${profile.id}, this.checked)">
-                        <span class="toggle-slider"></span>
-                        <span>${profile.is_active ? 'Aktiv' : 'Inaktiv'}</span>
+            return `
+                <div class="profile-checkbox-card" style="border-left: 4px solid ${info.color || 'var(--primary)'}">
+                    <label class="profile-checkbox-label">
+                        <input type="checkbox"
+                               ${isActive ? 'checked' : ''}
+                               onchange="Profiles.toggleProfile('${type.value}', this.checked)"
+                               data-profile="${type.value}">
+                        <span class="profile-checkbox-content">
+                            <span class="profile-emoji">${info.emoji || ''}</span>
+                            <span class="profile-name">${type.label}</span>
+                            ${hasDisclaimer ? `
+                                <button class="profile-info-btn" onclick="event.preventDefault(); Profiles.showDisclaimer('${type.value}')" title="${lang === 'de' ? 'Wichtiger Hinweis' : 'Important notice'}">
+                                    ⚠️
+                                </button>
+                            ` : ''}
+                        </span>
                     </label>
-                    <div style="display: flex; gap: var(--spacing-sm);">
-                        <button class="btn btn-sm btn-ghost" onclick="Profiles.showEditModal(${profile.id})">Bearbeiten</button>
-                        <button class="btn btn-sm btn-danger" onclick="Profiles.delete(${profile.id})">Löschen</button>
-                    </div>
                 </div>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="profiles-intro">
+                <p>${lang === 'de'
+                    ? 'Wähle deine Ernährungsprofile. Diese werden bei der Rezeptgenerierung berücksichtigt.'
+                    : 'Select your diet profiles. These will be considered when generating recipes.'}</p>
+            </div>
+            <div class="profiles-checkbox-grid">
+                ${checkboxesHtml}
             </div>
         `;
     },
 
-    // Format settings for display
-    formatSettings(type, settings) {
-        const parts = [];
+    // Toggle profile on/off
+    async toggleProfile(profileType, isActive) {
+        const info = PROFILE_INFO[profileType];
+        const lang = i18n.currentLang;
 
-        if (settings.unit) parts.push(`Einheit: ${settings.unit}`);
-        if (settings.daily_carb_limit) parts.push(`Max. Carbs: ${settings.daily_carb_limit}g/Tag`);
-        if (settings.carbs_per_meal) parts.push(`Pro Mahlzeit: ${settings.carbs_per_meal}g`);
-        if (settings.daily_fat_min) parts.push(`Min. Fett: ${settings.daily_fat_min}g/Tag`);
-        if (settings.daily_protein) parts.push(`Protein: ${settings.daily_protein}g/Tag`);
-        if (settings.daily_protein_min) parts.push(`Min. Protein: ${settings.daily_protein_min}g/Tag`);
-        if (settings.exclude_ingredients && settings.exclude_ingredients.length > 0) {
-            parts.push(`Ausgeschlossen: ${settings.exclude_ingredients.join(', ')}`);
-        }
+        // If activating and has disclaimer that hasn't been shown yet
+        if (isActive && info && (info.disclaimer_de || info.disclaimer_en) && !this.disclaimerShown[profileType]) {
+            const disclaimer = lang === 'de' ? info.disclaimer_de : info.disclaimer_en;
+            const types = CONFIG.getProfileTypes();
+            const type = types.find(t => t.value === profileType);
+            const typeName = type ? type.label : profileType;
 
-        return parts.join(' | ');
-    },
-
-    // Show add modal
-    showAddModal() {
-        // Filter out already existing profile types
-        const existingTypes = this.items.map(p => p.profile_type);
-        const availableTypes = CONFIG.getProfileTypes().filter(
-            t => !existingTypes.includes(t.value)
-        );
-
-        if (availableTypes.length === 0) {
-            UI.warning(i18n.t('profiles.all_added') || 'All profiles already added!');
-            return;
-        }
-
-        UI.showFormModal({
-            title: i18n.t('profiles.new') || 'New Diet Profile',
-            fields: [
-                {
-                    name: 'profile_type',
-                    label: i18n.t('profiles.type') || 'Profile Type',
-                    type: 'select',
-                    required: true,
-                    options: availableTypes.map(t => ({
-                        value: t.value,
-                        label: `${t.emoji} ${t.label}`
-                    }))
-                },
-                {
-                    name: 'name',
-                    label: i18n.t('profiles.name') || 'Name',
-                    required: true,
-                    placeholder: i18n.t('profiles.name_placeholder') || 'e.g. My Diabetes Profile'
-                },
-                {
-                    name: 'is_active',
-                    label: i18n.t('profiles.activate_now') || 'Activate immediately',
-                    type: 'checkbox',
-                    value: true
-                }
-            ],
-            submitText: i18n.t('common.save') || 'Create',
-            onSubmit: async (data) => {
-                await this.createWithDisclaimer(data);
-            }
-        });
-    },
-
-    // Create with disclaimer confirmation for critical profiles
-    async createWithDisclaimer(data) {
-        const info = PROFILE_INFO[data.profile_type];
-
-        // Show disclaimer before creating if exists
-        if (info && info.disclaimer) {
             const confirmed = await UI.confirmHtml(
-                `<h3>${info.emoji} ${info.name}</h3>
-                 <p style="margin: var(--spacing-md) 0;">${info.description}</p>
-                 ${info.disclaimer}
-                 <p style="margin-top: var(--spacing-md);"><strong>Profil trotzdem hinzufügen?</strong></p>`,
-                'Ja, hinzufügen',
-                'Abbrechen'
+                `<h3>${info.emoji} ${typeName}</h3>
+                 <div class="profile-disclaimer warning" style="margin: var(--spacing-md) 0;">
+                     ${disclaimer}
+                 </div>
+                 <p><strong>${lang === 'de' ? 'Profil aktivieren?' : 'Activate profile?'}</strong></p>`,
+                lang === 'de' ? 'Ja, aktivieren' : 'Yes, activate',
+                lang === 'de' ? 'Abbrechen' : 'Cancel'
             );
 
-            if (!confirmed) return;
+            if (!confirmed) {
+                // Reset checkbox
+                const checkbox = document.querySelector(`input[data-profile="${profileType}"]`);
+                if (checkbox) checkbox.checked = false;
+                return;
+            }
+
+            // Mark disclaimer as shown
+            this.disclaimerShown[profileType] = true;
+            localStorage.setItem('profiles_disclaimer_shown', JSON.stringify(this.disclaimerShown));
         }
 
-        await this.create(data);
+        try {
+            const existing = this.items.find(p => p.profile_type === profileType);
+
+            if (existing) {
+                // Update existing profile
+                await api.updateProfile(existing.id, { is_active: isActive });
+            } else if (isActive) {
+                // Create new profile
+                const types = CONFIG.getProfileTypes();
+                const type = types.find(t => t.value === profileType);
+                await api.createProfile({
+                    profile_type: profileType,
+                    name: type ? type.label : profileType,
+                    is_active: true,
+                    settings: {}
+                });
+            }
+
+            UI.success(isActive
+                ? i18n.t('profiles.activated')
+                : i18n.t('profiles.deactivated'));
+
+            await this.load();
+        } catch (error) {
+            UI.error(error.message);
+            await this.load(); // Reload to reset checkboxes
+        }
     },
 
-    // Show edit modal
+    // Show disclaimer popup for a profile
+    showDisclaimer(profileType) {
+        const info = PROFILE_INFO[profileType];
+        if (!info) return;
+
+        const lang = i18n.currentLang;
+        const disclaimer = lang === 'de' ? info.disclaimer_de : info.disclaimer_en;
+
+        if (!disclaimer) return;
+
+        const types = CONFIG.getProfileTypes();
+        const type = types.find(t => t.value === profileType);
+        const typeName = type ? type.label : profileType;
+
+        UI.showModal(
+            `${info.emoji} ${typeName}`,
+            `<div class="profile-disclaimer-content">
+                <div class="profile-disclaimer warning">
+                    ${disclaimer}
+                </div>
+            </div>`,
+            { size: 'medium' }
+        );
+    },
+
+    // Legacy method for compatibility - now just toggles
+    showAddModal() {
+        // Show info that profiles are now checkboxes
+        const lang = i18n.currentLang;
+        UI.info(lang === 'de'
+            ? 'Aktiviere Profile durch Anklicken der Checkboxen'
+            : 'Activate profiles by clicking the checkboxes');
+    },
+
+    // Legacy edit modal - show disclaimer instead
     showEditModal(id) {
         const profile = this.items.find(p => p.id === id);
-        if (!profile) return;
-
-        const settings = profile.settings || {};
-
-        // Build dynamic fields based on profile type
-        const fields = [
-            {
-                name: 'name',
-                label: 'Name',
-                required: true,
-                value: profile.name
-            },
-            {
-                name: 'is_active',
-                label: 'Aktiv',
-                type: 'checkbox',
-                value: profile.is_active
-            }
-        ];
-
-        // Add type-specific settings
-        if (profile.profile_type === 'diabetic') {
-            fields.push({
-                name: 'unit',
-                label: 'Einheit',
-                type: 'select',
-                value: settings.unit || 'KE',
-                options: [
-                    { value: 'KE', label: 'KE (Kohlenhydrat-Einheiten)' },
-                    { value: 'BE', label: 'BE (Broteinheiten)' }
-                ]
-            });
-            fields.push({
-                name: 'daily_carb_limit',
-                label: 'Tägliches Carb-Limit (g)',
-                type: 'number',
-                value: settings.daily_carb_limit || 180,
-                placeholder: 'z.B. 180'
-            });
-        } else if (profile.profile_type === 'keto') {
-            fields.push({
-                name: 'daily_carb_limit',
-                label: 'Tägliches Carb-Limit (g)',
-                type: 'number',
-                value: settings.daily_carb_limit || 50,
-                placeholder: 'z.B. 50'
-            });
-            fields.push({
-                name: 'daily_fat_min',
-                label: 'Min. Fett pro Tag (g)',
-                type: 'number',
-                value: settings.daily_fat_min || 150,
-                placeholder: 'z.B. 150'
-            });
-        } else if (profile.profile_type === 'low_carb') {
-            fields.push({
-                name: 'daily_carb_limit',
-                label: 'Tägliches Carb-Limit (g)',
-                type: 'number',
-                value: settings.daily_carb_limit || 100,
-                placeholder: 'z.B. 100'
-            });
-        } else if (profile.profile_type === 'high_protein') {
-            fields.push({
-                name: 'daily_protein_min',
-                label: 'Min. Protein pro Tag (g)',
-                type: 'number',
-                value: settings.daily_protein_min || 150,
-                placeholder: 'z.B. 150'
-            });
-        }
-
-        UI.showFormModal({
-            title: 'Profil bearbeiten',
-            fields,
-            submitText: 'Speichern',
-            onSubmit: async (data) => {
-                await this.update(id, profile.profile_type, data);
-            }
-        });
-    },
-
-    // Create profile
-    async create(data) {
-        try {
-            const payload = {
-                profile_type: data.profile_type,
-                name: data.name,
-                is_active: data.is_active || false,
-                settings: {}
-            };
-
-            await api.createProfile(payload);
-            UI.success('Profil erstellt!');
-            await this.load();
-        } catch (error) {
-            UI.error('Fehler: ' + error.message);
+        if (profile) {
+            this.showDisclaimer(profile.profile_type);
         }
     },
 
-    // Update profile
-    async update(id, profileType, data) {
-        try {
-            const payload = {
-                name: data.name,
-                is_active: data.is_active
-            };
-
-            // Build settings based on type
-            const settings = {};
-            if (profileType === 'diabetic') {
-                if (data.unit) settings.unit = data.unit;
-                if (data.daily_carb_limit) settings.daily_carb_limit = parseInt(data.daily_carb_limit);
-            } else if (profileType === 'keto') {
-                if (data.daily_carb_limit) settings.daily_carb_limit = parseInt(data.daily_carb_limit);
-                if (data.daily_fat_min) settings.daily_fat_min = parseInt(data.daily_fat_min);
-            } else if (profileType === 'low_carb') {
-                if (data.daily_carb_limit) settings.daily_carb_limit = parseInt(data.daily_carb_limit);
-            } else if (profileType === 'high_protein') {
-                if (data.daily_protein_min) settings.daily_protein_min = parseInt(data.daily_protein_min);
-            }
-
-            if (Object.keys(settings).length > 0) {
-                payload.settings = settings;
-            }
-
-            await api.updateProfile(id, payload);
-            UI.success('Profil aktualisiert!');
-            await this.load();
-        } catch (error) {
-            UI.error('Fehler: ' + error.message);
-        }
-    },
-
-    // Toggle active status
-    async toggleActive(id, isActive) {
-        try {
-            await api.updateProfile(id, { is_active: isActive });
-            UI.success(isActive ? 'Profil aktiviert!' : 'Profil deaktiviert!');
-            await this.load();
-        } catch (error) {
-            UI.error('Fehler: ' + error.message);
-            await this.load(); // Reload to reset checkbox
-        }
-    },
-
-    // Delete profile
+    // Delete is now just deactivation
     delete(id) {
         const profile = this.items.find(p => p.id === id);
-        UI.confirm(`"${profile?.name || 'Profil'}" wirklich löschen?`, async () => {
-            try {
-                await api.deleteProfile(id);
-                UI.success('Profil gelöscht!');
-                await this.load();
-            } catch (error) {
-                UI.error('Fehler: ' + error.message);
-            }
-        });
+        if (profile) {
+            this.toggleProfile(profile.profile_type, false);
+        }
     }
 };

@@ -23,23 +23,50 @@ const CONFIG = {
         { value: 'vegetarian', label_de: 'Vegetarisch', label_en: 'Vegetarian', emoji: '🥕' }
     ],
 
-    // Ingredient Categories (translated)
+    // Ingredient Categories (translated) - sorted alphabetically per language
     CATEGORIES_DE: [
         'Fisch', 'Fleisch', 'Gemüse', 'Getränke', 'Getreide', 'Gewürze',
         'Kohlenhydrate', 'Milchprodukte', 'Nüsse & Samen', 'Obst',
         'Öle & Fette', 'Saucen', 'Sonstiges'
-    ],
+    ].sort((a, b) => a.localeCompare(b, 'de')),
 
     CATEGORIES_EN: [
-        'Fish', 'Meat', 'Vegetables', 'Beverages', 'Grains', 'Spices',
-        'Carbohydrates', 'Dairy', 'Nuts & Seeds', 'Fruits',
-        'Oils & Fats', 'Sauces', 'Other'
+        'Beverages', 'Carbohydrates', 'Dairy', 'Fish', 'Fruits', 'Grains',
+        'Meat', 'Nuts & Seeds', 'Oils & Fats', 'Other', 'Sauces', 'Spices',
+        'Vegetables'
     ],
 
-    // Get categories based on current language
+    // Category mapping DE -> EN for backend storage
+    CATEGORY_MAP_DE_EN: {
+        'Fisch': 'Fish', 'Fleisch': 'Meat', 'Gemüse': 'Vegetables',
+        'Getränke': 'Beverages', 'Getreide': 'Grains', 'Gewürze': 'Spices',
+        'Kohlenhydrate': 'Carbohydrates', 'Milchprodukte': 'Dairy',
+        'Nüsse & Samen': 'Nuts & Seeds', 'Obst': 'Fruits',
+        'Öle & Fette': 'Oils & Fats', 'Saucen': 'Sauces', 'Sonstiges': 'Other'
+    },
+
+    // Category mapping EN -> DE for display
+    CATEGORY_MAP_EN_DE: {
+        'Fish': 'Fisch', 'Meat': 'Fleisch', 'Vegetables': 'Gemüse',
+        'Beverages': 'Getränke', 'Grains': 'Getreide', 'Spices': 'Gewürze',
+        'Carbohydrates': 'Kohlenhydrate', 'Dairy': 'Milchprodukte',
+        'Nuts & Seeds': 'Nüsse & Samen', 'Fruits': 'Obst',
+        'Oils & Fats': 'Öle & Fette', 'Sauces': 'Saucen', 'Other': 'Sonstiges'
+    },
+
+    // Get categories based on current language (sorted alphabetically)
     getCategories() {
         const lang = localStorage.getItem('kitchenhelper_lang') || 'en';
         return lang === 'de' ? this.CATEGORIES_DE : this.CATEGORIES_EN;
+    },
+
+    // Translate category to current language for display
+    translateCategory(category) {
+        const lang = localStorage.getItem('kitchenhelper_lang') || 'en';
+        if (lang === 'de') {
+            return this.CATEGORY_MAP_EN_DE[category] || category;
+        }
+        return this.CATEGORY_MAP_DE_EN[category] || category;
     },
 
     // Get profile types with translated labels
