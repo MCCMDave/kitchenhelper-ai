@@ -169,11 +169,17 @@
                         <form id="password-form">
                             <div class="form-group">
                                 <label class="form-label" data-i18n="settings.new_password">New Password</label>
-                                <input type="password" id="settings-password" class="form-control" placeholder="Min. 6 characters" minlength="6">
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="settings-password" class="form-control" placeholder="Min. 6 characters" minlength="6">
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('settings-password', this)">👁️</button>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" data-i18n="settings.confirm_password">Confirm Password</label>
-                                <input type="password" id="settings-password-confirm" class="form-control" placeholder="Repeat password">
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="settings-password-confirm" class="form-control" placeholder="Repeat password">
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('settings-password-confirm', this)">👁️</button>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary" data-i18n="settings.change_password">Change Password</button>
                         </form>

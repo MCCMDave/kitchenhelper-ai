@@ -415,23 +415,23 @@ const Ingredients = {
     // Show add modal with Auto-Suggest and Auto-Category
     showAddModal() {
         UI.showFormModal({
-            title: 'Neue Zutat hinzufügen',
+            title: i18n.t('ingredients.add'),
             fields: [
-                { name: 'name', label: 'Name', required: true, placeholder: 'z.B. Tomaten', id: 'add-ingredient-name' },
+                { name: 'name', label: i18n.t('ingredients.name'), required: true, placeholder: i18n.currentLang === 'de' ? 'z.B. Tomaten' : 'e.g. Tomatoes', id: 'add-ingredient-name' },
                 {
                     name: 'category',
-                    label: 'Kategorie',
+                    label: i18n.t('ingredients.category'),
                     type: 'select',
                     id: 'add-ingredient-category',
                     options: [
-                        { value: '', label: '📦 Keine Kategorie' },
-                        ...CONFIG.CATEGORIES.map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
+                        { value: '', label: '📦 ' + (i18n.currentLang === 'de' ? 'Keine Kategorie' : 'No category') },
+                        ...CONFIG.getCategories().map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
                     ]
                 },
-                { name: 'expiry_date', label: 'Ablaufdatum', type: 'date' },
-                { name: 'is_permanent', label: 'Dauerhaft (z.B. Gewürze)', type: 'checkbox' }
+                { name: 'expiry_date', label: i18n.t('ingredients.expiry'), type: 'date' },
+                { name: 'is_permanent', label: i18n.t('ingredients.permanent') + (i18n.currentLang === 'de' ? ' (z.B. Gewürze)' : ' (e.g. Spices)'), type: 'checkbox' }
             ],
-            submitText: 'Hinzufügen',
+            submitText: i18n.currentLang === 'de' ? 'Hinzufügen' : 'Add',
             onSubmit: async (data) => {
                 await this.create(data);
             }
@@ -522,23 +522,23 @@ const Ingredients = {
         const expiryDate = item.expiry_date ? item.expiry_date.split('T')[0] : '';
 
         UI.showFormModal({
-            title: 'Zutat bearbeiten',
+            title: i18n.t('ingredients.edit'),
             fields: [
-                { name: 'name', label: 'Name', required: true, value: item.name },
+                { name: 'name', label: i18n.t('ingredients.name'), required: true, value: item.name },
                 {
                     name: 'category',
-                    label: 'Kategorie',
+                    label: i18n.t('ingredients.category'),
                     type: 'select',
                     value: item.category || '',
                     options: [
-                        { value: '', label: '📦 Keine Kategorie' },
-                        ...CONFIG.CATEGORIES.map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
+                        { value: '', label: '📦 ' + (i18n.currentLang === 'de' ? 'Keine Kategorie' : 'No category') },
+                        ...CONFIG.getCategories().map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
                     ]
                 },
-                { name: 'expiry_date', label: 'Ablaufdatum', type: 'date', value: expiryDate },
-                { name: 'is_permanent', label: 'Dauerhaft', type: 'checkbox', value: item.is_permanent }
+                { name: 'expiry_date', label: i18n.t('ingredients.expiry'), type: 'date', value: expiryDate },
+                { name: 'is_permanent', label: i18n.t('ingredients.permanent'), type: 'checkbox', value: item.is_permanent }
             ],
-            submitText: 'Speichern',
+            submitText: i18n.t('common.save'),
             onSubmit: async (data) => {
                 await this.update(id, data);
             }

@@ -1,5 +1,21 @@
 // KitchenHelper-AI UI Helper Module
 
+// Global password toggle function
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.textContent = '🙈';
+        button.classList.add('visible');
+    } else {
+        input.type = 'password';
+        button.textContent = '👁️';
+        button.classList.remove('visible');
+    }
+}
+
 const UI = {
     // ==================== LOADING ====================
     showLoading(element) {
