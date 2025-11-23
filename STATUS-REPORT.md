@@ -1,6 +1,6 @@
 # KitchenHelper-AI Status Report
 
-**Datum:** 23. November 2025
+**Datum:** 24. November 2025
 **Geraet:** PC (Startklar)
 **Pfad:** `C:\Users\Startklar\Desktop\GitHub\kitchenhelper-ai`
 
@@ -23,6 +23,10 @@
 | Favoriten Modal | OK | Modal statt Expand |
 | Password Toggle | OK | Show/Hide Passwort |
 | User Menu mit Emoji | OK | Dropdown mit Einstellungen |
+| Profile Checkbox-Grid | OK | Alle Profile als Checkboxen (24.11) |
+| Kategorie-Sortierung | OK | Alphabetisch DE/EN (24.11) |
+| i18n Umlaute | OK | Korrekte deutsche Umlaute (24.11) |
+| Rezept-Labels i18n | OK | Alle Labels übersetzt (24.11) |
 
 ---
 
@@ -170,12 +174,16 @@ curl -X POST "http://127.0.0.1:8000/api/auth/login" \
 1. [x] Frontend fertigstellen (Password Toggle, User Menu) ✅
 2. [x] Multi-Language Support (DE/EN) ✅
 3. [x] PDF Export fuer Rezepte ✅
-4. [ ] KI-Integration (Claude, OpenAI, Gemini)
-5. [ ] BE/KE-Rechner fuer Diabetes
-6. [ ] Stripe Payment Integration
-7. [ ] Docker Deployment fuer Raspberry Pi
-8. [ ] E-Mail-Versand fuer Password Reset
+4. [x] Profile als Checkbox-Grid ✅
+5. [x] Alphabetische Kategorie-Sortierung ✅
+6. [x] i18n Umlaute korrigiert ✅
+7. [x] Rezept-Labels vollstaendig uebersetzt ✅
+8. [ ] KI-Integration (Claude, OpenAI, Gemini)
+9. [ ] BE/KE-Rechner fuer Diabetes
+10. [ ] Stripe Payment Integration
+11. [ ] Docker Deployment fuer Raspberry Pi
+12. [ ] E-Mail-Versand fuer Password Reset
 
 ---
 
-**Letztes Update:** 23.11.2025, 21:00 Uhr
+**Letztes Update:** 24.11.2025, Nachmittag

@@ -48,6 +48,12 @@ Kitchenhelper/
   - Multi-Language Support (Englisch/Deutsch)
   - Favoriten als Modal statt Expand/Collapse
   - Bilinguale Rezeptgenerierung
+- **Neue Features (24.11.2025):**
+  - Vollstaendige i18n mit korrekten deutschen Umlauten
+  - Alphabetisch sortierte Kategorien (DE/EN)
+  - Rezeptausgabe komplett sprachabhaengig
+  - Profile-System als Checkbox-Grid (statt Add/Edit Modals)
+  - Warnhinweise bei Profil-Aktivierung als Popup
 - **Naechster Schritt:** Testing, Deployment, echte KI-Integration
 
 ## Wichtige Befehle
@@ -140,4 +146,4 @@ STRIPE_WEBHOOK_SECRET=<webhook-secret>
 
 ---
 
-**Letzte Aktualisierung:** 23. November 2025
+**Letzte Aktualisierung:** 24. November 2025
