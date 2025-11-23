@@ -1,0 +1,248 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+from datetime import datetime, date
+import json
+
+from app.schemas.recipe import (
+    RecipeGenerateRequest,
+    RecipeResponse,
+    RecipeListResponse,
+    RecipeIngredient,
+    NutritionInfo
+)
+from app.models.recipe import Recipe
+from app.models.ingredient import Ingredient
+from app.models.user import User
+from app.models.diet_profile import DietProfile
+from app.utils.database import get_db
+from app.utils.auth import get_current_user
+from app.services.mock_recipe_generator import mock_generator
+
+router = APIRouter(prefix="/recipes", tags=["Recipes"])
+
+def check_daily_limit(user: User, db: Session) -> bool:
+    """Prüfe ob User noch Rezepte generieren darf"""
+    today = date.today()
+    
+    # Reset Counter wenn neuer Tag
+    if user.last_recipe_date is None or user.last_recipe_date.date() < today:
+        user.daily_recipe_count = 0
+        user.last_recipe_date = datetime.utcnow()
+        db.commit()
+    
+    # Prüfe Limit
+    return user.daily_recipe_count < user.daily_limit
+
+def increment_recipe_count(user: User, db: Session):
+    """Erhöhe täglichen Rezept-Counter"""
+    user.daily_recipe_count += 1
+    user.last_recipe_date = datetime.utcnow()
+    db.commit()
+
+@router.post("/generate", response_model=RecipeListResponse)
+def generate_recipes(
+    request: RecipeGenerateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Rezepte generieren (Mock oder AI)
+    
+    - **ingredient_ids**: Liste von Zutaten-IDs
+    - **ai_provider**: "mock" (kostenlos!), "anthropic", "openai", "gemini"
+    - **diet_profiles**: z.B. ["diabetic", "vegan"]
+    - **servings**: Anzahl Portionen (1-10)
+    
+    **Daily Limits:**
+    - Demo: 3 Rezepte/Tag
+    - Basic: 50 Rezepte/Tag
+    - Premium: Unbegrenzt
+    """
+    # 1. Daily Limit Check
+    if not check_daily_limit(current_user, db):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={
+                "error": "daily_limit_reached",
+                "message": f"Tageslimit erreicht ({current_user.daily_limit} Rezepte). Upgrade für mehr!",
+                "daily_limit": current_user.daily_limit,
+                "subscription_tier": current_user.subscription_tier.value
+            }
+        )
+    
+    # 2. Zutaten laden
+    ingredients = db.query(Ingredient).filter(
+        Ingredient.id.in_(request.ingredient_ids),
+        Ingredient.user_id == current_user.id
+    ).all()
+    
+    if not ingredients:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Keine gültigen Zutaten gefunden"
+        )
+    
+    ingredient_names = [ing.name for ing in ingredients]
+    
+    # 3. Diabetes-Einheit aus aktivem Profil laden (oder aus Request)
+    diabetes_unit = request.diabetes_unit or "KE"
+
+    # Aktives Diabetes-Profil pruefen fuer Unit-Einstellung
+    active_diabetes_profile = db.query(DietProfile).filter(
+        DietProfile.user_id == current_user.id,
+        DietProfile.profile_type == "diabetic",
+        DietProfile.is_active == True
+    ).first()
+
+    if active_diabetes_profile and active_diabetes_profile.settings_json:
+        try:
+            settings = json.loads(active_diabetes_profile.settings_json)
+            diabetes_unit = settings.get("unit", "KE")
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # 4. Rezepte generieren (Mock - kostenlos!)
+    if request.ai_provider == "mock":
+        generated_recipes = mock_generator.generate_recipes(
+            ingredients=ingredient_names,
+            count=3,
+            servings=request.servings,
+            diet_profiles=request.diet_profiles,
+            diabetes_unit=diabetes_unit
+        )
+    else:
+        # Spaeter: Echte AI-Integration
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail=f"AI Provider '{request.ai_provider}' noch nicht implementiert. Nutze 'mock'!"
+        )
+
+    # 5. In Datenbank speichern
+    saved_recipes = []
+    for recipe_data in generated_recipes:
+        new_recipe = Recipe(
+            user_id=current_user.id,
+            name=recipe_data["name"],
+            description=recipe_data["description"],
+            difficulty=recipe_data["difficulty"],
+            cooking_time=recipe_data["cooking_time"],
+            method=recipe_data["method"],
+            servings=recipe_data["servings"],
+            used_ingredients=json.dumps(recipe_data["used_ingredients"]),
+            leftover_tips=recipe_data["leftover_tips"],
+            ingredients_json=json.dumps(recipe_data["ingredients"]),
+            nutrition_json=json.dumps(recipe_data["nutrition_per_serving"]),
+            ai_provider=recipe_data["ai_provider"]
+        )
+        
+        db.add(new_recipe)
+        db.flush()  # Um ID zu bekommen
+        
+        # Response-Format erstellen
+        recipe_response = RecipeResponse(
+            id=new_recipe.id,
+            user_id=new_recipe.user_id,
+            name=new_recipe.name,
+            description=new_recipe.description,
+            difficulty=new_recipe.difficulty,
+            cooking_time=new_recipe.cooking_time,
+            method=new_recipe.method,
+            servings=new_recipe.servings,
+            used_ingredients=recipe_data["used_ingredients"],
+            leftover_tips=recipe_data["leftover_tips"],
+            ingredients=[RecipeIngredient(**ing) for ing in recipe_data["ingredients"]],
+            nutrition_per_serving=NutritionInfo(**recipe_data["nutrition_per_serving"]),
+            ai_provider=new_recipe.ai_provider,
+            generated_at=new_recipe.generated_at
+        )
+        
+        saved_recipes.append(recipe_response)
+    
+    db.commit()
+    
+    # 5. Counter erhöhen
+    increment_recipe_count(current_user, db)
+    
+    # 6. Response
+    remaining = current_user.daily_limit - current_user.daily_recipe_count
+    
+    return RecipeListResponse(
+        recipes=saved_recipes,
+        count=len(saved_recipes),
+        daily_count_remaining=remaining,
+        message=f"✅ {len(saved_recipes)} Rezepte generiert! Noch {remaining} heute verfügbar."
+    )
+
+@router.get("/history", response_model=List[RecipeResponse])
+def get_recipe_history(
+    limit: int = 20,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Rezept-Historie abrufen
+    
+    - **limit**: Max. Anzahl Rezepte (default: 20)
+    """
+    recipes = db.query(Recipe).filter(
+        Recipe.user_id == current_user.id
+    ).order_by(Recipe.generated_at.desc()).limit(limit).all()
+    
+    # Parse JSON fields
+    result = []
+    for recipe in recipes:
+        recipe_response = RecipeResponse(
+            id=recipe.id,
+            user_id=recipe.user_id,
+            name=recipe.name,
+            description=recipe.description,
+            difficulty=recipe.difficulty,
+            cooking_time=recipe.cooking_time,
+            method=recipe.method,
+            servings=recipe.servings,
+            used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
+            leftover_tips=recipe.leftover_tips,
+            ingredients=[RecipeIngredient(**ing) for ing in json.loads(recipe.ingredients_json)] if recipe.ingredients_json else [],
+            nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
+            ai_provider=recipe.ai_provider,
+            generated_at=recipe.generated_at
+        )
+        result.append(recipe_response)
+    
+    return result
+
+@router.get("/{recipe_id}", response_model=RecipeResponse)
+def get_recipe(
+    recipe_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Einzelnes Rezept abrufen"""
+    recipe = db.query(Recipe).filter(
+        Recipe.id == recipe_id,
+        Recipe.user_id == current_user.id
+    ).first()
+    
+    if not recipe:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Rezept nicht gefunden"
+        )
+    
+    return RecipeResponse(
+        id=recipe.id,
+        user_id=recipe.user_id,
+        name=recipe.name,
+        description=recipe.description,
+        difficulty=recipe.difficulty,
+        cooking_time=recipe.cooking_time,
+        method=recipe.method,
+        servings=recipe.servings,
+        used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
+        leftover_tips=recipe.leftover_tips,
+        ingredients=[RecipeIngredient(**ing) for ing in json.loads(recipe.ingredients_json)] if recipe.ingredients_json else [],
+        nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
+        ai_provider=recipe.ai_provider,
+        generated_at=recipe.generated_at
+    )

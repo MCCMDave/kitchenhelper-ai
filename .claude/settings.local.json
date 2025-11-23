@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(source venv/Scripts/activate)",
+      "Bash(python -c:*)",
+      "Bash(timeout 5 python:*)",
+      "Bash(mkdir:*)",
+      "Bash(.venvScriptsactivate)",
+      "Bash(python scripts/db_manager.py:*)",
+      "Bash(tasklist:*)",
+      "Bash(taskkill:*)",
+      "Bash(python scripts/quick_reset.py:*)",
+      "Bash(curl:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

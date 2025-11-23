@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitchenHelper-AI - Dashboard</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">🍳 KitchenHelper-AI</div>
+                    <div class="header-actions">
+                        <div id="active-profiles" class="active-profiles-badge">
+                            <!-- Wird dynamisch befüllt -->
+                        </div>
+                        <!-- Language Toggle -->
+                        <button class="lang-toggle header-lang-toggle" onclick="i18n.toggle()" title="Sprache / Language">
+                            <span class="lang-icon">🌍</span>
+                            <span class="lang-toggle-text">DE</span>
+                        </button>
+
+                        <button id="theme-toggle" class="theme-toggle" aria-label="Theme umschalten" title="Dark/Light Mode">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+
+                        <!-- User Menu mit Emoji + Dropdown -->
+                        <div class="user-menu">
+                            <button class="user-avatar" onclick="UserMenu.toggle(event)">
+                                <span class="user-emoji" id="user-emoji">👤</span>
+                                <span class="user-tier-badge" id="user-tier">Demo</span>
+                            </button>
+
+                            <div class="user-dropdown" id="user-dropdown">
+                                <div class="dropdown-header">
+                                    <strong id="dropdown-name">User</strong>
+                                    <span id="dropdown-email">email@test.de</span>
+                                </div>
+                                <hr>
+                                <button onclick="UserMenu.goToSettings()">⚙️ Einstellungen</button>
+                                <button onclick="UserMenu.goToProfiles()">👤 Profile</button>
+                                <hr>
+                                <button onclick="Auth.logout()">🚪 Abmelden</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Navigation Tabs -->
+                <nav class="tabs nav-tabs">
+                    <button class="tab active" data-section="ingredients">Zutaten</button>
+                    <button class="tab" data-section="recipes">Rezepte</button>
+                    <button class="tab" data-section="favorites">Favoriten</button>
+                    <button class="tab" data-section="profiles">Profile</button>
+                    <button class="tab" data-section="settings">Einstellungen</button>
+                </nav>
+
+                <!-- Sections -->
+                <!-- Ingredients Section -->
+                <section id="ingredients-section" class="section active">
+                    <div class="page-header">
+                        <h1 class="page-title">🥗 Meine Zutaten</h1>
+                        <button class="btn btn-primary" onclick="Ingredients.showAddModal()">+ Zutat hinzufügen</button>
+                    </div>
+                    <div class="filters" style="margin-bottom: var(--spacing-lg);">
+                        <select id="ingredient-category-filter" class="form-control" style="max-width: 200px;" onchange="Ingredients.load()">
+                            <option value="">Alle Kategorien</option>
+                        </select>
+                    </div>
+                    <div id="ingredients-list" class="grid grid-3"></div>
+                </section>
+
+                <!-- Recipes Section -->
+                <section id="recipes-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title">🍽️ Rezepte generieren</h1>
+                    </div>
+
+                    <!-- Ingredient Selection -->
+                    <div class="ingredient-selection card">
+                        <h3 class="ingredient-selection-title">Wähle deine Zutaten</h3>
+                        <div id="ingredient-checkboxes" class="ingredient-checkboxes"></div>
+                        <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-md); flex-wrap: wrap; align-items: center;">
+                            <button class="btn btn-primary btn-lg" onclick="Recipes.generate()" id="generate-btn">
+                                🤖 Rezepte generieren
+                            </button>
+                            <span id="selected-count" style="color: var(--text-muted);">0 Zutaten ausgewählt</span>
+                        </div>
+                    </div>
+
+                    <!-- Generated Recipes -->
+                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);">Generierte Rezepte</h2>
+                    <div id="recipes-list" class="grid grid-2"></div>
+
+                    <!-- Recipe History -->
+                    <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);">Letzte Rezepte</h2>
+                    <div id="recipe-history" class="grid grid-2"></div>
+                </section>
+
+                <!-- Favorites Section -->
+                <section id="favorites-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title">⭐ Meine Favoriten</h1>
+                    </div>
+                    <div id="favorites-list" class="grid grid-2"></div>
+                </section>
+
+                <!-- Profiles Section -->
+                <section id="profiles-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title">👤 Ernährungsprofile</h1>
+                        <button class="btn btn-primary" onclick="Profiles.showAddModal()">+ Profil hinzufügen</button>
+                    </div>
+                    <div id="profiles-list" class="grid grid-3"></div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title">⚙️ Einstellungen</h1>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="settings-title">Profil bearbeiten</h2>
+                        <form id="settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Avatar-Emoji</label>
+                                <div class="emoji-picker-container">
+                                    <input type="text" id="settings-emoji" class="form-control emoji-input" placeholder="👤" maxlength="2">
+                                    <div class="emoji-suggestions">
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('👤')">👤</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('👨')">👨</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('👩')">👩</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🧑')">🧑</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('👨‍🍳')">👨‍🍳</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('👩‍🍳')">👩‍🍳</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🍳')">🍳</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🥗')">🥗</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🍕')">🍕</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('😊')">😊</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🌟')">🌟</button>
+                                        <button type="button" class="emoji-btn" onclick="Settings.setEmoji('🔥')">🔥</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Benutzername</label>
+                                <input type="text" id="settings-username" class="form-control" placeholder="meinusername" minlength="3" maxlength="20">
+                                <small class="form-hint">3-20 Zeichen, nur Buchstaben, Zahlen, - und _</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">E-Mail</label>
+                                <input type="email" id="settings-email" class="form-control" placeholder="deine@email.de">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Speichern</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="settings-title">Passwort ändern</h2>
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label class="form-label">Neues Passwort</label>
+                                <input type="password" id="settings-password" class="form-control" placeholder="Mind. 6 Zeichen" minlength="6">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Passwort bestätigen</label>
+                                <input type="password" id="settings-password-confirm" class="form-control" placeholder="Passwort wiederholen">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Passwort ändern</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2 class="settings-title">Account-Info</h2>
+                        <div id="account-info"></div>
+                    </div>
+
+                    <div class="settings-section" style="border-left: 4px solid var(--danger);">
+                        <h2 class="settings-title" style="color: var(--danger);">⚠️ Gefahrenzone</h2>
+                        <p style="margin-bottom: var(--spacing-md); color: var(--text-muted);">
+                            Achtung: Diese Aktion kann nicht rückgängig gemacht werden!
+                        </p>
+                        <button class="btn btn-danger" onclick="Settings.deleteAccount()">Account löschen</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/ingredients.js"></script>
+    <script src="js/recipes.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/profiles.js"></script>
+    <script src="js/user-menu.js"></script>
+    <script>
+        // ==================== THEME SWITCHER ====================
+        const Theme = {
+            init() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem('kitchenhelper_theme') || 'light';
+                this.setTheme(savedTheme);
+
+                // Setup toggle button
+                const toggle = document.getElementById('theme-toggle');
+                if (toggle) {
+                    toggle.addEventListener('click', () => this.toggle());
+                }
+            },
+
+            setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('kitchenhelper_theme', theme);
+
+                // Update icon
+                const icon = document.querySelector('.theme-icon');
+                if (icon) {
+                    icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+                }
+
+                console.log('[Theme] Set to:', theme);
+            },
+
+            toggle() {
+                const current = document.documentElement.getAttribute('data-theme');
+                const newTheme = current === 'dark' ? 'light' : 'dark';
+                this.setTheme(newTheme);
+            }
+        };
+
+        // Require authentication
+        if (!Auth.requireAuth()) {
+            // Will redirect to login
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            Theme.init();
+            initDashboard();
+        });
+
+        async function initDashboard() {
+            // Load user info
+            const user = Auth.getCurrentUser();
+            if (user) {
+                // Update User Menu
+                UserMenu.updateUserInfo(user);
+            }
+
+            // Setup navigation
+            setupNavigation();
+
+            // Load initial data
+            await Ingredients.load();
+            populateCategoryFilter();
+
+            // Load profiles for active badge
+            await Profiles.load();
+
+            // Setup settings form
+            setupSettingsForm();
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Update tabs
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Update sections
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(`${tab.dataset.section}-section`).classList.add('active');
+
+                    // Load section data
+                    loadSectionData(tab.dataset.section);
+                });
+            });
+        }
+
+        async function loadSectionData(section) {
+            switch (section) {
+                case 'ingredients':
+                    await Ingredients.load();
+                    break;
+                case 'recipes':
+                    await Recipes.loadIngredientSelection();
+                    await Recipes.loadHistory();
+                    break;
+                case 'favorites':
+                    await Favorites.load();
+                    break;
+                case 'profiles':
+                    await Profiles.load();
+                    break;
+                case 'settings':
+                    loadSettingsData();
+                    break;
+            }
+        }
+
+        function populateCategoryFilter() {
+            const select = document.getElementById('ingredient-category-filter');
+            CONFIG.CATEGORIES.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+
+        function setupSettingsForm() {
+            // Profile form
+            document.getElementById('settings-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('settings-username').value.trim();
+                const email = document.getElementById('settings-email').value.trim();
+                const emoji = document.getElementById('settings-emoji').value;
+
+                // Validate username
+                if (username && (username.length < 3 || !/^[a-zA-Z0-9_-]+$/.test(username))) {
+                    UI.error('Benutzername muss 3-20 Zeichen lang sein und darf nur Buchstaben, Zahlen, - und _ enthalten.');
+                    return;
+                }
+
+                try {
+                    const data = {};
+                    if (username) data.username = username;
+                    if (email) data.email = email;
+                    if (emoji) data.emoji = emoji;
+
+                    if (Object.keys(data).length > 0) {
+                        await Auth.updateProfile(data);
+                        UI.success('Profil aktualisiert!');
+
+                        // Update User Menu
+                        const user = Auth.getCurrentUser();
+                        UserMenu.updateUserInfo(user);
+                    }
+                } catch (error) {
+                    UI.error(error.message);
+                }
+            });
+
+            // Password form
+            document.getElementById('password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const password = document.getElementById('settings-password').value;
+                const confirm = document.getElementById('settings-password-confirm').value;
+
+                if (password !== confirm) {
+                    UI.error('Passwörter stimmen nicht überein!');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    UI.error('Passwort muss mindestens 6 Zeichen lang sein!');
+                    return;
+                }
+
+                try {
+                    await Auth.updateProfile({ password });
+                    UI.success('Passwort geändert!');
+                    document.getElementById('password-form').reset();
+                } catch (error) {
+                    UI.error(error.message);
+                }
+            });
+        }
+
+        function loadSettingsData() {
+            const user = Auth.getCurrentUser();
+            if (user) {
+                document.getElementById('settings-username').value = user.username || '';
+                document.getElementById('settings-email').value = user.email || '';
+                document.getElementById('settings-emoji').value = user.emoji || '👤';
+
+                const tierInfo = Auth.getTierInfo();
+                document.getElementById('account-info').innerHTML = `
+                    <p><strong>Benutzername:</strong> ${user.username}</p>
+                    <p><strong>E-Mail:</strong> ${user.email}</p>
+                    <p><strong>Subscription:</strong> ${tierInfo.name}</p>
+                    <p><strong>Rezepte heute:</strong> ${user.daily_recipe_count} / ${user.daily_limit}</p>
+                    <p><strong>Mitglied seit:</strong> ${UI.formatDate(user.created_at)}</p>
+                `;
+            }
+        }
+
+        // Settings module
+        const Settings = {
+            setEmoji(emoji) {
+                document.getElementById('settings-emoji').value = emoji;
+            },
+
+            async saveEmoji() {
+                const emoji = document.getElementById('settings-emoji').value || '👤';
+                try {
+                    await Auth.updateProfile({ emoji });
+                    UserMenu.updateUserInfo(Auth.getCurrentUser());
+                    UI.success('Emoji aktualisiert!');
+                } catch (error) {
+                    UI.error(error.message);
+                }
+            },
+
+            deleteAccount() {
+                UI.confirm('Bist du sicher? Dein Account und alle Daten werden unwiderruflich geloescht!', async () => {
+                    try {
+                        await api.deleteMe();
+                        Auth.logout();
+                    } catch (error) {
+                        UI.error(error.message);
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>

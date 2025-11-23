@@ -1,0 +1,2406 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitchenHelper-AI - Intelligent Recipes from Available Ingredients</title>
+    <meta name="description" content="KitchenHelper-AI - AI-powered recipe generator from your available ingredients. Free demo mode, unlimited with AI integration.">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="keywords" content="recipes, cooking, AI kitchen assistant, food waste reduction, intelligent cooking, diabetes, nutrition">
+    <meta name="author" content="Melucio-Labs (David). Inspired by Katja">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="KitchenHelper-AI - Intelligent Recipe Generator">
+    <meta property="og:description" content="Create recipes from your available ingredients. Free demo, unlimited with AI integration.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="KitchenHelper-AI - Intelligent Recipe Generator">
+    <meta property="twitter:description" content="Create recipes from your available ingredients. Free demo, unlimited with AI integration.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .section h2 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Demo Mode Styling - Enhanced */
+        .demo-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196F3;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .demo-section.ai-active {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border: 2px solid #4CAF50;
+        }
+        
+        .demo-watermark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #1976D2;
+            text-transform: uppercase;
+        }
+        
+        .demo-watermark.ai-active {
+            color: #4CAF50;
+        }
+        
+        .demo-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .demo-badge.ai-active {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+        
+        .demo-warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .demo-warning strong {
+            color: #e65100;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        /* Nutrition Profile Section */
+        .nutrition-section {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border: 2px solid #9c27b0;
+        }
+        
+        .section-collapsible {
+            cursor: pointer;
+            position: relative;
+            padding-right: 30px;
+        }
+        
+        .section-collapsible::after {
+            content: '▼';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s;
+        }
+        
+        .section-collapsible.collapsed::after {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+        
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            max-height: 1500px;
+        }
+        
+        .section-content.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        
+        .diet-toggles {
+            display: grid;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .diet-toggle {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .diet-toggle:hover {
+            background: #f5f5f5;
+            transform: translateX(5px);
+        }
+        
+        .diet-toggle input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .diet-toggle label {
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .diet-info {
+            font-size: 12px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .nutrition-disclaimer {
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+            border-radius: 5px;
+        }
+        
+        .nutrition-disclaimer strong {
+            color: #c62828;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        /* BE/KE Radio Button Styling - FIXED */
+        .unit-selector-container {
+            background: #fce4ec;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .radio-option span {
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        /* BE/KE Display Styles */
+        .nutrition-values {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        
+        .portion-info {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .nutrition-values-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .nutrition-value {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+        
+        .be-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .be-green {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .be-yellow {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .be-red {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        /* Portion Calculator Styles */
+        .portion-calculator {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .portion-slider-container {
+            margin: 10px 0;
+        }
+        
+        .portion-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .portion-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .adjusted-nutrition {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        /* Ingredient List with Amounts */
+        .ingredient-detail-list {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .ingredient-detail-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+        
+        .ingredient-detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ingredient-detail-name {
+            font-weight: 500;
+        }
+        
+        .ingredient-detail-amount {
+            color: #666;
+        }
+        
+        .ingredient-detail-be {
+            color: #4CAF50;
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-header {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .comparison-feature {
+            color: #666;
+        }
+        
+        .comparison-demo {
+            color: #2196F3;
+            font-weight: 500;
+        }
+        
+        .comparison-ai {
+            color: #4CAF50;
+            font-weight: 500;
+        }
+        
+        .upgrade-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffa000;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+        }
+        
+        .btn-demo {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            width: 100%;
+            font-size: 18px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .btn-demo:hover {
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .ingredients-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .ingredient-tag {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #a5d6a7;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ingredient-tag .expiry {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .ingredient-tag.expiring {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+            color: #f57c00;
+            border-color: #ffb74d;
+        }
+        
+        .ingredient-tag.expired {
+            background: linear-gradient(135deg, #ffebee 0%, #ef5350 100%);
+            color: #c62828;
+            border-color: #ef5350;
+        }
+        
+        .ingredient-tag.permanent {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            border-color: #90caf9;
+        }
+        
+        .remove-btn {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        
+        .remove-btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .recipes-section {
+            margin-top: 20px;
+        }
+        
+        .recipe-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+        }
+        
+        .recipe-card.demo-recipe {
+            border: 2px dashed #2196F3;
+            background: linear-gradient(135deg, #f3f8ff 0%, #e3f2fd 100%);
+        }
+        
+        .demo-recipe-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #2196F3;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .recipe-card h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .recipe-title-section {
+            flex: 1;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        
+        .difficulty, .cooking-time, .cooking-method {
+            background: rgba(76, 175, 80, 0.1);
+            color: #2e7d32;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .recipe-description {
+            line-height: 1.6;
+            color: #555;
+            margin: 10px 0;
+        }
+        
+        .recipe-ingredients {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .ingredient-list {
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        
+        .leftover-tips {
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+            border-left: 3px solid #ffa000;
+        }
+        
+        .leftover-tips strong {
+            color: #f57c00;
+        }
+        
+        .recipe-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .recipe-actions .btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+        
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 5px;
+            border-radius: 50%;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-btn.active {
+            filter: drop-shadow(0 0 3px gold);
+        }
+        
+        .ai-providers {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .provider-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .provider-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .provider-card.selected {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        }
+        
+        .provider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .provider-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .recommended, .alternative, .budget {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .recommended {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+        
+        .alternative {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+        }
+        
+        .budget {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+        }
+        
+        .provider-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        
+        .provider-info li {
+            padding: 3px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .provider-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .provider-btn {
+            flex: 1;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-content h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Provider Link Modal */
+        .provider-link-modal {
+            text-align: center;
+        }
+        
+        .provider-link-modal h3 {
+            color: #2196F3;
+            margin-bottom: 15px;
+        }
+        
+        .provider-link-modal .external-link {
+            display: inline-block;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .provider-link-modal .external-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .current-provider {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border: 1px solid #a5d6a7;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .current-provider.error {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-color: #ef5350;
+        }
+        
+        .recipe-card p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateX(300px);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.warning {
+            background: #ff9800;
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        /* Suggestions Dropdown */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #4CAF50;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .suggestion-item:hover, .suggestion-item.highlighted {
+            background-color: #e8f5e8;
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .suggestion-category {
+            font-size: 12px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 5px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .suggestion-icon {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .quick-add {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .quick-add-btn {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-add-btn:hover {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            transform: translateY(-1px);
+        }
+        
+        /* Upgrade Modal */
+        .upgrade-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+        
+        .upgrade-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .upgrade-modal-content h3 {
+            color: #f44336;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .upgrade-modal-content p {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .upgrade-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .upgrade-modal-buttons .btn {
+            flex: 1;
+        }
+        
+        /* Debug Section */
+        .debug-section {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border: 2px solid #757575;
+            margin-top: 20px;
+        }
+        
+        .debug-toggle {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .debug-console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* Model selector dropdown */
+        .model-selector {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 KitchenHelper-AI</h1>
+            <p>Intelligente Rezepte aus deinen Zutaten</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- Demo-Modus Sektion - DYNAMISCH -->
+            <div class="section demo-section" id="demoSection">
+                <div class="demo-watermark" id="demoWatermark">Demo</div>
+                <div class="demo-badge" id="demoBadge">Demo-Modus</div>
+                <h2>🚀 <span id="demoTitle">Sofort kostenlos ausprobieren</span></h2>
+                
+                <div id="demoContent">
+                    <p style="margin-bottom: 15px; line-height: 1.6;">
+                        <strong>Teste KitchenHelper-AI ohne Anmeldung!</strong> 
+                        Du erhältst einfache Beispiel-Rezeptvorlagen basierend auf deinen Zutaten.
+                    </p>
+                    
+                    <button class="btn btn-demo" onclick="startDemo()">
+                        ✨ Demo starten - 3 kostenlose Beispiele pro Tag
+                    </button>
+                    
+                    <!-- KRITISCHER DISCLAIMER -->
+                    <div class="demo-warning">
+                        <strong>⚠️ WICHTIG: Einschränkungen im Demo-Modus</strong>
+                        Demo-Rezepte sind nur <u>einfache Basis-Vorlagen</u> ohne KI-Personalisierung!<br>
+                        Für kreative, individuelle und hochwertige Rezepte benötigst du einen KI-Anbieter (siehe unten).<br>
+                        Demo-Rezepte werden visuell mit "DEMO" gekennzeichnet.
+                    </div>
+                    
+                    <div class="comparison-table">
+                        <div class="comparison-row comparison-header">
+                            <div>Feature</div>
+                            <div>Demo-Modus</div>
+                            <div>Mit KI-Anbieter</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-feature">Rezepte pro Tag</div>
+                            <div class="comparison-demo">3 Stück</div>
+                            <div class="comparison-ai">Unbegrenzt</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-feature">Rezept-Qualität</div>
+                            <div class="comparison-demo">Basis-Vorlagen</div>
+                            <div class="comparison-ai">KI-generiert & personalisiert</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-feature">Kreativität</div>
+                            <div class="comparison-demo">Standard-Templates</div>
+                            <div class="comparison-ai">Hochkreativ & einzigartig</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-feature">Nährwerte</div>
+                            <div class="comparison-demo">Nicht verfügbar</div>
+                            <div class="comparison-ai">Detaillierte Angaben</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-feature">Kosten</div>
+                            <div class="comparison-demo">Kostenlos</div>
+                            <div class="comparison-ai">~2-4€/Monat bei normaler Nutzung</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="aiActiveContent" style="display: none;">
+                    <p style="margin-bottom: 15px; line-height: 1.6; color: #2e7d32;">
+                        <strong>✅ KI-Modus aktiv!</strong><br>
+                        Du hast unbegrenzten Zugriff auf personalisierte, hochwertige KI-Rezepte mit detaillierten Nährwertangaben.
+                    </p>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong>Aktives Modell:</strong>
+                            <span id="activeModelDisplay" style="color: #4CAF50; font-weight: bold;">-</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong>Status:</strong>
+                            <span style="color: #4CAF50;">✅ Einsatzbereit</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="upgrade-highlight">
+                    <strong>💡 Warum ein KI-Anbieter?</strong><br>
+                    • Echte KI analysiert deine Zutaten individuell<br>
+                    • Kreative, überraschende Rezept-Kombinationen<br>
+                    • Berücksichtigt Haltbarkeit und Reste-Verwertung<br>
+                    • Nährwerte und BE-Berechnung für Diabetiker<br>
+                    • Unbegrenzte Rezept-Generierung<br>
+                    • Kontinuierliche Verbesserung der Vorschläge
+                </div>
+            </div>
+            
+            <!-- NEUE SEKTION: Ernährungsprofil - FIXED BE/KE Radio Buttons -->
+            <div class="section nutrition-section">
+                <h2 class="section-collapsible" onclick="toggleSection(this)">
+                    🎯 Ernährungsprofil (Optional)
+                </h2>
+                
+                <div class="section-content" id="nutritionContent">
+                    <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+                        Aktiviere spezielle Ernährungsprofile für angepasste Rezeptvorschläge mit Nährwerten.
+                    </p>
+                    
+                    <div class="diet-toggles">
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="diabetic" onchange="handleDietToggle('diabetic')">
+                                <span style="flex: 1;">Diabetes-Management</span>
+                                <span class="diet-info">BE/KE-Anzeige</span>
+                            </label>
+                        </div>
+                        
+                        <!-- BE/KE Auswahl - COMPLETELY FIXED HTML Structure -->
+                        <div id="unitSelector" class="unit-selector-container" style="display: none;">
+                            <div style="margin-bottom: 8px; font-weight: bold; color: #333;">Einheit wählen:</div>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="unitKE" name="diabetesUnit" value="KE" checked>
+                                    <span onclick="document.getElementById('unitKE').click()">KE (10g KH)</span>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="unitBE" name="diabetesUnit" value="BE">
+                                    <span onclick="document.getElementById('unitBE').click()">BE (12g KH)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="keto" onchange="handleDietToggle('keto')">
+                                <span style="flex: 1;">Ketogene Ernährung</span>
+                                <span class="diet-info">&lt;20g KH</span>
+                            </label>
+                        </div>
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="lowcarb" onchange="handleDietToggle('lowcarb')">
+                                <span style="flex: 1;">Low-Carb</span>
+                                <span class="diet-info">&lt;100g KH</span>
+                            </label>
+                        </div>
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="glutenfree" onchange="handleDietToggle('glutenfree')">
+                                <span style="flex: 1;">Glutenfrei</span>
+                                <span class="diet-info">Zöliakie-geeignet</span>
+                            </label>
+                        </div>
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="vegan" onchange="handleDietToggle('vegan')">
+                                <span style="flex: 1;">Vegan</span>
+                                <span class="diet-info">Rein pflanzlich</span>
+                            </label>
+                        </div>
+                        <div class="diet-toggle">
+                            <label style="width: 100%; display: flex; align-items: center;">
+                                <input type="checkbox" id="vegetarian" onchange="handleDietToggle('vegetarian')">
+                                <span style="flex: 1;">Vegetarisch</span>
+                                <span class="diet-info">Ohne Fleisch</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="nutrition-disclaimer" style="background: #e3f2fd; border-left-color: #1976D2;">
+                        <strong style="color: #1565c0;">ℹ️ Allgemeiner Hinweis</strong>
+                        Alle Nährwertangaben sind KI-Schätzungen zur Orientierung. Diese App ersetzt keine medizinische oder ernährungswissenschaftliche Beratung. Bei gesundheitlichen Fragen konsultiere bitte Fachpersonal.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zutaten hinzufügen -->
+            <div class="section">
+                <h2>🥕 Zutaten verwalten</h2>
+                
+                <!-- Schnell-Auswahl für häufige Zutaten -->
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: #4CAF50; margin-bottom: 8px; font-size: 14px;">Häufig verwendet:</h4>
+                    <div class="quick-add" id="quickAdd"></div>
+                </div>
+                
+                <div class="input-group">
+                    <div style="position: relative; flex: 1;">
+                        <input type="text" id="ingredientInput" placeholder="Zutat eingeben oder auswählen..." 
+                               autocomplete="off" oninput="showSuggestions()" onblur="hideSuggestions()" onkeydown="handleKeyDown(event)">
+                        <div id="suggestionsList" class="suggestions-dropdown" style="display: none;"></div>
+                    </div>
+                    <button class="btn" onclick="addIngredient()">Hinzufügen</button>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <button class="btn btn-secondary" onclick="addPermanentSpices()" style="width: 100%;">
+                        🧂 Standard-Gewürze hinzufügen
+                    </button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="totalIngredients">0</div>
+                        <div class="stat-label">Gesamt</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="expiringIngredients">0</div>
+                        <div class="stat-label">Läuft ab</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="expiredIngredients">0</div>
+                        <div class="stat-label">Abgelaufen</div>
+                    </div>
+                </div>
+                
+                <div class="ingredients-list" id="ingredientsList"></div>
+            </div>
+            
+            <!-- Rezepte generieren -->
+            <div class="section">
+                <h2>📖 Rezepte finden</h2>
+                <button class="btn" onclick="generateRecipes()" id="generateBtn" style="width: 100%;">
+                    🎯 Rezepte generieren
+                </button>
+                
+                <div id="recipesContainer"></div>
+            </div>
+            
+            <!-- Status & Limits Section -->
+            <div class="section">
+                <h2>📊 Status & Limits</h2>
+                <div id="currentProvider"></div>
+            </div>
+            
+            <!-- KI-Anbieter Auswahl -->
+            <div class="section">
+                <h2>🤖 Für Vollversion: KI-Anbieter wählen</h2>
+                
+                <p style="margin-bottom: 20px; color: #666; line-height: 1.6;">
+                    <strong>Optional:</strong> Verbinde einen KI-Anbieter für unbegrenzte, hochqualitative Rezepte mit Nährwertangaben. 
+                    Alle Anbieter haben kostenlose Startguthaben - keine Abo-Kosten!
+                </p>
+                
+                <div class="ai-providers">
+                    <div class="provider-card" data-provider="anthropic">
+                        <div class="provider-header">
+                            <h3>🤖 Anthropic Claude</h3>
+                            <span class="recommended">Empfohlen</span>
+                        </div>
+                        <div class="provider-info">
+                            <p><strong>Beste Wahl für Rezepte</strong></p>
+                            <ul>
+                                <li>✅ Kreative & detaillierte Rezepte</li>
+                                <li>✅ Präzise Nährwertberechnung</li>
+                                <li>✅ $5 kostenloses Startguthaben</li>
+                                <li>💶 ~2.50€ pro 1M Token</li>
+                                <li>✅ Sehr sicher & zuverlässig</li>
+                            </ul>
+                        </div>
+                        <div class="provider-actions">
+                            <button class="btn provider-btn" onclick="registerProvider('anthropic')">
+                                🚀 Bei Claude anmelden
+                            </button>
+                            <button class="btn btn-secondary" onclick="configureProvider('anthropic')" style="display: none;">
+                                ⚙️ API Key eingeben
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="provider-card" data-provider="openai">
+                        <div class="provider-header">
+                            <h3>🧠 OpenAI GPT-5</h3>
+                            <span class="alternative">Neu & Mächtig</span>
+                        </div>
+                        <div class="provider-info">
+                            <p><strong>Neueste GPT-5 Technologie</strong></p>
+                            <ul>
+                                <li>🚀 GPT-5 verfügbar (3 Modelle)</li>
+                                <li>⚡ Blitzschnelle Antworten</li>
+                                <li>📊 Perfekte Nährwertdaten</li>
+                                <li>💶 GPT-5-mini: ~2€/1M Token</li>
+                                <li>💶 GPT-5-nano: ~0.40€/1M Token</li>
+                                <li>🎯 Optimal: GPT-5-mini</li>
+                            </ul>
+                        </div>
+                        <div class="provider-actions">
+                            <button class="btn provider-btn" onclick="registerProvider('openai')">
+                                🚀 Bei OpenAI anmelden
+                            </button>
+                            <button class="btn btn-secondary" onclick="configureProvider('openai')" style="display: none;">
+                                ⚙️ API Key eingeben
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="provider-card" data-provider="gemini">
+                        <div class="provider-header">
+                            <h3>🌟 Google Gemini</h3>
+                            <span class="budget">Günstig</span>
+                        </div>
+                        <div class="provider-info">
+                            <p><strong>Günstigste Option</strong></p>
+                            <ul>
+                                <li>💶 Sehr günstig (~0.40€/1M Token)</li>
+                                <li>🆓 Großzügiges kostenloses Kontingent</li>
+                                <li>⚡ Google's neueste KI</li>
+                                <li>📊 Basis-Nährwertberechnung</li>
+                                <li>🧪 Noch in der Entwicklung</li>
+                            </ul>
+                        </div>
+                        <div class="provider-actions">
+                            <button class="btn provider-btn" onclick="registerProvider('gemini')">
+                                🚀 Bei Google anmelden
+                            </button>
+                            <button class="btn btn-secondary" onclick="configureProvider('gemini')" style="display: none;">
+                                ⚙️ API Key eingeben
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API Key Eingabe Modal -->
+                <div id="apiKeyModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <h3 id="modalTitle">API Key eingeben</h3>
+                        <p id="modalDescription"></p>
+                        
+                        <!-- Model Selector for OpenAI -->
+                        <div id="modelSelector" style="display: none; margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Modell wählen:</label>
+                            <select class="model-selector" id="modelSelect" onchange="updateSelectedModel()">
+                                <option value="gpt-5-mini">GPT-5-mini (Empfohlen - ~2€/1M Token)</option>
+                                <option value="gpt-5-nano">GPT-5-nano (Günstigst - ~0.40€/1M Token)</option>
+                                <option value="gpt-5">GPT-5 (Premium - ~8€/1M Token)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="password" id="apiKeyInput" placeholder="API Key hier eingeben...">
+                            <button class="btn" onclick="saveApiKey()">Speichern</button>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button class="btn btn-secondary" onclick="closeModal()">Abbrechen</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Provider Link Modal - FIXED for robust link handling -->
+                <div id="providerLinkModal" class="modal" style="display: none;">
+                    <div class="modal-content provider-link-modal">
+                        <h3 id="linkModalTitle">🔗 Anmeldung beim Anbieter</h3>
+                        <p id="linkModalDescription">Klicke auf den Link um dich beim Anbieter anzumelden:</p>
+                        
+                        <a id="providerExternalLink" href="#" target="_blank" class="external-link">
+                            Anbieter öffnen
+                        </a>
+                        
+                        <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                            Nach der Anmeldung:<br>
+                            1. Erstelle einen API Key im Dashboard<br>
+                            2. Komme hierher zurück<br>
+                            3. Gib den Key unten ein
+                        </p>
+                        
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <button class="btn" onclick="proceedToKeyInput()" style="flex: 1;">
+                                ⚙️ Key eingeben
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeProviderLinkModal()" style="flex: 1;">
+                                Später
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Debug Section -->
+            <div class="section debug-section">
+                <h2>🔧 Entwickler-Optionen</h2>
+                <div class="diet-toggles">
+                    <div class="debug-toggle">
+                        <label style="width: 100%; display: flex; align-items: center;">
+                            <input type="checkbox" id="debugMode" onchange="updateDebugMode()">
+                            <span style="flex: 1;">API-Anfragen anzeigen (Debug-Modus)</span>
+                            <span class="diet-info">Für Entwickler</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="debugConsole" class="debug-console" style="display: none;">
+                    <div id="debugOutput">Debug-Ausgabe erscheint hier...</div>
+                </div>
+            </div>
+
+            <!-- Favoriten -->
+            <div class="section">
+                <h2>⭐ Lieblings-Rezepte</h2>
+                <div id="favoritesContainer">
+                    <p style="color: #999; font-style: italic;">Noch keine Favoriten gespeichert</p>
+                </div>
+            </div>
+
+            <!-- Reste verwalten -->
+            <div class="section">
+                <h2>🥡 Reste verwalten</h2>
+                <p style="margin-bottom: 15px; color: #666;">Markiere Zutaten als verwendet oder als Reste für morgen:</p>
+                <div id="leftoversContainer">
+                    <p style="color: #999; font-style: italic;">Generiere erst Rezepte, um Reste zu verwalten</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upgrade Modal -->
+    <div class="upgrade-modal" id="upgradeModal">
+        <div class="upgrade-modal-content">
+            <h3>⚠️ Demo-Limit erreicht</h3>
+            <p>
+                Du hast heute bereits 3 Demo-Rezepte generiert.<br><br>
+                <strong>Demo-Rezepte sind nur einfache Vorlagen!</strong><br>
+                Für kreative, personalisierte KI-Rezepte mit Nährwerten benötigst du einen KI-Anbieter.
+            </p>
+            <div class="upgrade-modal-buttons">
+                <button class="btn" onclick="scrollToProviders()">
+                    🤖 KI-Anbieter wählen
+                </button>
+                <button class="btn btn-secondary" onclick="closeUpgradeModal()">
+                    Später
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diet Profile Warning Modal -->
+    <div class="upgrade-modal" id="dietWarningModal" style="display: none;">
+        <div class="upgrade-modal-content" style="max-width: 500px;">
+            <h3 id="dietWarningTitle" style="color: #d32f2f;">⚠️ Wichtiger Hinweis</h3>
+            <div id="dietWarningContent" style="text-align: left; line-height: 1.8; color: #333;"></div>
+            <div style="margin-top: 20px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                    <input type="checkbox" id="dontShowAgainCheckbox" style="width: 18px; height: 18px;">
+                    <span style="font-size: 14px;">Ich habe verstanden, diese Warnung nicht mehr anzeigen</span>
+                </label>
+            </div>
+            <div class="upgrade-modal-buttons" style="margin-top: 20px;">
+                <button class="btn" onclick="acceptDietWarning()" style="width: 100%;">
+                    ✓ Verstanden
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// KitchenHelper-AI v4.2 - IMPROVED BE/KE Calculation with Portion Support
+// Author: Melucio-Labs (David). Inspired by Katja
+// CRITICAL UPDATE: Precise nutrition info per serving + portion calculator
+
+// Diet Profiles Configuration
+const dietProfiles = {
+    diabetic: { 
+        showBE: true, 
+        maxBE: 6,
+        name: 'Diabetes-Management',
+        requirements: 'KE/BE-Berechnung PRO PORTION, langsame Kohlenhydrate bevorzugt',
+        warning: {
+            title: '🚨 KRITISCHER MEDIZINISCHER HINWEIS: Diabetes-Management',
+            content: `
+                <p style="margin-bottom: 15px;"><strong>Diese App dient AUSSCHLIESSLICH der groben Orientierung und ersetzt KEINE medizinische Beratung!</strong></p>
+                
+                <div style="background: #ffebee; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong style="color: #c62828;">Alle BE/KE-Angaben sind:</strong><br>
+                    • KI-geschätzte Näherungswerte PRO PORTION<br>
+                    • <strong>NICHT für Insulin-Dosierung geeignet</strong><br>
+                    • NICHT medizinisch validiert<br>
+                    • Nur zum groben Rezept-Vergleich gedacht
+                </div>
+                
+                <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong style="color: #2e7d32;">Für Insulin-Dosierung IMMER:</strong><br>
+                    • Eigene Portion wiegen<br>
+                    • Offizielle Nährwerttabellen nutzen<br>
+                    • Diabetologen/Ernährungsberater konsultieren<br>
+                    • Zertifizierte Diabetes-Apps verwenden
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 12px; border-radius: 8px;">
+                    <strong style="color: #7b1fa2;">KE/BE-Definition:</strong><br>
+                    • <strong>KE</strong> (Kohlenhydrateinheit) = 10g Kohlenhydrate<br>
+                    • <strong>BE</strong> (Broteinheit) = 12g Kohlenhydrate<br>
+                    Pro Portion, nicht pro 100g!
+                </div>
+                
+                <p style="margin-top: 15px; font-size: 13px; color: #666;">
+                    Nur fortfahren, wenn du diese Einschränkungen verstanden hast und die App nur zur Rezept-Inspiration nutzt.
+                </p>
+            `
+        }
+    },
+    keto: { 
+        maxCarbs: 20,
+        name: 'Ketogen',
+        requirements: 'Maximal 20g Kohlenhydrate pro Portion',
+        warning: {
+            title: '⚠️ Hinweis: Ketogene Ernährung',
+            content: `
+                <p style="margin-bottom: 15px;">Die ketogene Ernährung ist eine sehr kohlenhydratarme Diät mit potenziellen Gesundheitsrisiken.</p>
+                
+                <div style="background: #fff3e0; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Wichtig zu wissen:</strong><br>
+                    • Nicht für jeden geeignet (Schwangerschaft, Stillzeit, bestimmte Erkrankungen)<br>
+                    • Kann zu "Keto-Grippe" führen (Müdigkeit, Kopfschmerzen)<br>
+                    • Elektrolyte beachten (Natrium, Kalium, Magnesium)<br>
+                    • Bei Vorerkrankungen Arzt konsultieren
+                </div>
+                
+                <p style="font-size: 13px; color: #666;">
+                    Die Nährwertangaben in dieser App sind Schätzungen. Für medizinische Ketose bitte Fachpersonal konsultieren.
+                </p>
+            `
+        }
+    },
+    lowcarb: { 
+        maxCarbs: 100,
+        name: 'Low-Carb',
+        requirements: 'Maximal 100g Kohlenhydrate pro Portion',
+        warning: {
+            title: 'ℹ️ Hinweis: Low-Carb Ernährung',
+            content: `
+                <p style="margin-bottom: 15px;">Low-Carb bedeutet reduzierte Kohlenhydrataufnahme. Dies ist für die meisten Menschen unbedenklich, aber:</p>
+                
+                <div style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Beachte:</strong><br>
+                    • Ausgewogene Ernährung wichtig (ausreichend Vitamine & Mineralstoffe)<br>
+                    • Bei Diabetes: Blutzucker-Kontrolle anpassen<br>
+                    • Sportler: Leistung kann initial beeinträchtigt sein<br>
+                    • Bei Unsicherheit Ernährungsberater konsultieren
+                </div>
+                
+                <p style="font-size: 13px; color: #666;">
+                    Die Nährwertangaben sind KI-Schätzungen zur Orientierung.
+                </p>
+            `
+        }
+    },
+    glutenfree: {
+        name: 'Glutenfrei',
+        requirements: 'Keine glutenhaltigen Zutaten',
+        warning: {
+            title: 'ℹ️ Hinweis: Glutenfreie Ernährung',
+            content: `
+                <p style="margin-bottom: 15px;">Glutenfreie Ernährung ist wichtig bei Zöliakie oder Glutensensitivität.</p>
+                
+                <div style="background: #fff3e0; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Wichtig bei Zöliakie:</strong><br>
+                    • Bereits kleinste Glutenmengen können schädlich sein<br>
+                    • Die KI kann Kontaminationsrisiken nicht bewerten<br>
+                    • Prüfe alle Zutaten auf verstecktes Gluten<br>
+                    • Bei medizinischer Notwendigkeit: Zertifizierte Produkte nutzen
+                </div>
+                
+                <p style="font-size: 13px; color: #666;">
+                    Die App kann keine garantiert glutenfreien Rezepte liefern. Eigenverantwortung ist erforderlich.
+                </p>
+            `
+        }
+    },
+    vegan: {
+        name: 'Vegan',
+        requirements: 'Nur pflanzliche Zutaten',
+        warning: {
+            title: 'ℹ️ Hinweis: Vegane Ernährung',
+            content: `
+                <p style="margin-bottom: 15px;">Vegane Ernährung kann gesund und nachhaltig sein, erfordert aber Planung.</p>
+                
+                <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Beachte kritische Nährstoffe:</strong><br>
+                    • Vitamin B12 (Supplement notwendig!)<br>
+                    • Eisen, Zink, Jod, Omega-3<br>
+                    • Protein-Vielfalt wichtig<br>
+                    • Bei einseitiger Ernährung: Ernährungsberatung empfohlen
+                </div>
+                
+                <p style="font-size: 13px; color: #666;">
+                    Die App prüft keine Nährstoffabdeckung. Achte selbst auf ausgewogene Ernährung.
+                </p>
+            `
+        }
+    },
+    vegetarian: {
+        name: 'Vegetarisch',
+        requirements: 'Keine Fleisch- oder Fischprodukte',
+        warning: {
+            title: 'ℹ️ Hinweis: Vegetarische Ernährung',
+            content: `
+                <p style="margin-bottom: 15px;">Vegetarische Ernährung ist für die meisten Menschen unbedenklich.</p>
+                
+                <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Tipp:</strong><br>
+                    • Eisenreiche pflanzliche Quellen nutzen (Hülsenfrüchte, Vollkorn)<br>
+                    • Vitamin C verbessert Eisenaufnahme<br>
+                    • Proteinquellen variieren (Eier, Milchprodukte, Hülsenfrüchte)<br>
+                    • Vitamin B12 ggf. über Milchprodukte/Eier oder Supplement
+                </div>
+                
+                <p style="font-size: 13px; color: #666;">
+                    Die App gibt allgemeine Rezeptideen, keine individuelle Ernährungsberatung.
+                </p>
+            `
+        }
+    }
+};
+
+// Track which warnings have been accepted
+let acceptedWarnings = JSON.parse(localStorage.getItem('acceptedWarnings') || '{}');
+
+// Current profile being warned about
+let currentWarningProfile = null;
+
+// Active diet profiles
+let activeDietProfiles = {};
+
+// Diabetes unit setting (KE or BE)
+let diabetesUnit = localStorage.getItem('diabetesUnit') || 'KE';
+
+// Debug mode
+let debugMode = localStorage.getItem('debugMode') === 'true';
+
+// Selected OpenAI model
+let selectedOpenAIModel = localStorage.getItem('selectedOpenAIModel') || 'gpt-5-mini';
+
+// App State
+let ingredients = JSON.parse(localStorage.getItem('ingredients') || '[]');
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+let permanentSpices = JSON.parse(localStorage.getItem('permanentSpices') || '[]');
+let apiKey = localStorage.getItem('api_key') || '';
+let apiProvider = localStorage.getItem('api_provider') || 'anthropic';
+let currentRecipes = [];
+let dailyRecipeCount = parseInt(localStorage.getItem('dailyRecipeCount') || '0');
+let lastResetDate = localStorage.getItem('lastResetDate') || new Date().toDateString();
+
+// Current provider being registered (for modal flow)
+let currentProviderForRegistration = null;
+
+// API Provider configurations
+const apiProviders = {
+    anthropic: {
+        name: 'Anthropic Claude',
+        url: 'https://api.anthropic.com/v1/messages',
+        model: 'claude-3-sonnet-20240229',
+        keyPrefix: 'sk-ant-',
+        signupUrl: 'https://console.anthropic.com/',
+        info: 'API Key wird nur lokal gespeichert. ~2.50€ pro 1M Token',
+        pricePerMillion: '2.50€'
+    },
+    openai: {
+        name: 'OpenAI GPT-5',
+        url: 'https://api.openai.com/v1/chat/completions',
+        models: {
+            'gpt-5': { name: 'GPT-5', price: '~8€/1M Token' },
+            'gpt-5-mini': { name: 'GPT-5-mini', price: '~2€/1M Token' },
+            'gpt-5-nano': { name: 'GPT-5-nano', price: '~0.40€/1M Token' }
+        },
+        keyPrefix: 'sk-',
+        signupUrl: 'https://platform.openai.com/',
+        info: 'API Key wird nur lokal gespeichert. GPT-5 verfügbar!',
+        getModel: () => selectedOpenAIModel || 'gpt-5-mini',
+        getPricePerMillion: () => {
+            const models = apiProviders.openai.models;
+            const model = selectedOpenAIModel || 'gpt-5-mini';
+            return models[model]?.price || '~2€/1M Token';
+        }
+    },
+    gemini: {
+        name: 'Google Gemini',
+        url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+        model: 'gemini-2.5-flash',
+        keyPrefix: '',
+        signupUrl: 'https://makersuite.google.com/',
+        info: 'API Key wird nur lokal gespeichert. ~0.40€ pro 1M Token',
+        pricePerMillion: '0.40€'
+    }
+};
+
+// Check if Demo Mode should be active
+function shouldUseDemoMode() {
+    return !apiKey;
+}
+
+// Update Demo Section Display
+function updateDemoSectionDisplay() {
+    const demoSection = document.getElementById('demoSection');
+    const demoWatermark = document.getElementById('demoWatermark');
+    const demoBadge = document.getElementById('demoBadge');
+    const demoTitle = document.getElementById('demoTitle');
+    const demoContent = document.getElementById('demoContent');
+    const aiActiveContent = document.getElementById('aiActiveContent');
+    
+    if (!demoSection) return;
+    
+    if (apiKey) {
+        demoSection.classList.add('ai-active');
+        demoWatermark.classList.add('ai-active');
+        demoWatermark.textContent = 'KI AKTIV';
+        demoBadge.classList.add('ai-active');
+        demoBadge.textContent = 'KI-Modus';
+        demoTitle.textContent = 'KI-Modus aktiviert';
+        demoContent.style.display = 'none';
+        aiActiveContent.style.display = 'block';
+        
+        const activeModelDisplay = document.getElementById('activeModelDisplay');
+        if (activeModelDisplay) {
+            const provider = apiProviders[apiProvider];
+            let modelName = provider.name;
+            if (apiProvider === 'openai') {
+                modelName = `OpenAI ${selectedOpenAIModel.toUpperCase()}`;
+            }
+            activeModelDisplay.textContent = modelName;
+        }
+    } else {
+        demoSection.classList.remove('ai-active');
+        demoWatermark.classList.remove('ai-active');
+        demoWatermark.textContent = 'Demo';
+        demoBadge.classList.remove('ai-active');
+        demoBadge.textContent = 'Demo-Modus';
+        demoTitle.textContent = 'Sofort kostenlos ausprobieren';
+        demoContent.style.display = 'block';
+        aiActiveContent.style.display = 'none';
+    }
+}
+
+// Carbohydrate Unit Calculation Function
+function calculateCarbUnit(carbs) {
+    const divisor = diabetesUnit === 'KE' ? 10 : 12;
+    return Math.round(carbs / divisor * 10) / 10;
+}
+
+// Unit Color Coding
+function getUnitColorClass(units) {
+    if (units < 2) return 'be-green';
+    if (units <= 6) return 'be-yellow';
+    return 'be-red';
+}
+
+// Initialize radio button listeners
+function initializeRadioButtons() {
+    const radioButtons = document.querySelectorAll('input[name="diabetesUnit"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                diabetesUnit = this.value;
+                localStorage.setItem('diabetesUnit', diabetesUnit);
+                showNotification(`Einheit auf ${diabetesUnit} geändert!`, 'success');
+                debugLog(`Diabetes unit changed to: ${diabetesUnit}`);
+                
+                if (currentRecipes.length > 0) {
+                    displayRecipes(currentRecipes);
+                }
+            }
+        });
+    });
+}
+
+// Handle Diet Toggle with Warning Check
+function handleDietToggle(profile) {
+    const checkbox = document.getElementById(profile);
+    if (!checkbox) return;
+    
+    // If unchecking, just update
+    if (!checkbox.checked) {
+        updateDietProfile();
+        return;
+    }
+    
+    // If checking and warning not yet accepted, show warning
+    if (!acceptedWarnings[profile] && dietProfiles[profile]?.warning) {
+        // Uncheck temporarily
+        checkbox.checked = false;
+        // Show warning modal
+        showDietWarning(profile);
+        return;
+    }
+    
+    // If warning already accepted or no warning needed, just update
+    updateDietProfile();
+}
+
+// Update Diet Profile
+function updateDietProfile() {
+    activeDietProfiles = {};
+    
+    const diabeticCheckbox = document.getElementById('diabetic');
+    const unitSelector = document.getElementById('unitSelector');
+    if (unitSelector) {
+        unitSelector.style.display = diabeticCheckbox?.checked ? 'block' : 'none';
+    }
+    
+    Object.keys(dietProfiles).forEach(profile => {
+        const checkbox = document.getElementById(profile);
+        if (checkbox && checkbox.checked) {
+            activeDietProfiles[profile] = dietProfiles[profile];
+            localStorage.setItem(`diet_${profile}`, 'true');
+        } else {
+            localStorage.removeItem(`diet_${profile}`);
+        }
+    });
+    
+    console.log('Active diet profiles:', activeDietProfiles);
+    showNotification(`Ernährungsprofil aktualisiert!`, 'success');
+}
+
+// Show Diet Warning Modal
+function showDietWarning(profile) {
+    currentWarningProfile = profile;
+    const profileData = dietProfiles[profile];
+    
+    if (!profileData || !profileData.warning) {
+        // No warning defined, just activate
+        const checkbox = document.getElementById(profile);
+        if (checkbox) checkbox.checked = true;
+        updateDietProfile();
+        return;
+    }
+    
+    const modal = document.getElementById('dietWarningModal');
+    const title = document.getElementById('dietWarningTitle');
+    const content = document.getElementById('dietWarningContent');
+    const checkbox = document.getElementById('dontShowAgainCheckbox');
+    
+    if (!modal || !title || !content || !checkbox) {
+        console.error('Warning modal elements not found');
+        return;
+    }
+    
+    title.textContent = profileData.warning.title;
+    content.innerHTML = profileData.warning.content;
+    checkbox.checked = false;
+    
+    modal.style.display = 'flex';
+    
+    debugLog(`Showing warning for profile: ${profile}`);
+}
+
+// Accept Diet Warning
+function acceptDietWarning() {
+    if (!currentWarningProfile) return;
+    
+    const dontShowAgain = document.getElementById('dontShowAgainCheckbox')?.checked;
+    
+    if (dontShowAgain) {
+        acceptedWarnings[currentWarningProfile] = true;
+        localStorage.setItem('acceptedWarnings', JSON.stringify(acceptedWarnings));
+        debugLog(`Warning accepted permanently for: ${currentWarningProfile}`);
+    }
+    
+    // Now activate the profile
+    const checkbox = document.getElementById(currentWarningProfile);
+    if (checkbox) {
+        checkbox.checked = true;
+    }
+    
+    // Close modal
+    const modal = document.getElementById('dietWarningModal');
+    if (modal) modal.style.display = 'none';
+    
+    const profile = currentWarningProfile;
+    currentWarningProfile = null;
+    
+    // Update profiles
+    updateDietProfile();
+    
+    showNotification(`${dietProfiles[profile]?.name || 'Profil'} aktiviert!`, 'success');
+}
+
+// Load Diet Profiles from LocalStorage
+function loadDietProfiles() {
+    const savedUnit = localStorage.getItem('diabetesUnit');
+    if (savedUnit) {
+        diabetesUnit = savedUnit;
+        const unitRadio = document.getElementById(savedUnit === 'KE' ? 'unitKE' : 'unitBE');
+        if (unitRadio) unitRadio.checked = true;
+    }
+    
+    initializeRadioButtons();
+    
+    Object.keys(dietProfiles).forEach(profile => {
+        const checkbox = document.getElementById(profile);
+        if (checkbox && localStorage.getItem(`diet_${profile}`) === 'true') {
+            checkbox.checked = true;
+            activeDietProfiles[profile] = dietProfiles[profile];
+            
+            if (profile === 'diabetic') {
+                const unitSelector = document.getElementById('unitSelector');
+                if (unitSelector) unitSelector.style.display = 'block';
+            }
+        }
+    });
+}
+
+// Update Debug Mode
+function updateDebugMode() {
+    const checkbox = document.getElementById('debugMode');
+    const debugConsole = document.getElementById('debugConsole');
+    
+    debugMode = checkbox.checked;
+    localStorage.setItem('debugMode', debugMode.toString());
+    
+    if (debugConsole) {
+        debugConsole.style.display = debugMode ? 'block' : 'none';
+    }
+    
+    showNotification(`Debug-Modus ${debugMode ? 'aktiviert' : 'deaktiviert'}!`, 'success');
+}
+
+// Log to Debug Console
+function debugLog(message, data = null) {
+    if (!debugMode) return;
+    
+    const debugOutput = document.getElementById('debugOutput');
+    if (!debugOutput) return;
+    
+    const timestamp = new Date().toLocaleTimeString('de-DE');
+    let output = `[${timestamp}] ${message}\n`;
+    
+    if (data) {
+        output += JSON.stringify(data, null, 2) + '\n';
+    }
+    
+    output += '---\n';
+    
+    debugOutput.textContent = output + debugOutput.textContent;
+    console.log(`[DEBUG ${timestamp}]`, message, data);
+}
+
+// Update Selected Model (for OpenAI)
+function updateSelectedModel() {
+    const modelSelect = document.getElementById('modelSelect');
+    if (modelSelect) {
+        selectedOpenAIModel = modelSelect.value;
+        localStorage.setItem('selectedOpenAIModel', selectedOpenAIModel);
+        debugLog(`OpenAI Model selected: ${selectedOpenAIModel}`);
+    }
+}
+
+// Toggle Section Visibility
+function toggleSection(header) {
+    const content = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    content.classList.toggle('collapsed');
+    
+    if (content.classList.contains('collapsed')) {
+        content.style.maxHeight = '0';
+    } else {
+        content.style.maxHeight = '1500px';
+    }
+}
+
+// Upgrade Modal Functions
+function showUpgradeModal() {
+    document.getElementById('upgradeModal').style.display = 'flex';
+}
+
+function closeUpgradeModal() {
+    document.getElementById('upgradeModal').style.display = 'none';
+}
+
+function scrollToProviders() {
+    closeUpgradeModal();
+    const providersSection = document.querySelector('.ai-providers').parentElement;
+    providersSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Enhanced Smart Mock Recipes with DEMO indicators
+function generateSmartMockRecipes(allAvailableItems) {
+    const freshIngredients = allAvailableItems.filter(item => !item.isPermanent).map(item => item.name);
+    const spicesAvailable = allAvailableItems.filter(item => item.isPermanent).map(item => item.name);
+    
+    const numRecipes = Math.min(5, Math.max(3, Math.floor(freshIngredients.length / 2)));
+    
+    const getRandomSpices = (count = 2) => {
+        if (spicesAvailable.length === 0) return [];
+        const shuffled = [...spicesAvailable].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, Math.min(count, spicesAvailable.length));
+    };
+    
+    const smartRecipeTemplates = [
+        {
+            name: `Zero-Waste Power-Pfanne [DEMO]`,
+            description: `DEMO-VORLAGE: Geniale One-Pot Lösung mit ${freshIngredients.slice(0, 3).join(', ')} ${getRandomSpices(2).length ? `und ${getRandomSpices(2).join(', ')}` : ''}! Alle Zutaten nacheinander in die heiße Pfanne, 15 Min köcheln lassen.`,
+            difficulty: 2,
+            cookingTime: "15 Min",
+            method: "Pfanne",
+            servings: 2,
+            usedIngredients: [...freshIngredients.slice(0, 4), ...getRandomSpices(2)],
+            leftoverTips: `Die ersten ${freshIngredients.slice(4, 6).join(' und ')} sind ideal für ein schnelles Sandwich morgen!`,
+            isDemo: true,
+            ingredients: null,
+            nutritionPerServing: null
+        },
+        {
+            name: `No-Shopping Bowl [DEMO]`,
+            description: `DEMO-VORLAGE: Trendy Bowl nur mit ${freshIngredients.slice(1, 4).join(', ')} ${getRandomSpices().length ? `und ${getRandomSpices().join(', ')}` : ''}! Mix aus gekochten und rohen Elementen.`,
+            difficulty: 3,
+            cookingTime: "20 Min",
+            method: "Mix",
+            servings: 2,
+            usedIngredients: [...freshIngredients.slice(1, 5), ...getRandomSpices()],
+            leftoverTips: `Bowl-Reste eignen sich perfekt als Wrap-Füllung für das Lunch morgen!`,
+            isDemo: true,
+            ingredients: null,
+            nutritionPerServing: null
+        },
+        {
+            name: `Express-Suppe aus dem Vorratsschrank [DEMO]`,
+            description: `DEMO-VORLAGE: Blitz-Suppe mit ${freshIngredients.slice(0, 3).join(', ')} ${getRandomSpices(3).length ? `und ${getRandomSpices(3).join(', ')}` : ''}! Alles klein schneiden, in Wasser 20 Min köcheln.`,
+            difficulty: 2,
+            cookingTime: "25 Min", 
+            method: "Topf",
+            servings: 2,
+            usedIngredients: [...freshIngredients.slice(0, 4), ...getRandomSpices(3)],
+            leftoverTips: `Übrige ${freshIngredients.slice(4).join(', ')} halten sich 2-3 Tage im Kühlschrank.`,
+            isDemo: true,
+            ingredients: null,
+            nutritionPerServing: null
+        }
+    ];
+    
+    return smartRecipeTemplates.slice(0, numRecipes);
+}
+
+// Standard permanent spices
+const standardSpices = [
+    'Salz', 'Pfeffer', 'Olivenöl', 'Butter', 'Knoblauch', 'Zwiebeln',
+    'Paprika', 'Oregano', 'Basilikum', 'Thymian', 'Rosmarin', 'Petersilie',
+    'Zimt', 'Zucker', 'Essig', 'Sojasauce', 'Senf', 'Honig'
+];
+
+// Ingredient database
+const ingredientDatabase = {
+    'Gemüse': ['Tomaten', 'Gurken', 'Paprika', 'Zwiebeln', 'Knoblauch', 'Karotten', 'Zucchini', 'Aubergine', 'Brokkoli', 'Blumenkohl', 'Spinat', 'Salat', 'Rucola', 'Champignons', 'Lauch', 'Sellerie', 'Radieschen', 'Kürbis', 'Süßkartoffel', 'Rote Bete'],
+    'Obst': ['Äpfel', 'Bananen', 'Orangen', 'Zitronen', 'Limetten', 'Erdbeeren', 'Himbeeren', 'Blaubeeren', 'Trauben', 'Kiwi', 'Mango', 'Ananas', 'Avocado', 'Birnen', 'Pfirsiche', 'Kirschen', 'Pflaumen'],
+    'Fleisch & Fisch': ['Hähnchenbrust', 'Hackfleisch', 'Rindfleisch', 'Schweinefleisch', 'Lachs', 'Thunfisch', 'Garnelen', 'Hähnchenschenkel', 'Putenbrust', 'Bratwurst', 'Speck', 'Schinken'],
+    'Milchprodukte': ['Milch', 'Joghurt', 'Quark', 'Sahne', 'Butter', 'Mozzarella', 'Parmesan', 'Gouda', 'Feta', 'Frischkäse', 'Ricotta', 'Mascarpone'],
+    'Getreide & Hülsenfrüchte': ['Reis', 'Nudeln', 'Brot', 'Haferflocken', 'Quinoa', 'Couscous', 'Bulgur', 'Linsen', 'Kichererbsen', 'Kidneybohnen', 'Schwarze Bohnen', 'Mehl'],
+    'Gewürze & Öle': ['Salz', 'Pfeffer', 'Olivenöl', 'Basilikum', 'Oregano', 'Thymian', 'Rosmarin', 'Petersilie', 'Paprika', 'Curry', 'Kurkuma', 'Kreuzkümmel', 'Zimt', 'Ingwer', 'Chili', 'Koriander'],
+    'Sonstiges': ['Eier', 'Honig', 'Zucker', 'Essig', 'Sojasauce', 'Senf', 'Mayonnaise', 'Ketchup', 'Brühe', 'Kokosmilch', 'Nüsse', 'Mandeln', 'Oliven']
+};
+
+const frequentIngredients = [
+    'Tomaten', 'Zwiebeln', 'Knoblauch', 'Eier', 'Nudeln', 'Reis', 'Hähnchenbrust', 
+    'Kartoffeln', 'Paprika', 'Karotten', 'Milch', 'Käse', 'Brot'
+];
+
+let currentSuggestionIndex = -1;
+let filteredSuggestions = [];
+
+// Initialize App
+window.addEventListener('load', () => {
+    checkDailyReset();
+    loadDietProfiles();
+    updateIngredientsDisplay();
+    updateFavoritesDisplay();
+    updateProviderDisplay();
+    setupQuickAdd();
+    updateDemoSectionDisplay();
+    
+    const debugCheckbox = document.getElementById('debugMode');
+    if (debugCheckbox) {
+        debugCheckbox.checked = debugMode;
+        const debugConsole = document.getElementById('debugConsole');
+        if (debugConsole) {
+            debugConsole.style.display = debugMode ? 'block' : 'none';
+        }
+    }
+    
+    debugLog('KitchenHelper-AI v4.2 loaded successfully', {
+        version: '4.2.0',
+        diabetesUnit,
+        activeDietProfiles: Object.keys(activeDietProfiles),
+        debugMode
+    });
+});
+
+// Check daily reset for recipe limits
+function checkDailyReset() {
+    const today = new Date().toDateString();
+    if (lastResetDate !== today) {
+        dailyRecipeCount = 0;
+        lastResetDate = today;
+        localStorage.setItem('dailyRecipeCount', '0');
+        localStorage.setItem('lastResetDate', today);
+    }
+}
+
+// Generate Recipes with IMPROVED nutrition prompting
+async function generateRecipes() {
+    const btn = document.getElementById('generateBtn');
+    const container = document.getElementById('recipesContainer');
+    
+    checkDailyReset();
+    
+    const allAvailableItems = [
+        ...ingredients.filter(ing => new Date(ing.expiryDate) > new Date()),
+        ...permanentSpices
+    ];
+    
+    if (allAvailableItems.length === 0) {
+        showNotification('Bitte füge erst Zutaten hinzu!', 'warning');
+        return;
+    }
+    
+    const isDemoMode = shouldUseDemoMode();
+    
+    if (isDemoMode && dailyRecipeCount >= 3) {
+        showUpgradeModal();
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = `⏳ ${isDemoMode ? 'Demo-Rezepte werden erstellt' : apiProviders[apiProvider].name + ' denkt nach'}...`;
+    container.innerHTML = `<div class="loading">${isDemoMode ? 'Erstelle Demo-Rezepte' : apiProviders[apiProvider].name + ' analysiert deine Zutaten'}...</div>`;
+    
+    try {
+        let recipes;
+        
+        if (isDemoMode) {
+            debugLog('Generating demo recipes (no API key configured)');
+            recipes = generateSmartMockRecipes(allAvailableItems);
+            dailyRecipeCount++;
+            localStorage.setItem('dailyRecipeCount', dailyRecipeCount.toString());
+        } else {
+            debugLog('Generating AI recipes', { provider: apiProvider });
+            recipes = await callAI(allAvailableItems);
+        }
+        
+        currentRecipes = recipes;
+        displayRecipes(recipes);
+        updateLeftoversSection();
+        
+        if (isDemoMode) {
+            const remaining = 3 - dailyRecipeCount;
+            showNotification(`Demo-Rezepte generiert! (${remaining} heute übrig) - Hinweis: Dies sind nur Basis-Vorlagen!`, 'warning');
+        } else {
+            showNotification('KI-Rezepte erfolgreich generiert!', 'success');
+        }
+        
+    } catch (error) {
+        console.error('API Error:', error);
+        debugLog('API Error occurred', { error: error.message });
+        
+        const recipes = generateSmartMockRecipes(allAvailableItems);
+        currentRecipes = recipes;
+        displayRecipes(recipes);
+        updateLeftoversSection();
+        
+        container.innerHTML += `
+            <div style="text-align: center; padding: 10px; color: #ff9800; font-size: 14px;">
+                ⚠️ API-Fehler - Demo-Rezepte verwendet
+            </div>
+        `;
+        showNotification('API-Fehler: Demo-Rezepte verwendet', 'warning');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🎯 Rezepte generieren';
+    }
+}
+
+// Enhanced API caller with IMPROVED nutrition prompting
+async function callAI(allAvailableItems) {
+    const freshIngredients = allAvailableItems.filter(item => !item.isPermanent).map(item => item.name);
+    const spicesAvailable = allAvailableItems.filter(item => item.isPermanent).map(item => item.name);
+    
+    const ingredientsList = freshIngredients.join(', ');
+    const spicesList = spicesAvailable.join(', ');
+    
+    let dietRequirements = '';
+    if (Object.keys(activeDietProfiles).length > 0) {
+        dietRequirements = '\n\nERNÄHRUNGSANFORDERUNGEN:\n';
+        Object.entries(activeDietProfiles).forEach(([key, profile]) => {
+            dietRequirements += `- ${profile.name}: ${profile.requirements}\n`;
+        });
+    }
+    
+    switch(apiProvider) {
+        case 'anthropic':
+            return await callClaudeAPI(ingredientsList, spicesList, dietRequirements);
+        case 'openai':
+            return await callOpenAI(ingredientsList, spicesList, dietRequirements);
+        case 'gemini':
+            return await callGeminiAPI(ingredientsList, spicesList, dietRequirements);
+        default:
+            throw new Error('Unbekannter API Provider');
+    }
+}
+
+// Enhanced Claude API with DETAILED nutrition requirements
+async function callClaudeAPI(ingredientsList, spicesList, dietRequirements) {
+    const prompt = `Du bist KitchenHelper-AI, ein präziser KI-Küchenhelfer mit medizinischer Verantwortung. Erstelle 3-5 Rezepte mit EXAKTEN Portionsangaben:
+
+FRISCHE ZUTATEN: ${ingredientsList}
+VERFÜGBARE GEWÜRZE/BASICS: ${spicesList}
+${dietRequirements}
+
+KRITISCHE ANFORDERUNGEN FÜR NÄHRWERTANGABEN:
+${activeDietProfiles.diabetic ? `
+🚨 DIABETES-MODUS AKTIV - HÖCHSTE PRÄZISION ERFORDERLICH:
+- IMMER genaue Portionsanzahl angeben (z.B. "Ergibt 2 Portionen")
+- ALLE Nährwerte AUSSCHLIESSLICH PRO PORTION berechnen
+- Detaillierte Zutatenliste mit Mengenangaben (z.B. "200g Nudeln", "150g Tomaten")
+- Für JEDE Zutat: Geschätzte Kohlenhydrate in Gramm
+- Berechne ${diabetesUnit} PRO PORTION (1 ${diabetesUnit} = ${diabetesUnit === 'KE' ? '10g' : '12g'} Kohlenhydrate)
+- Summiere ${diabetesUnit}-Werte aller Zutaten für Gesamtwert pro Portion
+` : ''}
+- Zwischen 3-5 verschiedene Rezepte (je nach Zutatenmenge)
+- Verschiedene Schwierigkeitsgrade: 1 einfach, 2-3 mittelschwer, 1 anspruchsvoll
+- Verschiedene Kocharten: Pfanne, Ofen, roh/kalt, Suppe/Eintopf
+- Schätze Schwierigkeit (1-5 Sterne) und Zeit realistisch ein
+- Gib Tipps für Reste-Verwertung der übrigen Zutaten
+- Verwende kreative Namen (nicht nur "Nudeln mit Tomaten")
+- Nutze die verfügbaren Gewürze sinnvoll
+
+Format als JSON:
+[
+  {
+    "name": "Kreativer Rezeptname",
+    "description": "2-3 Sätze Anleitung mit Geheimtipps",
+    "difficulty": 3,
+    "cookingTime": "25 Min",
+    "method": "Pfanne",
+    "servings": 2,
+    "usedIngredients": ["zutat1", "zutat2"],
+    "leftoverTips": "Was du mit übrigen Zutaten machen kannst"${activeDietProfiles.diabetic ? `,
+    "ingredients": [
+      {"name": "Vollkornnudeln", "amount": "200g", "carbs": 60},
+      {"name": "Tomaten", "amount": "300g", "carbs": 9},
+      {"name": "Olivenöl", "amount": "2 EL", "carbs": 0}
+    ],
+    "nutritionPerServing": {
+      "calories": 350,
+      "protein": 15,
+      "carbs": 34.5,
+      "fat": 12,
+      "${diabetesUnit.toLowerCase()}": 3.5
+    }` : Object.keys(activeDietProfiles).length > 0 ? `,
+    "nutritionPerServing": {
+      "calories": 350,
+      "protein": 25,
+      "carbs": 40,
+      "fat": 15
+    }` : ''}
+  }
+]`;
+
+    const requestBody = {
+        model: apiProviders.anthropic.model,
+        max_tokens: 3000,
+        messages: [{
+            role: 'user',
+            content: prompt
+        }]
+    };
+
+    debugLog('Claude API Request', {
+        url: apiProviders.anthropic.url,
+        model: requestBody.model,
+        promptLength: prompt.length,
+        dietProfiles: Object.keys(activeDietProfiles),
+        diabetesUnit
+    });
+
+    const response = await fetch(apiProviders.anthropic.url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        debugLog('Claude API Error', { status: response.status, error: errorData });
+        throw new Error(errorData.error?.message || `Claude API Error: ${response.status}`);

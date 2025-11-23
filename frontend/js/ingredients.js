@@ -1,0 +1,576 @@
+// KitchenHelper-AI Ingredients Module
+
+// ==================== AUTO-KATEGORIE MAPPING (500+ Zutaten) ====================
+const INGREDIENT_CATEGORIES = {
+    // ========== GEMÜSE ==========
+    'artischocke': 'Gemüse', 'aubergine': 'Gemüse', 'avocado': 'Gemüse',
+    'blumenkohl': 'Gemüse', 'bohnen': 'Gemüse', 'brokkoli': 'Gemüse', 'broccoli': 'Gemüse',
+    'champignons': 'Gemüse', 'chicorée': 'Gemüse', 'chicoree': 'Gemüse', 'chinakohl': 'Gemüse',
+    'erbsen': 'Gemüse', 'fenchel': 'Gemüse', 'grünkohl': 'Gemüse', 'gruenkohl': 'Gemüse',
+    'gurke': 'Gemüse', 'gurken': 'Gemüse', 'karotte': 'Gemüse', 'karotten': 'Gemüse',
+    'knoblauch': 'Gemüse', 'kohlrabi': 'Gemüse', 'kürbis': 'Gemüse', 'kuerbis': 'Gemüse',
+    'lauch': 'Gemüse', 'mais': 'Gemüse', 'mangold': 'Gemüse',
+    'möhre': 'Gemüse', 'möhren': 'Gemüse', 'moehre': 'Gemüse', 'moehren': 'Gemüse',
+    'paprika': 'Gemüse', 'pastinake': 'Gemüse', 'pastinaken': 'Gemüse',
+    'pilze': 'Gemüse', 'porree': 'Gemüse', 'radieschen': 'Gemüse',
+    'rettich': 'Gemüse', 'romanesco': 'Gemüse', 'rosenkohl': 'Gemüse',
+    'rote bete': 'Gemüse', 'rote beete': 'Gemüse', 'rotkohl': 'Gemüse',
+    'rucola': 'Gemüse', 'salat': 'Gemüse', 'sauerkraut': 'Gemüse',
+    'schwarzwurzel': 'Gemüse', 'sellerie': 'Gemüse', 'spargel': 'Gemüse',
+    'spinat': 'Gemüse', 'spitzkohl': 'Gemüse', 'steckrübe': 'Gemüse',
+    'süßkartoffel': 'Gemüse', 'suesskartoffel': 'Gemüse',
+    'tomate': 'Gemüse', 'tomaten': 'Gemüse',
+    'weißkohl': 'Gemüse', 'weisskohl': 'Gemüse', 'wirsing': 'Gemüse',
+    'zucchini': 'Gemüse', 'zwiebel': 'Gemüse', 'zwiebeln': 'Gemüse',
+
+    // ========== FLEISCH - Rind ==========
+    'rind': 'Fleisch', 'rindfleisch': 'Fleisch', 'rindersteak': 'Fleisch',
+    'rinderhüfte': 'Fleisch', 'rinderschulter': 'Fleisch', 'rinderbrust': 'Fleisch',
+    'rinderfilet': 'Fleisch', 'roastbeef': 'Fleisch', 'entrecote': 'Fleisch',
+    'ribeye': 'Fleisch', 'tafelspitz': 'Fleisch', 'gulasch': 'Fleisch',
+    'hackfleisch': 'Fleisch', 'hack': 'Fleisch', 'rinderhack': 'Fleisch', 'tatar': 'Fleisch',
+
+    // ========== FLEISCH - Schwein ==========
+    'schwein': 'Fleisch', 'schweinefleisch': 'Fleisch', 'schweinebraten': 'Fleisch',
+    'schweineschnitzel': 'Fleisch', 'schnitzel': 'Fleisch', 'schweinekotelett': 'Fleisch',
+    'kotelett': 'Fleisch', 'schweinefilet': 'Fleisch', 'kasseler': 'Fleisch',
+    'schweinebauch': 'Fleisch', 'bauchspeck': 'Fleisch', 'speck': 'Fleisch',
+    'bacon': 'Fleisch', 'schweinehaxe': 'Fleisch', 'schweinehack': 'Fleisch',
+    'bratwurst': 'Fleisch', 'wurst': 'Fleisch', 'würstchen': 'Fleisch',
+    'wuerstchen': 'Fleisch', 'bockwurst': 'Fleisch', 'currywurst': 'Fleisch',
+
+    // ========== FLEISCH - Geflügel ==========
+    'hähnchen': 'Fleisch', 'haehnchen': 'Fleisch', 'huhn': 'Fleisch',
+    'hähnchenbrust': 'Fleisch', 'haehnchenbrust': 'Fleisch', 'hühnerbrust': 'Fleisch',
+    'hähnchenschenkel': 'Fleisch', 'hühnerkeule': 'Fleisch',
+    'chicken wings': 'Fleisch', 'wings': 'Fleisch',
+    'pute': 'Fleisch', 'putenbrust': 'Fleisch', 'putenschnitzel': 'Fleisch',
+    'truthahn': 'Fleisch', 'ente': 'Fleisch', 'entenbrust': 'Fleisch',
+    'gans': 'Fleisch', 'gänsekeule': 'Fleisch',
+
+    // ========== FLEISCH - Wild ==========
+    'wild': 'Fleisch', 'wildschwein': 'Fleisch', 'wildschweinbraten': 'Fleisch',
+    'reh': 'Fleisch', 'rehkeule': 'Fleisch', 'rehbraten': 'Fleisch',
+    'hirsch': 'Fleisch', 'hirschbraten': 'Fleisch', 'hirschfilet': 'Fleisch',
+    'fasan': 'Fleisch', 'wachtel': 'Fleisch',
+
+    // ========== FLEISCH - Wurst & Aufschnitt ==========
+    'schinken': 'Fleisch', 'kochschinken': 'Fleisch', 'rohschinken': 'Fleisch',
+    'schwarzwälder schinken': 'Fleisch', 'parmaschinken': 'Fleisch',
+    'serranoschinken': 'Fleisch', 'salami': 'Fleisch', 'chorizo': 'Fleisch',
+    'mortadella': 'Fleisch', 'leberwurst': 'Fleisch', 'blutwurst': 'Fleisch',
+    'mettwurst': 'Fleisch', 'teewurst': 'Fleisch', 'steak': 'Fleisch',
+    'lamm': 'Fleisch', 'lammfleisch': 'Fleisch', 'lammkeule': 'Fleisch',
+
+    // ========== FISCH & MEERESFRÜCHTE ==========
+    'lachs': 'Fisch', 'lachsfilet': 'Fisch', 'räucherlachs': 'Fisch',
+    'thunfisch': 'Fisch', 'forelle': 'Fisch', 'regenbogenforelle': 'Fisch',
+    'kabeljau': 'Fisch', 'dorsch': 'Fisch', 'seelachs': 'Fisch',
+    'hering': 'Fisch', 'matjes': 'Fisch', 'makrele': 'Fisch',
+    'sardine': 'Fisch', 'sardinen': 'Fisch', 'anchovis': 'Fisch',
+    'pangasius': 'Fisch', 'zander': 'Fisch', 'barsch': 'Fisch',
+    'dorade': 'Fisch', 'wolfsbarsch': 'Fisch', 'steinbutt': 'Fisch',
+    'heilbutt': 'Fisch', 'scholle': 'Fisch', 'seezunge': 'Fisch',
+    'rotbarsch': 'Fisch', 'aal': 'Fisch',
+    'garnele': 'Fisch', 'garnelen': 'Fisch', 'shrimps': 'Fisch',
+    'krabben': 'Fisch', 'hummer': 'Fisch', 'languste': 'Fisch',
+    'tintenfisch': 'Fisch', 'calamari': 'Fisch', 'kalmar': 'Fisch', 'oktopus': 'Fisch',
+    'muscheln': 'Fisch', 'miesmuscheln': 'Fisch', 'jakobsmuscheln': 'Fisch',
+
+    // ========== MILCHPRODUKTE & KÄSE ==========
+    'milch': 'Milchprodukte', 'vollmilch': 'Milchprodukte', 'frischmilch': 'Milchprodukte',
+    'butter': 'Milchprodukte', 'sahne': 'Milchprodukte', 'schlagsahne': 'Milchprodukte',
+    'joghurt': 'Milchprodukte', 'naturjoghurt': 'Milchprodukte', 'griechischer joghurt': 'Milchprodukte',
+    'quark': 'Milchprodukte', 'magerquark': 'Milchprodukte', 'speisequark': 'Milchprodukte',
+    'schmand': 'Milchprodukte', 'saure sahne': 'Milchprodukte',
+    'crème fraîche': 'Milchprodukte', 'creme fraiche': 'Milchprodukte',
+    'buttermilch': 'Milchprodukte', 'kefir': 'Milchprodukte',
+    'käse': 'Milchprodukte', 'kaese': 'Milchprodukte',
+    'frischkäse': 'Milchprodukte', 'frischkaese': 'Milchprodukte',
+    'philadelphia': 'Milchprodukte', 'mascarpone': 'Milchprodukte',
+    'ricotta': 'Milchprodukte', 'hüttenkäse': 'Milchprodukte',
+    'camembert': 'Milchprodukte', 'brie': 'Milchprodukte',
+    'mozzarella': 'Milchprodukte', 'burrata': 'Milchprodukte',
+    'gouda': 'Milchprodukte', 'edamer': 'Milchprodukte', 'butterkäse': 'Milchprodukte',
+    'tilsiter': 'Milchprodukte', 'leerdammer': 'Milchprodukte', 'cheddar': 'Milchprodukte',
+    'parmesan': 'Milchprodukte', 'parmigiano': 'Milchprodukte',
+    'pecorino': 'Milchprodukte', 'grana padano': 'Milchprodukte',
+    'emmentaler': 'Milchprodukte', 'gruyère': 'Milchprodukte', 'gruyere': 'Milchprodukte',
+    'bergkäse': 'Milchprodukte', 'appenzeller': 'Milchprodukte',
+    'feta': 'Milchprodukte', 'schafskäse': 'Milchprodukte',
+    'ziegenkäse': 'Milchprodukte', 'ziegenkaese': 'Milchprodukte',
+    'halloumi': 'Milchprodukte', 'gorgonzola': 'Milchprodukte',
+    'roquefort': 'Milchprodukte', 'blauschimmelkäse': 'Milchprodukte',
+    'raclette': 'Milchprodukte',
+
+    // ========== GEWÜRZE & KRÄUTER ==========
+    'basilikum': 'Gewürze', 'oregano': 'Gewürze', 'thymian': 'Gewürze',
+    'rosmarin': 'Gewürze', 'petersilie': 'Gewürze', 'schnittlauch': 'Gewürze',
+    'dill': 'Gewürze', 'koriander': 'Gewürze', 'minze': 'Gewürze',
+    'salbei': 'Gewürze', 'majoran': 'Gewürze', 'estragon': 'Gewürze',
+    'bohnenkraut': 'Gewürze', 'lorbeer': 'Gewürze', 'lorbeerblätter': 'Gewürze',
+    'salz': 'Gewürze', 'meersalz': 'Gewürze', 'pfeffer': 'Gewürze',
+    'schwarzer pfeffer': 'Gewürze', 'weißer pfeffer': 'Gewürze',
+    'cayennepfeffer': 'Gewürze', 'chili': 'Gewürze', 'chiliflocken': 'Gewürze',
+    'paprikapulver': 'Gewürze', 'rosenpaprika': 'Gewürze',
+    'curry': 'Gewürze', 'currypulver': 'Gewürze', 'kurkuma': 'Gewürze',
+    'kreuzkümmel': 'Gewürze', 'cumin': 'Gewürze', 'kümmel': 'Gewürze',
+    'zimt': 'Gewürze', 'muskat': 'Gewürze', 'muskatnuss': 'Gewürze',
+    'nelken': 'Gewürze', 'gewürznelken': 'Gewürze', 'kardamom': 'Gewürze',
+    'vanille': 'Gewürze', 'vanilleschote': 'Gewürze', 'anis': 'Gewürze', 'sternanis': 'Gewürze',
+    'ingwer': 'Gewürze', 'safran': 'Gewürze', 'garam masala': 'Gewürze',
+    'ras el hanout': 'Gewürze', 'harissa': 'Gewürze',
+
+    // ========== KOHLENHYDRATE ==========
+    'nudeln': 'Kohlenhydrate', 'pasta': 'Kohlenhydrate', 'spaghetti': 'Kohlenhydrate',
+    'penne': 'Kohlenhydrate', 'fusilli': 'Kohlenhydrate', 'farfalle': 'Kohlenhydrate',
+    'tagliatelle': 'Kohlenhydrate', 'fettuccine': 'Kohlenhydrate',
+    'rigatoni': 'Kohlenhydrate', 'lasagneplatten': 'Kohlenhydrate',
+    'gnocchi': 'Kohlenhydrate', 'tortellini': 'Kohlenhydrate', 'ravioli': 'Kohlenhydrate',
+    'reis': 'Kohlenhydrate', 'basmati': 'Kohlenhydrate', 'jasminreis': 'Kohlenhydrate',
+    'risottoreis': 'Kohlenhydrate', 'wildreis': 'Kohlenhydrate', 'vollkornreis': 'Kohlenhydrate',
+    'kartoffel': 'Kohlenhydrate', 'kartoffeln': 'Kohlenhydrate',
+    'brot': 'Kohlenhydrate', 'vollkornbrot': 'Kohlenhydrate', 'weißbrot': 'Kohlenhydrate',
+    'brötchen': 'Kohlenhydrate', 'toast': 'Kohlenhydrate', 'baguette': 'Kohlenhydrate',
+    'ciabatta': 'Kohlenhydrate', 'focaccia': 'Kohlenhydrate',
+    'mehl': 'Kohlenhydrate', 'weizenmehl': 'Kohlenhydrate', 'dinkelmehl': 'Kohlenhydrate',
+    'vollkornmehl': 'Kohlenhydrate', 'haferflocken': 'Kohlenhydrate', 'müsli': 'Kohlenhydrate',
+    'couscous': 'Kohlenhydrate', 'bulgur': 'Kohlenhydrate',
+    'quinoa': 'Kohlenhydrate', 'amaranth': 'Kohlenhydrate', 'hirse': 'Kohlenhydrate',
+    'linsen': 'Kohlenhydrate', 'rote linsen': 'Kohlenhydrate',
+    'kichererbsen': 'Kohlenhydrate', 'kidneybohnen': 'Kohlenhydrate',
+
+    // ========== ÖLE & FETTE ==========
+    'öl': 'Öle & Fette', 'oel': 'Öle & Fette',
+    'olivenöl': 'Öle & Fette', 'olivenoel': 'Öle & Fette',
+    'sonnenblumenöl': 'Öle & Fette', 'sonnenblumenoel': 'Öle & Fette',
+    'rapsöl': 'Öle & Fette', 'rapsoel': 'Öle & Fette',
+    'kokosöl': 'Öle & Fette', 'kokosoel': 'Öle & Fette',
+    'sesamöl': 'Öle & Fette', 'sesamoel': 'Öle & Fette',
+    'erdnussöl': 'Öle & Fette', 'walnussöl': 'Öle & Fette',
+    'leinöl': 'Öle & Fette', 'kürbiskernöl': 'Öle & Fette',
+    'margarine': 'Öle & Fette', 'schmalz': 'Öle & Fette', 'butterschmalz': 'Öle & Fette', 'ghee': 'Öle & Fette',
+
+    // ========== OBST ==========
+    'apfel': 'Obst', 'äpfel': 'Obst', 'aepfel': 'Obst',
+    'birne': 'Obst', 'birnen': 'Obst', 'quitte': 'Obst',
+    'banane': 'Obst', 'bananen': 'Obst',
+    'orange': 'Obst', 'orangen': 'Obst', 'mandarine': 'Obst', 'clementine': 'Obst',
+    'grapefruit': 'Obst', 'pomelo': 'Obst',
+    'zitrone': 'Obst', 'zitronen': 'Obst', 'limette': 'Obst', 'limetten': 'Obst',
+    'erdbeere': 'Obst', 'erdbeeren': 'Obst', 'himbeere': 'Obst', 'himbeeren': 'Obst',
+    'blaubeere': 'Obst', 'blaubeeren': 'Obst', 'heidelbeeren': 'Obst',
+    'brombeere': 'Obst', 'brombeeren': 'Obst', 'johannisbeeren': 'Obst',
+    'kirsche': 'Obst', 'kirschen': 'Obst', 'sauerkirschen': 'Obst',
+    'pfirsich': 'Obst', 'pfirsiche': 'Obst', 'nektarine': 'Obst', 'nektarinen': 'Obst',
+    'aprikose': 'Obst', 'aprikosen': 'Obst', 'pflaume': 'Obst', 'pflaumen': 'Obst',
+    'traube': 'Obst', 'trauben': 'Obst', 'weintrauben': 'Obst',
+    'melone': 'Obst', 'wassermelone': 'Obst', 'honigmelone': 'Obst',
+    'mango': 'Obst', 'papaya': 'Obst', 'ananas': 'Obst',
+    'kiwi': 'Obst', 'maracuja': 'Obst', 'passionsfrucht': 'Obst',
+    'granatapfel': 'Obst', 'feige': 'Obst', 'feigen': 'Obst',
+    'dattel': 'Obst', 'datteln': 'Obst', 'rosinen': 'Obst',
+
+    // ========== NÜSSE & SAMEN ==========
+    'mandel': 'Nüsse & Samen', 'mandeln': 'Nüsse & Samen',
+    'walnuss': 'Nüsse & Samen', 'walnüsse': 'Nüsse & Samen', 'walnuesse': 'Nüsse & Samen',
+    'haselnuss': 'Nüsse & Samen', 'haselnüsse': 'Nüsse & Samen',
+    'cashew': 'Nüsse & Samen', 'cashews': 'Nüsse & Samen', 'cashewnuss': 'Nüsse & Samen',
+    'erdnuss': 'Nüsse & Samen', 'erdnüsse': 'Nüsse & Samen', 'erdnuesse': 'Nüsse & Samen',
+    'pinienkerne': 'Nüsse & Samen', 'pistazien': 'Nüsse & Samen',
+    'macadamia': 'Nüsse & Samen', 'paranuss': 'Nüsse & Samen', 'pekannuss': 'Nüsse & Samen',
+    'sesam': 'Nüsse & Samen', 'sesamsamen': 'Nüsse & Samen',
+    'leinsamen': 'Nüsse & Samen', 'chiasamen': 'Nüsse & Samen',
+    'kürbiskerne': 'Nüsse & Samen', 'kuerbiskerne': 'Nüsse & Samen',
+    'sonnenblumenkerne': 'Nüsse & Samen', 'mohn': 'Nüsse & Samen',
+
+    // ========== SAUCEN & CONDIMENTS ==========
+    'sojasauce': 'Saucen', 'tamari': 'Saucen', 'teriyaki': 'Saucen',
+    'worcestersauce': 'Saucen', 'tabasco': 'Saucen', 'sriracha': 'Saucen',
+    'ketchup': 'Saucen', 'senf': 'Saucen', 'dijon senf': 'Saucen',
+    'mayonnaise': 'Saucen', 'remoulade': 'Saucen', 'aioli': 'Saucen',
+    'pesto': 'Saucen', 'tomatensauce': 'Saucen', 'tomatenmark': 'Saucen',
+    'balsamico': 'Saucen', 'essig': 'Saucen', 'weinessig': 'Saucen',
+    'apfelessig': 'Saucen', 'reisessig': 'Saucen',
+
+    // ========== GETRÄNKE ==========
+    'wasser': 'Getränke', 'mineralwasser': 'Getränke',
+    'saft': 'Getränke', 'orangensaft': 'Getränke', 'apfelsaft': 'Getränke',
+    'wein': 'Getränke', 'rotwein': 'Getränke', 'weißwein': 'Getränke',
+    'bier': 'Getränke', 'sekt': 'Getränke', 'prosecco': 'Getränke',
+    'kaffee': 'Getränke', 'tee': 'Getränke',
+
+    // ========== SONSTIGES ==========
+    'zucker': 'Sonstiges', 'rohrzucker': 'Sonstiges', 'brauner zucker': 'Sonstiges',
+    'puderzucker': 'Sonstiges', 'honig': 'Sonstiges', 'ahornsirup': 'Sonstiges',
+    'agavendicksaft': 'Sonstiges', 'schokolade': 'Sonstiges', 'kakao': 'Sonstiges',
+    'backpulver': 'Sonstiges', 'natron': 'Sonstiges', 'hefe': 'Sonstiges',
+    'gelatine': 'Sonstiges', 'speisestärke': 'Sonstiges', 'maisstärke': 'Sonstiges',
+    'paniermehl': 'Sonstiges', 'semmelbrösel': 'Sonstiges', 'tofu': 'Sonstiges',
+    'eier': 'Sonstiges', 'ei': 'Sonstiges'
+};
+
+// ==================== AUTO-SUGGEST LISTE (Alphabetisch sortiert) ====================
+const INGREDIENT_SUGGESTIONS = [
+    'Aal', 'Agavendicksaft', 'Ahornsirup', 'Aioli', 'Anchovis', 'Ananas',
+    'Äpfel', 'Apfelessig', 'Aprikosen', 'Artischocke', 'Aubergine', 'Avocado',
+    'Bacon', 'Baguette', 'Balsamico', 'Bananen', 'Barsch', 'Basilikum',
+    'Basmati', 'Bergkäse', 'Birnen', 'Blaubeeren', 'Blauschimmelkäse', 'Blumenkohl',
+    'Bohnen', 'Bratwurst', 'Brie', 'Brokkoli', 'Brombeeren', 'Brot', 'Brötchen',
+    'Bulgur', 'Burrata', 'Butter', 'Butterkäse', 'Buttermilch',
+    'Calamari', 'Camembert', 'Cashews', 'Cayennepfeffer', 'Cheddar',
+    'Chiasamen', 'Chicorée', 'Chili', 'Chinakohl', 'Chorizo', 'Ciabatta',
+    'Couscous', 'Crème fraîche', 'Curry',
+    'Datteln', 'Dill', 'Dijon Senf', 'Dorade', 'Dorsch',
+    'Edamer', 'Eier', 'Emmentaler', 'Ente', 'Entenbrust', 'Entrecôte', 'Erbsen',
+    'Erdbeeren', 'Erdnüsse', 'Erdnussöl', 'Essig', 'Estragon',
+    'Farfalle', 'Fasan', 'Feigen', 'Fenchel', 'Feta', 'Fettuccine', 'Forelle',
+    'Frischkäse', 'Fusilli',
+    'Gans', 'Garam Masala', 'Garnelen', 'Gnocchi', 'Gorgonzola', 'Gouda',
+    'Granatapfel', 'Grapefruit', 'Griechischer Joghurt', 'Grünkohl', 'Gruyère', 'Gulasch', 'Gurken',
+    'Hackfleisch', 'Hähnchenbrust', 'Hähnchenschenkel', 'Halloumi', 'Haselnüsse',
+    'Heidelbeeren', 'Heilbutt', 'Hering', 'Himbeeren', 'Hirsch', 'Honig', 'Honigmelone', 'Hummer',
+    'Ingwer',
+    'Jakobsmuscheln', 'Jasminreis', 'Johannisbeeren', 'Joghurt',
+    'Kabeljau', 'Kakao', 'Kalmar', 'Kardamom', 'Karotten', 'Kartoffeln', 'Käse',
+    'Kasseler', 'Kefir', 'Ketchup', 'Kichererbsen', 'Kidneybohnen', 'Kirschen',
+    'Knoblauch', 'Kochschinken', 'Kohlrabi', 'Kokosöl', 'Koriander', 'Krabben',
+    'Kreuzkümmel', 'Kürbis', 'Kürbiskerne',
+    'Lachs', 'Lammfleisch', 'Languste', 'Lauch', 'Leberwurst', 'Leerdammer',
+    'Leinsamen', 'Leinöl', 'Limetten', 'Linsen', 'Lorbeer',
+    'Macadamia', 'Magerquark', 'Mais', 'Makrele', 'Mandarinen', 'Mandeln', 'Mango',
+    'Mangold', 'Margarine', 'Mascarpone', 'Matjes', 'Mayonnaise', 'Meersalz', 'Mehl',
+    'Melone', 'Mettwurst', 'Miesmuscheln', 'Milch', 'Minze', 'Möhren', 'Mozzarella',
+    'Müsli', 'Muskat',
+    'Natron', 'Nektarinen', 'Nudeln',
+    'Oktopus', 'Olivenöl', 'Orangen', 'Oregano',
+    'Pangasius', 'Paniermehl', 'Papaya', 'Paprika', 'Paprikapulver', 'Parmesan',
+    'Parmaschinken', 'Passionsfrucht', 'Pasta', 'Pastinaken', 'Pecorino', 'Penne',
+    'Petersilie', 'Pesto', 'Pfeffer', 'Pfirsiche', 'Pflaumen', 'Philadelphia',
+    'Pilze', 'Pinienkerne', 'Pistazien', 'Pomelo', 'Porree', 'Puderzucker',
+    'Pute', 'Putenbrust',
+    'Quark', 'Quinoa', 'Quitte',
+    'Raclette', 'Radieschen', 'Rapsöl', 'Räucherlachs', 'Ravioli', 'Reh',
+    'Reis', 'Remoulade', 'Rettich', 'Ribeye', 'Ricotta', 'Rind', 'Rinderfilet',
+    'Risottoreis', 'Roastbeef', 'Romanesco', 'Rosenkohl', 'Rosmarin', 'Rosinen',
+    'Rote Bete', 'Rote Linsen', 'Rotbarsch', 'Rotkohl', 'Rotwein', 'Rucola',
+    'Safran', 'Sahne', 'Salami', 'Salbei', 'Salat', 'Salz', 'Sardinen',
+    'Sauerkraut', 'Saure Sahne', 'Schafskäse', 'Schinken', 'Schlagsahne', 'Schmalz',
+    'Schmand', 'Schnittlauch', 'Schnitzel', 'Schokolade', 'Scholle', 'Schwarzer Pfeffer',
+    'Schwarzwälder Schinken', 'Schwarzwurzel', 'Schweinefleisch', 'Seelachs',
+    'Sellerie', 'Semmelbrösel', 'Senf', 'Serranoschinken', 'Sesam', 'Sesamöl', 'Shrimps',
+    'Sojasauce', 'Sonnenblumenkerne', 'Sonnenblumenöl', 'Spaghetti', 'Spargel', 'Speck',
+    'Speisestärke', 'Spinat', 'Sriracha', 'Steak', 'Steinbutt', 'Sternanis',
+    'Süßkartoffeln',
+    'Tabasco', 'Tafelspitz', 'Tagliatelle', 'Tamari', 'Tatar', 'Tee',
+    'Teriyaki', 'Thunfisch', 'Thymian', 'Tilsiter', 'Tintenfisch', 'Toast', 'Tofu',
+    'Tomaten', 'Tomatenmark', 'Tomatensauce', 'Tortellini', 'Trauben', 'Truthahn',
+    'Vanille', 'Vollkornbrot', 'Vollkornmehl', 'Vollkornreis',
+    'Wachtel', 'Walnüsse', 'Walnussöl', 'Wasser', 'Wassermelone', 'Wein', 'Weinessig',
+    'Weintrauben', 'Weißkohl', 'Weißwein', 'Weizenmehl', 'Wildreis', 'Wildschwein',
+    'Wings', 'Wirsing', 'Wolfsbarsch', 'Worcestersauce', 'Wurst', 'Würstchen',
+    'Zander', 'Zimt', 'Zitronen', 'Zucchini', 'Zucker', 'Zwiebeln'
+].sort((a, b) => a.localeCompare(b, 'de'));
+
+// ==================== KATEGORIE-EMOJIS ====================
+const CATEGORY_EMOJIS = {
+    'Fisch': '🐟',
+    'Fleisch': '🥩',
+    'Gemüse': '🥦',
+    'Getränke': '🥤',
+    'Getreide': '🌾',
+    'Gewürze': '🌿',
+    'Kohlenhydrate': '🍚',
+    'Milchprodukte': '🧀',
+    'Nüsse & Samen': '🥜',
+    'Obst': '🍎',
+    'Öle & Fette': '🫒',
+    'Saucen': '🥫',
+    'Sonstiges': '📦'
+};
+
+// ==================== HELPER FUNKTIONEN ====================
+function suggestCategory(ingredientName) {
+    const normalized = ingredientName.toLowerCase().trim();
+
+    // Exakte Übereinstimmung
+    if (INGREDIENT_CATEGORIES[normalized]) {
+        return INGREDIENT_CATEGORIES[normalized];
+    }
+
+    // Teilübereinstimmung
+    for (const [key, category] of Object.entries(INGREDIENT_CATEGORIES)) {
+        if (normalized.includes(key) || key.includes(normalized)) {
+            return category;
+        }
+    }
+
+    return null;
+}
+
+function filterSuggestions(input) {
+    const normalized = input.toLowerCase().trim();
+    if (normalized.length < 2) return [];
+
+    return INGREDIENT_SUGGESTIONS.filter(item =>
+        item.toLowerCase().includes(normalized)
+    ).slice(0, 5);
+}
+
+function getCategoryEmoji(category) {
+    return CATEGORY_EMOJIS[category] || '📦';
+}
+
+const Ingredients = {
+    items: [],
+    autocompleteDropdown: null,
+
+    // Load all ingredients
+    async load() {
+        const container = document.getElementById('ingredients-list');
+        UI.showLoading(container);
+
+        try {
+            const category = document.getElementById('ingredient-category-filter')?.value || '';
+            const params = category ? { category } : {};
+
+            console.log('[Ingredients] Loading with params:', params);
+            this.items = await api.getIngredients(params);
+            console.log('[Ingredients] Loaded items:', this.items);
+            this.render();
+        } catch (error) {
+            console.error('[Ingredients] Load error:', error);
+            UI.showError(container, 'Fehler beim Laden der Zutaten: ' + error.message);
+        }
+    },
+
+    // Render ingredients list
+    render() {
+        const container = document.getElementById('ingredients-list');
+
+        if (!this.items || this.items.length === 0) {
+            UI.showEmpty(container, 'Keine Zutaten vorhanden. Füge deine erste Zutat hinzu!', '🥗');
+            return;
+        }
+
+        container.innerHTML = this.items.map(item => this.renderCard(item)).join('');
+    },
+
+    // Render single ingredient card
+    renderCard(item) {
+        const isExpired = item.expiry_date && UI.isExpired(item.expiry_date);
+        const expiryClass = isExpired ? 'expired' : '';
+        const emoji = getCategoryEmoji(item.category);
+
+        return `
+            <div class="ingredient-card" data-id="${item.id}">
+                <div class="ingredient-header">
+                    <span class="ingredient-name">
+                        <span class="category-emoji">${emoji}</span>
+                        ${UI.escapeHtml(item.name)}
+                    </span>
+                    ${item.category ? `<span class="ingredient-category">${UI.escapeHtml(item.category)}</span>` : ''}
+                </div>
+                <div class="ingredient-expiry ${expiryClass}">
+                    ${item.is_permanent ? 'Dauerhaft' : (item.expiry_date ? `Ablauf: ${UI.formatDate(item.expiry_date)}${isExpired ? ' (Abgelaufen!)' : ''}` : 'Kein Ablaufdatum')}
+                </div>
+                <div class="ingredient-actions">
+                    <button class="btn btn-sm btn-ghost" onclick="Ingredients.showEditModal(${item.id})">Bearbeiten</button>
+                    <button class="btn btn-sm btn-danger" onclick="Ingredients.delete(${item.id})">Löschen</button>
+                </div>
+            </div>
+        `;
+    },
+
+    // Show add modal with Auto-Suggest and Auto-Category
+    showAddModal() {
+        UI.showFormModal({
+            title: 'Neue Zutat hinzufügen',
+            fields: [
+                { name: 'name', label: 'Name', required: true, placeholder: 'z.B. Tomaten', id: 'add-ingredient-name' },
+                {
+                    name: 'category',
+                    label: 'Kategorie',
+                    type: 'select',
+                    id: 'add-ingredient-category',
+                    options: [
+                        { value: '', label: '📦 Keine Kategorie' },
+                        ...CONFIG.CATEGORIES.map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
+                    ]
+                },
+                { name: 'expiry_date', label: 'Ablaufdatum', type: 'date' },
+                { name: 'is_permanent', label: 'Dauerhaft (z.B. Gewürze)', type: 'checkbox' }
+            ],
+            submitText: 'Hinzufügen',
+            onSubmit: async (data) => {
+                await this.create(data);
+            }
+        });
+
+        // Setup Auto-Suggest and Auto-Category after modal is created
+        setTimeout(() => {
+            this.setupAutocomplete();
+        }, 100);
+    },
+
+    // Setup Autocomplete for ingredient name input
+    setupAutocomplete() {
+        const nameInput = document.querySelector('input[name="name"]');
+        const categorySelect = document.querySelector('select[name="category"]');
+
+        if (!nameInput || !categorySelect) return;
+
+        // Create dropdown
+        const wrapper = nameInput.parentElement;
+        wrapper.style.position = 'relative';
+
+        let dropdown = wrapper.querySelector('.autocomplete-dropdown');
+        if (!dropdown) {
+            dropdown = document.createElement('div');
+            dropdown.className = 'autocomplete-dropdown';
+            dropdown.style.display = 'none';
+            wrapper.appendChild(dropdown);
+        }
+
+        let timeout;
+
+        nameInput.addEventListener('input', (e) => {
+            clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+                const value = e.target.value;
+
+                // Auto-Category
+                const suggestedCategory = suggestCategory(value);
+                if (suggestedCategory) {
+                    categorySelect.value = suggestedCategory;
+                    categorySelect.style.borderColor = '#4CAF50';
+                    setTimeout(() => categorySelect.style.borderColor = '', 1500);
+                }
+
+                // Auto-Suggest Dropdown
+                const suggestions = filterSuggestions(value);
+                if (suggestions.length > 0) {
+                    dropdown.innerHTML = suggestions.map(item =>
+                        `<div class="autocomplete-item" data-value="${item}">${item}</div>`
+                    ).join('');
+                    dropdown.style.display = 'block';
+
+                    // Add click handlers
+                    dropdown.querySelectorAll('.autocomplete-item').forEach(el => {
+                        el.addEventListener('click', () => {
+                            nameInput.value = el.dataset.value;
+                            dropdown.style.display = 'none';
+
+                            // Trigger category suggestion
+                            const cat = suggestCategory(el.dataset.value);
+                            if (cat) {
+                                categorySelect.value = cat;
+                            }
+                        });
+                    });
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            }, 150);
+        });
+
+        // Close dropdown on click outside
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    },
+
+    // Show edit modal
+    showEditModal(id) {
+        const item = this.items.find(i => i.id === id);
+        if (!item) return;
+
+        // Format date for input
+        const expiryDate = item.expiry_date ? item.expiry_date.split('T')[0] : '';
+
+        UI.showFormModal({
+            title: 'Zutat bearbeiten',
+            fields: [
+                { name: 'name', label: 'Name', required: true, value: item.name },
+                {
+                    name: 'category',
+                    label: 'Kategorie',
+                    type: 'select',
+                    value: item.category || '',
+                    options: [
+                        { value: '', label: '📦 Keine Kategorie' },
+                        ...CONFIG.CATEGORIES.map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
+                    ]
+                },
+                { name: 'expiry_date', label: 'Ablaufdatum', type: 'date', value: expiryDate },
+                { name: 'is_permanent', label: 'Dauerhaft', type: 'checkbox', value: item.is_permanent }
+            ],
+            submitText: 'Speichern',
+            onSubmit: async (data) => {
+                await this.update(id, data);
+            }
+        });
+    },
+
+    // Create ingredient
+    async create(data) {
+        try {
+            // Clean up data
+            const payload = {
+                name: data.name,
+                category: data.category || null,
+                expiry_date: data.expiry_date || null,
+                is_permanent: data.is_permanent || false
+            };
+
+            console.log('[Ingredients] Creating:', payload);
+            await api.createIngredient(payload);
+            UI.success('Zutat hinzugefügt!');
+            await this.load();
+        } catch (error) {
+            console.error('[Ingredients] Create error:', error);
+            UI.error('Fehler: ' + error.message);
+        }
+    },
+
+    // Update ingredient
+    async update(id, data) {
+        try {
+            const payload = {};
+            if (data.name) payload.name = data.name;
+            if (data.category !== undefined) payload.category = data.category || null;
+            if (data.expiry_date !== undefined) payload.expiry_date = data.expiry_date || null;
+            if (data.is_permanent !== undefined) payload.is_permanent = data.is_permanent;
+
+            console.log('[Ingredients] Updating:', id, payload);
+            await api.updateIngredient(id, payload);
+            UI.success('Zutat aktualisiert!');
+            await this.load();
+        } catch (error) {
+            console.error('[Ingredients] Update error:', error);
+            UI.error('Fehler: ' + error.message);
+        }
+    },
+
+    // Delete ingredient
+    delete(id) {
+        const item = this.items.find(i => i.id === id);
+        UI.confirm(`"${item?.name || 'Zutat'}" wirklich löschen?`, async () => {
+            try {
+                await api.deleteIngredient(id);
+                UI.success('Zutat gelöscht!');
+                await this.load();
+            } catch (error) {
+                UI.error('Fehler: ' + error.message);
+            }
+        });
+    },
+
+    // Get items for recipe selection
+    getItems() {
+        return this.items;
+    }
+};

@@ -1,0 +1,151 @@
+// KitchenHelper-AI API Client
+
+class APIClient {
+    constructor(baseURL) {
+        this.baseURL = baseURL;
+    }
+
+    // Token Management
+    getToken() {
+        return localStorage.getItem(CONFIG.TOKEN_KEY);
+    }
+
+    setToken(token) {
+        localStorage.setItem(CONFIG.TOKEN_KEY, token);
+    }
+
+    clearToken() {
+        localStorage.removeItem(CONFIG.TOKEN_KEY);
+        localStorage.removeItem(CONFIG.USER_KEY);
+    }
+
+    // Generic Request Method
+    async request(endpoint, options = {}) {
+        const url = `${this.baseURL}${endpoint}`;
+        const token = this.getToken();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            },
+            ...options
+        };
+
+        try {
+            const response = await fetch(url, config);
+
+            // Handle 401 Unauthorized - redirect to login
+            if (response.status === 401) {
+                this.clearToken();
+                window.location.href = 'index.html';
+                throw new Error('Session expired. Please login again.');
+            }
+
+            // Handle 204 No Content
+            if (response.status === 204) {
+                return null;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || `Request failed with status ${response.status}`);
+            }
+
+            return data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+
+    // HTTP Methods
+    async get(endpoint) {
+        return this.request(endpoint, { method: 'GET' });
+    }
+
+    async post(endpoint, data) {
+        return this.request(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async patch(endpoint, data) {
+        return this.request(endpoint, {
+            method: 'PATCH',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async delete(endpoint) {
+        return this.request(endpoint, { method: 'DELETE' });
+    }
+}
+
+// Create singleton instance
+const api = new APIClient(CONFIG.API_BASE_URL);
+
+// ==================== AUTH API ====================
+api.register = (email, username, password) =>
+    api.post('/auth/register', { email, username, password });
+
+api.login = (emailOrUsername, password) =>
+    api.post('/auth/login', { email_or_username: emailOrUsername, password });
+
+// ==================== USERS API ====================
+api.getMe = () => api.get('/users/me');
+
+api.updateMe = (data) => api.patch('/users/me', data);
+
+api.deleteMe = () => api.delete('/users/me');
+
+// ==================== INGREDIENTS API ====================
+api.getIngredients = (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.category) query.append('category', params.category);
+    if (params.expired !== undefined) query.append('expired', params.expired);
+    const queryString = query.toString();
+    return api.get(`/ingredients/${queryString ? '?' + queryString : ''}`);
+};
+
+api.createIngredient = (data) => api.post('/ingredients/', data);
+
+api.updateIngredient = (id, data) => api.patch(`/ingredients/${id}`, data);
+
+api.deleteIngredient = (id) => api.delete(`/ingredients/${id}`);
+
+// ==================== RECIPES API ====================
+api.generateRecipes = (data) => api.post('/recipes/generate', data);
+
+api.getRecipeHistory = (limit = 20, offset = 0) =>
+    api.get(`/recipes/history?limit=${limit}&offset=${offset}`);
+
+api.getRecipe = (id) => api.get(`/recipes/${id}`);
+
+// ==================== FAVORITES API ====================
+api.getFavorites = () => api.get('/favorites/');
+
+api.addFavorite = (recipeId) => api.post('/favorites/', { recipe_id: recipeId });
+
+api.removeFavorite = (id) => api.delete(`/favorites/${id}`);
+
+api.checkFavorite = (recipeId) => api.get(`/favorites/check/${recipeId}`);
+
+// ==================== DIET PROFILES API ====================
+api.getProfiles = (active = null) => {
+    const query = active !== null ? `?active=${active}` : '';
+    return api.get(`/profiles/${query}`);
+};
+
+api.getProfileTemplates = () => api.get('/profiles/templates');
+
+api.createProfile = (data) => api.post('/profiles/', data);
+
+api.createProfileFromTemplate = (profileType) =>
+    api.post(`/profiles/templates/${profileType}`, {});
+
+api.updateProfile = (id, data) => api.patch(`/profiles/${id}`, data);
+
+api.deleteProfile = (id) => api.delete(`/profiles/${id}`);

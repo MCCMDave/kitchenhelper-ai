@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitchenHelper-AI - Login</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-box">
+            <!-- Language Toggle -->
+            <button class="lang-toggle" onclick="i18n.toggle()" title="Sprache / Language">
+                <span class="lang-icon">🌍</span>
+                <span class="lang-toggle-text">DE</span>
+            </button>
+
+            <div class="auth-header">
+                <h1 class="auth-title">KitchenHelper-AI</h1>
+                <p class="auth-subtitle" data-i18n="auth.subtitle">Dein KI-Rezeptgenerator</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login" data-i18n="auth.login">Anmelden</button>
+                <button class="auth-tab" data-tab="register" data-i18n="auth.register">Registrieren</button>
+            </div>
+
+            <!-- Error Display -->
+            <div id="auth-error" class="auth-error" style="display: none;"></div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.email_or_username">E-Mail oder Benutzername</label>
+                    <input type="text" id="login-email" class="form-control" data-i18n-placeholder="auth.email_or_username" placeholder="E-Mail oder Benutzername" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.password">Passwort</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="login-password" class="form-control" data-i18n-placeholder="auth.password" placeholder="Passwort" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-btn" data-i18n="auth.login">
+                    Anmelden
+                </button>
+                <a href="#" id="forgot-password-link" class="forgot-password-link" data-i18n="auth.forgot_password">
+                    Passwort vergessen?
+                </a>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.email">E-Mail-Adresse</label>
+                    <input type="email" id="register-email" class="form-control" placeholder="deine@email.de" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.username">Benutzername</label>
+                    <input type="text" id="register-username" class="form-control" placeholder="meinusername" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_-]+">
+                    <small class="form-hint" data-i18n="auth.username_hint">3-20 Zeichen, nur Buchstaben, Zahlen, - und _</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.password">Passwort</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password" class="form-control" data-i18n-placeholder="auth.password_min" placeholder="Mind. 6 Zeichen" required minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="auth.password_confirm">Passwort bestaetigen</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password-confirm" class="form-control" data-i18n-placeholder="auth.password_repeat" placeholder="Passwort wiederholen" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="register-btn" data-i18n="auth.register">
+                    Registrieren
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: var(--spacing-lg); color: var(--text-muted); font-size: var(--font-size-sm);" data-i18n="auth.demo_hint">
+                Demo-Account: Registriere dich kostenlos!
+            </p>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="password-reset-modal" class="modal-overlay">
+        <div class="modal password-reset-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="reset.title">Passwort zuruecksetzen</h3>
+                <button class="modal-close" onclick="closeResetModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Request Reset -->
+                <div id="reset-step-1">
+                    <p style="margin-bottom: var(--spacing-md); color: var(--text-muted);" data-i18n="reset.step1_text">
+                        Gib deine E-Mail-Adresse ein, um einen Reset-Code zu erhalten.
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="auth.email">E-Mail</label>
+                        <input type="email" id="reset-email" class="form-control" placeholder="deine@email.de" required>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="requestPasswordReset()" data-i18n="reset.request_code">
+                        Reset-Code anfordern
+                    </button>
+                </div>
+
+                <!-- Step 2: Enter Token + New Password -->
+                <div id="reset-step-2" style="display: none;">
+                    <p style="margin-bottom: var(--spacing-md); color: var(--text-muted);" data-i18n="reset.step2_text">
+                        Gib den Reset-Code und dein neues Passwort ein.
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="reset.code">Reset-Code</label>
+                        <input type="text" id="reset-token" class="form-control" data-i18n-placeholder="reset.code_placeholder" placeholder="Code aus der Console/Email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="reset.new_password">Neues Passwort</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="reset-new-password" class="form-control" data-i18n-placeholder="auth.password_min" placeholder="Mind. 6 Zeichen" minlength="6">
+                            <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                                <span class="toggle-icon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="resetPassword()" data-i18n="reset.change_password">
+                        Passwort aendern
+                    </button>
+                    <button class="btn btn-ghost btn-block" onclick="showResetStep1()" style="margin-top: var(--spacing-sm);" data-i18n="reset.back">
+                        Zurueck
+                    </button>
+                </div>
+
+                <!-- Success Message -->
+                <div id="reset-step-success" style="display: none;">
+                    <div style="text-align: center; padding: var(--spacing-lg);">
+                        <div style="font-size: 48px; margin-bottom: var(--spacing-md);">✅</div>
+                        <p style="color: var(--success); font-weight: var(--font-semibold);" data-i18n="reset.success">
+                            Passwort erfolgreich geaendert!
+                        </p>
+                        <p style="color: var(--text-muted); margin-top: var(--spacing-sm);" data-i18n="reset.success_hint">
+                            Du kannst dich jetzt mit deinem neuen Passwort anmelden.
+                        </p>
+                        <button class="btn btn-primary" onclick="closeResetModal()" style="margin-top: var(--spacing-lg);" data-i18n="reset.to_login">
+                            Zum Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (Auth.redirectIfAuthenticated()) {
+            // Will redirect to dashboard
+        }
+
+        // Initialize i18n
+        document.addEventListener('DOMContentLoaded', () => {
+            i18n.init();
+            i18n.updateUI();
+
+            // Update lang toggle text
+            const langText = document.querySelector('.lang-toggle-text');
+            if (langText) {
+                langText.textContent = i18n.currentLang.toUpperCase();
+            }
+        });
+
+        // Password toggle function
+        function togglePassword(button) {
+            const wrapper = button.closest('.password-input-wrapper');
+            const input = wrapper.querySelector('input');
+            const icon = button.querySelector('.toggle-icon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+                button.classList.add('visible');
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+                button.classList.remove('visible');
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update tabs
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update forms
+                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+
+                // Clear error
+                hideError();
+            });
+        });
+
+        // Show error
+        function showError(message) {
+            const errorEl = document.getElementById('auth-error');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+
+        // Hide error
+        function hideError() {
+            document.getElementById('auth-error').style.display = 'none';
+        }
+
+        // Set button loading
+        function setLoading(btn, loading) {
+            btn.disabled = loading;
+            if (loading) {
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = i18n.t('common.loading');
+            } else {
+                btn.textContent = btn.dataset.originalText || btn.textContent;
+            }
+        }
+
+        // Login form
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+
+            const emailOrUsername = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+
+            if (!emailOrUsername) {
+                showError(i18n.t('error.invalid_email'));
+                return;
+            }
+
+            setLoading(btn, true);
+
+            try {
+                await Auth.login(emailOrUsername, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('[Login] Error:', error);
+                let message = i18n.t('error.login_failed');
+
+                if (error.message.includes('fetch')) {
+                    message = i18n.t('error.fetch_failed');
+                } else if (error.message) {
+                    message = error.message;
+                }
+
+                showError(message);
+                setLoading(btn, false);
+            }
+        });
+
+        // Register form
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+
+            const email = document.getElementById('register-email').value.trim();
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+            const passwordConfirm = document.getElementById('register-password-confirm').value;
+            const btn = document.getElementById('register-btn');
+
+            // Validate email
+            if (!email || !email.includes('@')) {
+                showError(i18n.t('error.invalid_email'));
+                return;
+            }
+
+            // Validate username
+            if (!username || username.length < 3) {
+                showError(i18n.t('error.username_too_short'));
+                return;
+            }
+
+            if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+                showError(i18n.t('error.username_invalid'));
+                return;
+            }
+
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                showError(i18n.t('error.passwords_not_match'));
+                return;
+            }
+
+            // Validate password length
+            if (password.length < 6) {
+                showError(i18n.t('error.password_too_short'));
+                return;
+            }
+
+            setLoading(btn, true);
+
+            try {
+                console.log('[Register] Attempting registration:', { email, username });
+                await Auth.register(email, username, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('[Register] Error:', error);
+                let message = i18n.t('error.registration_failed');
+
+                if (error.message.includes('fetch')) {
+                    message = i18n.t('error.fetch_failed');
+                } else if (error.message.includes('E-Mail') || error.message.includes('email')) {
+                    message = i18n.t('error.email_taken');
+                } else if (error.message.includes('Benutzername') || error.message.includes('username')) {
+                    message = i18n.t('error.username_taken');
+                } else if (error.message) {
+                    message = error.message;
+                }
+
+                showError(message);
+                setLoading(btn, false);
+            }
+        });
+
+        // ==================== PASSWORD RESET ====================
+        document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            openResetModal();
+        });
+
+        function openResetModal() {
+            const modal = document.getElementById('password-reset-modal');
+            modal.classList.add('show');
+            showResetStep1();
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('password-reset-modal');
+            modal.classList.remove('show');
+            document.getElementById('reset-email').value = '';
+            document.getElementById('reset-token').value = '';
+            document.getElementById('reset-new-password').value = '';
+            showResetStep1();
+            hideError();
+        }
+
+        function showResetStep1() {
+            document.getElementById('reset-step-1').style.display = 'block';
+            document.getElementById('reset-step-2').style.display = 'none';
+            document.getElementById('reset-step-success').style.display = 'none';
+        }
+
+        function showResetStep2() {
+            document.getElementById('reset-step-1').style.display = 'none';
+            document.getElementById('reset-step-2').style.display = 'block';
+            document.getElementById('reset-step-success').style.display = 'none';
+        }
+
+        function showResetSuccess() {
+            document.getElementById('reset-step-1').style.display = 'none';
+            document.getElementById('reset-step-2').style.display = 'none';
+            document.getElementById('reset-step-success').style.display = 'block';
+        }
+
+        async function requestPasswordReset() {
+            const email = document.getElementById('reset-email').value;
+
+            if (!email || !email.includes('@')) {
+                showError(i18n.t('error.invalid_email'));
+                return;
+            }
+
+            hideError();
+
+            try {
+                const response = await api.post('/auth/request-password-reset', { email });
+                console.log('[PasswordReset] Response:', response);
+
+                if (response.dev_token) {
+                    alert('DEV MODE: Reset-Token: ' + response.dev_token + '\n\nKopiere diesen Token in das naechste Feld.');
+                }
+
+                showResetStep2();
+            } catch (error) {
+                showError(error.message || 'Fehler beim Anfordern des Reset-Codes.');
+            }
+        }
+
+        async function resetPassword() {
+            const token = document.getElementById('reset-token').value;
+            const newPassword = document.getElementById('reset-new-password').value;
+
+            if (!token) {
+                showError(i18n.t('error.reset_code_required'));
+                return;
+            }
+
+            if (!newPassword || newPassword.length < 6) {
+                showError(i18n.t('error.password_too_short'));
+                return;
+            }
+
+            hideError();
+
+            try {
+                await api.post('/auth/reset-password', { token, new_password: newPassword });
+                showResetSuccess();
+            } catch (error) {
+                showError(error.message || 'Fehler beim Zuruecksetzen des Passworts.');
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('password-reset-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeResetModal();
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeResetModal();
+            }
+        });
+    </script>
+</body>
+</html>
