@@ -25,3 +25,6 @@ claude_history.json
 
 # Logs
 *.log
+
+# Test data (sensitive)
+TestUserDaten*

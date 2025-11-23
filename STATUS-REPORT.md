@@ -17,9 +17,12 @@
 | Recipe Generation | OK | Mock-Implementation |
 | Favorites System | OK | Rezepte favorisieren |
 | Diet Profiles | OK | Ernaehrungsprofile |
-| Multi-Language | - | Noch nicht implementiert |
-| Password Toggle | - | Frontend-Feature |
-| User Menu mit Emoji | - | Frontend-Feature |
+| Multi-Language (EN/DE) | OK | Toggle im Header |
+| PDF Export | OK | Rezepte als PDF exportieren |
+| Dark Mode | OK | Theme Toggle |
+| Favoriten Modal | OK | Modal statt Expand |
+| Password Toggle | OK | Show/Hide Passwort |
+| User Menu mit Emoji | OK | Dropdown mit Einstellungen |
 
 ---
 
@@ -31,6 +34,7 @@ backend/
     models/        6 Files (user, ingredient, recipe, favorite, diet_profile, __init__)
     routes/        7 Files (auth, users, ingredients, recipes, favorites, diet_profiles, __init__)
     schemas/       6 Files (user, ingredient, recipe, favorite, diet_profile, __init__)
+    services/      2 Files (mock_recipe_generator, pdf_generator)
     utils/         (database, password, jwt)
   scripts/
     db_manager.py  Database Management Tool
@@ -38,6 +42,21 @@ backend/
     quick_reset.py Quick Reset Tool
   database/
     kitchenhelper.db  SQLite Database
+frontend/
+  js/
+    api.js         API Client
+    app.js         Main App
+    auth.js        Authentication
+    config.js      Configuration (bilingual)
+    favorites.js   Favorites (Modal + PDF Export)
+    i18n.js        Internationalization (EN/DE)
+    ingredients.js Ingredients Management
+    profiles.js    Diet Profiles
+    recipes.js     Recipe Generation
+    settings.js    User Settings
+    theme.js       Dark Mode
+    ui.js          UI Components (Modals, Toasts)
+    user-menu.js   User Dropdown Menu
 ```
 
 ---
@@ -148,14 +167,15 @@ curl -X POST "http://127.0.0.1:8000/api/auth/login" \
 
 ## Naechste Schritte
 
-1. [ ] Frontend fertigstellen (Password Toggle, User Menu)
-2. [ ] Multi-Language Support (DE/EN)
-3. [ ] KI-Integration (Claude, OpenAI, Gemini)
-4. [ ] BE/KE-Rechner fuer Diabetes
-5. [ ] Stripe Payment Integration
-6. [ ] Docker Deployment fuer Raspberry Pi
-7. [ ] E-Mail-Versand fuer Password Reset
+1. [x] Frontend fertigstellen (Password Toggle, User Menu) ✅
+2. [x] Multi-Language Support (DE/EN) ✅
+3. [x] PDF Export fuer Rezepte ✅
+4. [ ] KI-Integration (Claude, OpenAI, Gemini)
+5. [ ] BE/KE-Rechner fuer Diabetes
+6. [ ] Stripe Payment Integration
+7. [ ] Docker Deployment fuer Raspberry Pi
+8. [ ] E-Mail-Versand fuer Password Reset
 
 ---
 
-**Letztes Update:** 23.11.2025, 16:26 Uhr
+**Letztes Update:** 23.11.2025, 21:00 Uhr

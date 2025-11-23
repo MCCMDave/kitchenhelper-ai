@@ -40,10 +40,15 @@ Kitchenhelper/
 
 ## Aktueller Status
 
-- **Phase:** Full-Stack Implementierung abgeschlossen
-- **Backend:** FastAPI mit allen Endpoints (Auth, Users, Ingredients, Recipes, Favorites, Profiles)
-- **Frontend:** Vanilla JS SPA mit API-Integration
-- **Naechster Schritt:** Testing und Deployment
+- **Phase:** Feature-Complete MVP
+- **Backend:** FastAPI mit allen Endpoints (Auth, Users, Ingredients, Recipes, Favorites, Profiles, PDF Export)
+- **Frontend:** Vanilla JS SPA mit API-Integration, Multi-Language (EN/DE)
+- **Neue Features (23.11.2025):**
+  - PDF Export fuer Rezepte (reportlab)
+  - Multi-Language Support (Englisch/Deutsch)
+  - Favoriten als Modal statt Expand/Collapse
+  - Bilinguale Rezeptgenerierung
+- **Naechster Schritt:** Testing, Deployment, echte KI-Integration
 
 ## Wichtige Befehle
 
@@ -92,7 +97,8 @@ Die geplante API ist dokumentiert in `docs/API-Documentation.md`. Hauptendpoints
 - `/auth/*` - Registrierung, Login, Token-Refresh
 - `/users/me` - Profilverwaltung
 - `/ingredients` - CRUD fuer Zutaten
-- `/recipes/generate` - KI-Rezeptgenerierung
+- `/recipes/generate` - KI-Rezeptgenerierung (mit language parameter)
+- `/recipes/{id}/export/pdf` - PDF Export
 - `/favorites` - Favoritenverwaltung
 - `/profiles` - Ernaehrungsprofile (Diabetes, Vegan, etc.)
 - `/payments/*` - Stripe Integration
@@ -134,4 +140,4 @@ STRIPE_WEBHOOK_SECRET=<webhook-secret>
 
 ---
 
-**Letzte Aktualisierung:** 22. November 2025
+**Letzte Aktualisierung:** 23. November 2025

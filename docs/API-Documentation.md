@@ -240,7 +240,8 @@ KI-Rezepte generieren
   "ingredient_ids": ["uuid1", "uuid2", "uuid3"],
   "ai_provider": "anthropic",
   "diet_profiles": ["diabetic", "vegan"],
-  "diabetes_unit": "KE"
+  "diabetes_unit": "KE",
+  "language": "en"
 }
 ```
 
@@ -328,6 +329,21 @@ Einzelnes Rezept abrufen
 **Headers:** `Authorization: Bearer {token}`
 
 **Response (200):** Single recipe object
+
+---
+
+### GET /recipes/{id}/export/pdf
+Rezept als PDF exportieren
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Response (200):** PDF-Datei als Download (application/pdf)
+
+**Response Headers:**
+```
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="recipe_{id}.pdf"
+```
 
 ---
 

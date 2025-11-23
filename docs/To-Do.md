@@ -1,8 +1,8 @@
 # KitchenHelper-AI - To-Do Liste
 
-**Projekt-Status:** Migration zu Full-Stack  
-**Aktueller Stand:** Planung & Setup  
-**Nächster Meilenstein:** Backend MVP
+**Projekt-Status:** Feature-Complete MVP
+**Aktueller Stand:** Testing & Deployment-Ready
+**Nächster Meilenstein:** Echte KI-Integration & Docker Deployment
 
 ---
 
@@ -117,10 +117,10 @@
 - [ ] Meal Planning (Wochenplanung)
 - [ ] Rezepte teilen (Social)
 - [ ] Barcode-Scanner Integration
-- [ ] Multi-Language Support (EN)
-- [ ] Dark Mode
+- [x] Multi-Language Support (EN) ✅
+- [x] Dark Mode ✅
 - [ ] PWA Offline-Modus
-- [ ] Export zu PDF/Email
+- [x] Export zu PDF/Email ✅
 
 ### Optimierungen
 - [ ] Caching-Layer (Redis?)
@@ -223,6 +223,14 @@
 - [x] Projektplanung abgeschlossen
 - [x] API-Dokumentation erstellt
 - [x] Migration-Checklist erstellt
+- [x] **Backend komplett implementiert** (23.11.2025)
+  - Auth, Users, Ingredients, Recipes, Favorites, Profiles
+- [x] **Frontend Migration abgeschlossen** (23.11.2025)
+  - Vanilla JS SPA mit Modulen
+- [x] **Multi-Language Support (EN/DE)** (23.11.2025)
+- [x] **PDF Export fuer Rezepte** (23.11.2025)
+- [x] **Dark Mode Toggle** (23.11.2025)
+- [x] **Favoriten als Modal** (23.11.2025)
 
 ---
 
@@ -249,5 +257,5 @@
 
 ---
 
-**Letzte Aktualisierung:** 21. November 2025  
-**Nächstes Review:** 28. November 2025
+**Letzte Aktualisierung:** 23. November 2025
+**Nächstes Review:** 30. November 2025
