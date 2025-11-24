@@ -106,7 +106,7 @@ const PROFILE_INFO = {
 const Profiles = {
     items: [],
     activeProfiles: new Set(),
-    disclaimerShown: JSON.parse(localStorage.getItem('profiles_disclaimer_shown') || '{}'),
+    disclaimerShownThisSession: {}, // Track per session, not persistent
 
     // Load all profiles
     async load() {
@@ -231,8 +231,8 @@ const Profiles = {
         const info = PROFILE_INFO[profileType];
         const lang = i18n.currentLang;
 
-        // If activating and has disclaimer that hasn't been shown yet
-        if (isActive && info && (info.disclaimer_de || info.disclaimer_en) && !this.disclaimerShown[profileType]) {
+        // If activating and has disclaimer that hasn't been shown THIS SESSION
+        if (isActive && info && (info.disclaimer_de || info.disclaimer_en) && !this.disclaimerShownThisSession[profileType]) {
             const disclaimer = lang === 'de' ? info.disclaimer_de : info.disclaimer_en;
             const types = CONFIG.getProfileTypes();
             const type = types.find(t => t.value === profileType);
@@ -255,9 +255,8 @@ const Profiles = {
                 return;
             }
 
-            // Mark disclaimer as shown
-            this.disclaimerShown[profileType] = true;
-            localStorage.setItem('profiles_disclaimer_shown', JSON.stringify(this.disclaimerShown));
+            // Mark disclaimer as shown for this session only
+            this.disclaimerShownThisSession[profileType] = true;
         }
 
         try {

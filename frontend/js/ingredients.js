@@ -274,26 +274,26 @@ const INGREDIENT_SUGGESTIONS = [
 
 // ==================== HÄUFIGE GEWÜRZE (Spice Quick-Select) ====================
 const COMMON_SPICES = [
-    { name: 'Salz', icon: '🧂' },
-    { name: 'Pfeffer', icon: '🌶️' },
-    { name: 'Paprikapulver', icon: '🌶️' },
-    { name: 'Oregano', icon: '🌿' },
-    { name: 'Basilikum', icon: '🌿' },
-    { name: 'Thymian', icon: '🌿' },
-    { name: 'Rosmarin', icon: '🌿' },
-    { name: 'Curry', icon: '🍛' },
-    { name: 'Kurkuma', icon: '🟡' },
-    { name: 'Zimt', icon: '🪵' },
-    { name: 'Muskat', icon: '🥜' },
-    { name: 'Knoblauchpulver', icon: '🧄' },
-    { name: 'Zwiebelpulver', icon: '🧅' },
-    { name: 'Chili', icon: '🌶️' },
-    { name: 'Kreuzkümmel', icon: '🌰' },
-    { name: 'Koriander', icon: '🌿' },
-    { name: 'Petersilie', icon: '🌿' },
-    { name: 'Dill', icon: '🌿' },
-    { name: 'Schnittlauch', icon: '🌿' },
-    { name: 'Lorbeerblätter', icon: '🍃' }
+    { name_de: 'Salz', name_en: 'Salt', icon: '🧂' },
+    { name_de: 'Pfeffer', name_en: 'Pepper', icon: '🌶️' },
+    { name_de: 'Paprikapulver', name_en: 'Paprika Powder', icon: '🌶️' },
+    { name_de: 'Oregano', name_en: 'Oregano', icon: '🌿' },
+    { name_de: 'Basilikum', name_en: 'Basil', icon: '🌿' },
+    { name_de: 'Thymian', name_en: 'Thyme', icon: '🌿' },
+    { name_de: 'Rosmarin', name_en: 'Rosemary', icon: '🌿' },
+    { name_de: 'Curry', name_en: 'Curry', icon: '🍛' },
+    { name_de: 'Kurkuma', name_en: 'Turmeric', icon: '🟡' },
+    { name_de: 'Zimt', name_en: 'Cinnamon', icon: '🪵' },
+    { name_de: 'Muskat', name_en: 'Nutmeg', icon: '🥜' },
+    { name_de: 'Knoblauchpulver', name_en: 'Garlic Powder', icon: '🧄' },
+    { name_de: 'Zwiebelpulver', name_en: 'Onion Powder', icon: '🧅' },
+    { name_de: 'Chili', name_en: 'Chili', icon: '🌶️' },
+    { name_de: 'Kreuzkümmel', name_en: 'Cumin', icon: '🌰' },
+    { name_de: 'Koriander', name_en: 'Coriander', icon: '🌿' },
+    { name_de: 'Petersilie', name_en: 'Parsley', icon: '🌿' },
+    { name_de: 'Dill', name_en: 'Dill', icon: '🌿' },
+    { name_de: 'Schnittlauch', name_en: 'Chives', icon: '🌿' },
+    { name_de: 'Lorbeerblätter', name_en: 'Bay Leaves', icon: '🍃' }
 ];
 
 // ==================== KATEGORIE-EMOJIS ====================
@@ -633,16 +633,17 @@ const Ingredients = {
         const existingNames = new Set(existingSpices.map(s => s.name));
 
         const spicesHtml = COMMON_SPICES.map(spice => {
-            const spiceId = spice.name.toLowerCase();
+            const spiceName = lang === 'de' ? spice.name_de : spice.name_en;
+            const spiceId = spiceName.toLowerCase();
             const existing = existingSpices.find(s => s.name === spiceId);
             const isOwned = existingNames.has(spiceId);
 
             return `
                 <label class="spice-checkbox ${isOwned ? 'owned' : ''}"
-                       onclick="Ingredients.toggleSpice('${spice.name}', ${existing ? existing.id : 'null'})"
+                       onclick="Ingredients.toggleSpice('${spiceName}', ${existing ? existing.id : 'null'})"
                        style="cursor: pointer;">
                     <span class="spice-icon">${spice.icon}</span>
-                    <span class="spice-name">${spice.name}</span>
+                    <span class="spice-name">${spiceName}</span>
                     ${isOwned ? `<span class="spice-owned">✓</span>` : `<span class="spice-add">+</span>`}
                 </label>
             `;
