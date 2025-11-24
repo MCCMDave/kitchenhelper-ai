@@ -86,8 +86,8 @@ const CONFIG = {
 
     // Subscription Tiers
     TIERS: {
-        demo: { name: 'Demo', recipes: 3, favorites: 5, profiles: 1 },
-        basic: { name: 'Basic', recipes: 50, favorites: 50, profiles: 3 },
+        demo: { name: 'Demo', recipes: 3, favorites: 5, profiles: 3 },
+        basic: { name: 'Basic', recipes: 50, favorites: 50, profiles: 5 },
         premium: { name: 'Premium', recipes: 'Unlimited', favorites: 'Unlimited', profiles: 'Unlimited' }
     }
 };

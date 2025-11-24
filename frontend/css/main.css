@@ -386,6 +386,105 @@ body {
     font-size: var(--font-size-2xl);
 }
 
+.page-header-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+/* ==================== SPICE QUICK-SELECT ==================== */
+.spice-quickselect {
+    padding: var(--spacing-md);
+}
+
+.spice-intro {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-light);
+}
+
+.spice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.spice-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.spice-checkbox:hover:not(.owned) {
+    border-color: var(--primary);
+    background: var(--success-light);
+}
+
+.spice-checkbox.owned {
+    background: var(--success-light);
+    border-color: var(--success);
+    opacity: 0.7;
+    cursor: default;
+}
+
+.spice-checkbox input {
+    display: none;
+}
+
+.spice-checkbox input:checked + .spice-icon + .spice-name {
+    color: var(--primary);
+    font-weight: var(--font-semibold);
+}
+
+.spice-checkbox:has(input:checked) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.spice-icon {
+    font-size: 1.2rem;
+}
+
+.spice-name {
+    flex: 1;
+    font-size: var(--font-size-sm);
+}
+
+.spice-owned {
+    color: var(--success);
+    font-weight: var(--font-bold);
+}
+
+.spice-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+/* Dark Mode Spice Quick-Select */
+[data-theme="dark"] .spice-checkbox {
+    background: var(--white);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .spice-checkbox:hover:not(.owned) {
+    background: #2a3a2a;
+}
+
+[data-theme="dark"] .spice-checkbox.owned {
+    background: #1b3a1d;
+}
+
+[data-theme="dark"] .spice-checkbox:has(input:checked) {
+    background: #2E7D32;
+}
+
 /* ==================== NAVIGATION ==================== */
 .nav-tabs {
     margin-bottom: var(--spacing-xl);
@@ -1185,4 +1284,90 @@ body {
     .ingredient-checkboxes {
         grid-template-columns: 1fr;
     }
+}
+
+/* ==================== SHARE MODAL ==================== */
+.share-modal-content {
+    padding: var(--spacing-md);
+}
+
+.share-url-container {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.share-url-input {
+    flex: 1;
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+}
+
+.share-expiry {
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+    margin: var(--spacing-sm) 0;
+}
+
+.share-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* ==================== SHOPPING LIST ==================== */
+.shopping-list-container {
+    padding: var(--spacing-md);
+}
+
+.shopping-list-category {
+    margin-bottom: var(--spacing-md);
+}
+
+.shopping-list-category h4 {
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.shopping-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) 0;
+}
+
+.shopping-list-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.shopping-list-item.checked {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+
+.shopping-list-amount {
+    color: var(--text-light);
+    min-width: 80px;
+}
+
+/* ==================== NUTRITION INFO ==================== */
+.nutrition-lookup-container {
+    padding: var(--spacing-md);
+}
+
+.nutrition-result {
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.nutrition-source {
+    font-size: var(--font-size-xs);
+    color: var(--text-light);
+    margin-top: var(--spacing-sm);
 }

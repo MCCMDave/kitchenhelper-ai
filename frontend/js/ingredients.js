@@ -272,6 +272,30 @@ const INGREDIENT_SUGGESTIONS = [
     'Zander', 'Zimt', 'Zitronen', 'Zucchini', 'Zucker', 'Zwiebeln'
 ].sort((a, b) => a.localeCompare(b, 'de'));
 
+// ==================== HÄUFIGE GEWÜRZE (Spice Quick-Select) ====================
+const COMMON_SPICES = [
+    { name: 'Salz', icon: '🧂' },
+    { name: 'Pfeffer', icon: '🌶️' },
+    { name: 'Paprikapulver', icon: '🌶️' },
+    { name: 'Oregano', icon: '🌿' },
+    { name: 'Basilikum', icon: '🌿' },
+    { name: 'Thymian', icon: '🌿' },
+    { name: 'Rosmarin', icon: '🌿' },
+    { name: 'Curry', icon: '🍛' },
+    { name: 'Kurkuma', icon: '🟡' },
+    { name: 'Zimt', icon: '🪵' },
+    { name: 'Muskat', icon: '🥜' },
+    { name: 'Knoblauchpulver', icon: '🧄' },
+    { name: 'Zwiebelpulver', icon: '🧅' },
+    { name: 'Chili', icon: '🌶️' },
+    { name: 'Kreuzkümmel', icon: '🌰' },
+    { name: 'Koriander', icon: '🌿' },
+    { name: 'Petersilie', icon: '🌿' },
+    { name: 'Dill', icon: '🌿' },
+    { name: 'Schnittlauch', icon: '🌿' },
+    { name: 'Lorbeerblätter', icon: '🍃' }
+];
+
 // ==================== KATEGORIE-EMOJIS ====================
 const CATEGORY_EMOJIS = {
     // German
@@ -379,7 +403,7 @@ const Ingredients = {
         const container = document.getElementById('ingredients-list');
 
         if (!this.items || this.items.length === 0) {
-            UI.showEmpty(container, 'Keine Zutaten vorhanden. Füge deine erste Zutat hinzu!', '🥗');
+            UI.showEmpty(container, i18n.t('ingredients.empty'), '🥗');
             return;
         }
 
@@ -402,11 +426,15 @@ const Ingredients = {
                     ${item.category ? `<span class="ingredient-category">${UI.escapeHtml(item.category)}</span>` : ''}
                 </div>
                 <div class="ingredient-expiry ${expiryClass}">
-                    ${item.is_permanent ? 'Dauerhaft' : (item.expiry_date ? `Ablauf: ${UI.formatDate(item.expiry_date)}${isExpired ? ' (Abgelaufen!)' : ''}` : 'Kein Ablaufdatum')}
+                    ${item.is_permanent
+                        ? i18n.t('ingredients.permanent')
+                        : (item.expiry_date
+                            ? `${i18n.t('ingredients.expires')}: ${UI.formatDate(item.expiry_date)}${isExpired ? ` (${i18n.t('ingredients.expired')}!)` : ''}`
+                            : i18n.t('ingredients.no_expiry'))}
                 </div>
                 <div class="ingredient-actions">
-                    <button class="btn btn-sm btn-ghost" onclick="Ingredients.showEditModal(${item.id})">Bearbeiten</button>
-                    <button class="btn btn-sm btn-danger" onclick="Ingredients.delete(${item.id})">Löschen</button>
+                    <button class="btn btn-sm btn-ghost" onclick="Ingredients.showEditModal(${item.id})">${i18n.t('ingredients.edit')}</button>
+                    <button class="btn btn-sm btn-danger" onclick="Ingredients.delete(${item.id})">${i18n.t('ingredients.delete')}</button>
                 </div>
             </div>
         `;
@@ -417,7 +445,7 @@ const Ingredients = {
         UI.showFormModal({
             title: i18n.t('ingredients.add'),
             fields: [
-                { name: 'name', label: i18n.t('ingredients.name'), required: true, placeholder: i18n.currentLang === 'de' ? 'z.B. Tomaten' : 'e.g. Tomatoes', id: 'add-ingredient-name' },
+                { name: 'name', label: i18n.t('ingredients.name'), required: true, placeholder: i18n.t('ingredients.placeholder'), id: 'add-ingredient-name' },
                 {
                     name: 'category',
                     label: i18n.t('ingredients.category'),
@@ -429,9 +457,9 @@ const Ingredients = {
                     ]
                 },
                 { name: 'expiry_date', label: i18n.t('ingredients.expiry'), type: 'date' },
-                { name: 'is_permanent', label: i18n.t('ingredients.permanent') + (i18n.currentLang === 'de' ? ' (z.B. Gewürze)' : ' (e.g. Spices)'), type: 'checkbox' }
+                { name: 'is_permanent', label: i18n.t('ingredients.permanent') + i18n.t('ingredients.hint_permanent'), type: 'checkbox' }
             ],
-            submitText: i18n.currentLang === 'de' ? 'Hinzufügen' : 'Add',
+            submitText: i18n.t('ingredients.btn_add'),
             onSubmit: async (data) => {
                 await this.create(data);
             }
@@ -531,7 +559,7 @@ const Ingredients = {
                     type: 'select',
                     value: item.category || '',
                     options: [
-                        { value: '', label: '📦 ' + (i18n.currentLang === 'de' ? 'Keine Kategorie' : 'No category') },
+                        { value: '', label: '📦 ' + i18n.t('ingredients.no_category') },
                         ...CONFIG.getCategories().map(c => ({ value: c, label: `${getCategoryEmoji(c)} ${c}` }))
                     ]
                 },
@@ -545,27 +573,6 @@ const Ingredients = {
         });
     },
 
-    // Create ingredient
-    async create(data) {
-        try {
-            // Clean up data
-            const payload = {
-                name: data.name,
-                category: data.category || null,
-                expiry_date: data.expiry_date || null,
-                is_permanent: data.is_permanent || false
-            };
-
-            console.log('[Ingredients] Creating:', payload);
-            await api.createIngredient(payload);
-            UI.success('Zutat hinzugefügt!');
-            await this.load();
-        } catch (error) {
-            console.error('[Ingredients] Create error:', error);
-            UI.error('Fehler: ' + error.message);
-        }
-    },
-
     // Update ingredient
     async update(id, data) {
         try {
@@ -577,24 +584,27 @@ const Ingredients = {
 
             console.log('[Ingredients] Updating:', id, payload);
             await api.updateIngredient(id, payload);
-            UI.success('Zutat aktualisiert!');
+            UI.success(i18n.t('ingredients.updated'));
             await this.load();
         } catch (error) {
             console.error('[Ingredients] Update error:', error);
-            UI.error('Fehler: ' + error.message);
+            UI.error(i18n.t('common.error_prefix') + error.message);
         }
     },
 
     // Delete ingredient
     delete(id) {
         const item = this.items.find(i => i.id === id);
-        UI.confirm(`"${item?.name || 'Zutat'}" wirklich löschen?`, async () => {
+        const confirmMsg = i18n.currentLang === 'de'
+            ? `"${item?.name || 'Zutat'}" wirklich löschen?`
+            : `Really delete "${item?.name || 'ingredient'}"?`;
+        UI.confirm(confirmMsg, async () => {
             try {
                 await api.deleteIngredient(id);
-                UI.success('Zutat gelöscht!');
+                UI.success(i18n.t('ingredients.deleted'));
                 await this.load();
             } catch (error) {
-                UI.error('Fehler: ' + error.message);
+                UI.error(i18n.t('common.error_prefix') + error.message);
             }
         });
     },
@@ -602,5 +612,135 @@ const Ingredients = {
     // Get items for recipe selection
     getItems() {
         return this.items;
+    },
+
+    // ==================== SPICE QUICK-SELECT ====================
+    showSpiceQuickSelect() {
+        const lang = i18n.currentLang;
+        const existingNames = new Set(this.items.map(i => i.name.toLowerCase()));
+
+        const spicesHtml = COMMON_SPICES.map(spice => {
+            const isOwned = existingNames.has(spice.name.toLowerCase());
+            return `
+                <label class="spice-checkbox ${isOwned ? 'owned' : ''}">
+                    <input type="checkbox" value="${spice.name}" ${isOwned ? 'disabled checked' : ''}>
+                    <span class="spice-icon">${spice.icon}</span>
+                    <span class="spice-name">${spice.name}</span>
+                    ${isOwned ? `<span class="spice-owned">✓</span>` : ''}
+                </label>
+            `;
+        }).join('');
+
+        const modalContent = `
+            <div class="spice-quickselect">
+                <p class="spice-intro">${lang === 'de'
+                    ? 'Wähle Gewürze aus, die du hinzufügen möchtest:'
+                    : 'Select spices you want to add:'}</p>
+                <div class="spice-grid">${spicesHtml}</div>
+                <div class="spice-actions">
+                    <button class="btn btn-outline" onclick="Ingredients.selectAllSpices()">
+                        ${lang === 'de' ? 'Alle auswählen' : 'Select all'}
+                    </button>
+                    <button class="btn btn-primary" onclick="Ingredients.addSelectedSpices()">
+                        ${lang === 'de' ? 'Hinzufügen' : 'Add selected'}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        UI.showModal(
+            lang === 'de' ? '⚡ Gewürze schnell hinzufügen' : '⚡ Quick-add Spices',
+            modalContent,
+            { size: 'medium' }
+        );
+    },
+
+    selectAllSpices() {
+        document.querySelectorAll('.spice-checkbox input:not(:disabled)').forEach(cb => {
+            cb.checked = true;
+        });
+    },
+
+    async addSelectedSpices() {
+        const selected = [];
+        document.querySelectorAll('.spice-checkbox input:checked:not(:disabled)').forEach(cb => {
+            selected.push({
+                name: cb.value,
+                category: 'Gewürze',
+                is_permanent: true
+            });
+        });
+
+        if (selected.length === 0) {
+            UI.warning(i18n.t('ingredients.no_spices_selected'));
+            return;
+        }
+
+        try {
+            const created = await api.createBatchIngredients(selected);
+            UI.closeModal();
+
+            const msg = i18n.currentLang === 'de'
+                ? `${created.length} Gewürz${created.length === 1 ? '' : 'e'} hinzugefügt!`
+                : `${created.length} spice${created.length === 1 ? '' : 's'} added!`;
+            UI.success(msg);
+
+            await this.load();
+        } catch (error) {
+            UI.error(error.message);
+        }
+    },
+
+    // ==================== DUPLICATE PREVENTION ====================
+    async create(data) {
+        try {
+            const payload = {
+                name: data.name,
+                category: data.category || null,
+                expiry_date: data.expiry_date || null,
+                is_permanent: data.is_permanent || false
+            };
+
+            console.log('[Ingredients] Creating:', payload);
+            await api.createIngredient(payload);
+            UI.success(i18n.t('ingredients.added'));
+            await this.load();
+        } catch (error) {
+            console.error('[Ingredients] Create error:', error);
+
+            // Handle 409 Conflict (Duplicate)
+            if (error.message && error.message.includes('already exists')) {
+                this.handleDuplicate(data.name, error);
+            } else {
+                UI.error(i18n.t('common.error_prefix') + error.message);
+            }
+        }
+    },
+
+    handleDuplicate(name, error) {
+        const lang = i18n.currentLang;
+        const msg = lang === 'de'
+            ? `"${name}" existiert bereits. Möchtest du die vorhandene Zutat bearbeiten?`
+            : `"${name}" already exists. Would you like to edit the existing ingredient?`;
+
+        // Try to extract existing_id from error
+        let existingId = null;
+        try {
+            const detail = JSON.parse(error.message.replace('Ingredient already exists', '').trim());
+            existingId = detail.existing_id;
+        } catch (e) {
+            // Find by name
+            const existing = this.items.find(i => i.name.toLowerCase() === name.toLowerCase());
+            if (existing) existingId = existing.id;
+        }
+
+        UI.confirm(msg, () => {
+            UI.closeModal();
+            if (existingId) {
+                this.showEditModal(existingId);
+            } else {
+                this.load();
+            }
+        });
     }
 };

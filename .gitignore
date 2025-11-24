@@ -9,6 +9,7 @@ env/
 # Environment & Secrets
 .env
 backend/.env
+!.env.example
 
 # Database
 backend/database/*.db
@@ -25,6 +26,10 @@ claude_history.json
 
 # Logs
 *.log
+logs/
 
 # Test data (sensitive)
 TestUserDaten*
+
+# Docker (nicht ignorieren, nur Laufzeit-Dateien)
+# Docker Volumes werden im Container erstellt

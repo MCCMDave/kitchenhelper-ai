@@ -38,7 +38,7 @@ STANDARD_PROFILES = {
         }
     },
     "keto": {
-        "name": "Ketogene Diaet",
+        "name": "Ketogene Diät",
         "settings": {
             "daily_carb_limit": 50,
             "daily_fat_min": 150,
@@ -48,7 +48,7 @@ STANDARD_PROFILES = {
     "vegan": {
         "name": "Vegan",
         "settings": {
-            "exclude_ingredients": ["Fleisch", "Fisch", "Eier", "Milch", "Kaese", "Butter"]
+            "exclude_ingredients": ["Fleisch", "Fisch", "Eier", "Milch", "Käse", "Butter"]
         }
     },
     "vegetarian": {
@@ -99,29 +99,34 @@ def check_profile_limit(user: User, db: Session) -> bool:
 
     Returns:
         True wenn unter dem Limit, False wenn Limit erreicht
+
+    Note: Mit dem Checkbox-System koennen alle User alle Profile erstellen,
+    aber nur eine bestimmte Anzahl gleichzeitig AKTIV haben.
     """
-    current_count = db.query(DietProfile).filter(
-        DietProfile.user_id == user.id
+    # Zaehle nur AKTIVE Profile fuer das Limit
+    active_count = db.query(DietProfile).filter(
+        DietProfile.user_id == user.id,
+        DietProfile.is_active == True
     ).count()
 
     limits = {
-        SubscriptionTier.DEMO: 1,
-        SubscriptionTier.BASIC: 3,
-        SubscriptionTier.PREMIUM: 999999
+        SubscriptionTier.DEMO: 8,      # Demo: alle 8 Profile moeglich
+        SubscriptionTier.BASIC: 8,     # Basic: alle 8 Profile moeglich
+        SubscriptionTier.PREMIUM: 999999  # Premium: unbegrenzt
     }
 
-    limit = limits.get(user.subscription_tier, 1)
-    return current_count < limit
+    limit = limits.get(user.subscription_tier, 8)
+    return active_count < limit
 
 
 def get_profile_limit(user: User) -> int:
-    """Hole das Profil-Limit fuer den User"""
+    """Hole das Profil-Limit fuer den User (aktive Profile)"""
     limits = {
-        SubscriptionTier.DEMO: 1,
-        SubscriptionTier.BASIC: 3,
+        SubscriptionTier.DEMO: 8,
+        SubscriptionTier.BASIC: 8,
         SubscriptionTier.PREMIUM: 999999
     }
-    return limits.get(user.subscription_tier, 1)
+    return limits.get(user.subscription_tier, 8)
 
 
 def validate_settings(profile_type: str, settings: Dict[str, Any]) -> Dict[str, Any]:
@@ -235,12 +240,12 @@ def create_profile(
     # 1. Validiere profile_type
     validate_profile_type(profile_data.profile_type)
 
-    # 2. Pruefe Tier-Limit
-    if not check_profile_limit(current_user, db):
+    # 2. Pruefe Tier-Limit (nur wenn Profil aktiv sein soll)
+    if profile_data.is_active and not check_profile_limit(current_user, db):
         limit = get_profile_limit(current_user)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"Profile limit reached ({limit}). Upgrade your subscription for more profiles."
+            detail=f"Active profile limit reached ({limit}). Upgrade your subscription for more active profiles."
         )
 
     # 3. Validiere Settings
@@ -417,6 +422,14 @@ def update_profile(
         profile.settings_json = json.dumps(validated_settings) if validated_settings else None
 
     if "is_active" in update_data:
+        # Pruefe Limit nur wenn von inaktiv -> aktiv gewechselt wird
+        if update_data["is_active"] and not profile.is_active:
+            if not check_profile_limit(current_user, db):
+                limit = get_profile_limit(current_user)
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Active profile limit reached ({limit}). Deactivate another profile or upgrade your subscription."
+                )
         profile.is_active = update_data["is_active"]
 
     db.commit()

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
+from pydantic import BaseModel
 from app.schemas.ingredient import IngredientCreate, IngredientUpdate, IngredientResponse
 from app.models.ingredient import Ingredient
 from app.models.user import User
@@ -9,6 +10,17 @@ from app.utils.database import get_db
 from app.utils.auth import get_current_user
 
 router = APIRouter(prefix="/ingredients", tags=["Ingredients"])
+
+
+# Schema für Batch-Create
+class BatchIngredientItem(BaseModel):
+    name: str
+    category: Optional[str] = None
+    is_permanent: bool = True
+
+
+class BatchIngredientCreate(BaseModel):
+    ingredients: List[BatchIngredientItem]
 
 @router.get("/", response_model=List[IngredientResponse])
 def get_ingredients(
@@ -56,16 +68,35 @@ def create_ingredient(
 ):
     """
     Neue Zutat hinzufügen
-    
+
     - **name**: Name der Zutat (Pflicht)
     - **category**: Kategorie wie "Gemüse", "Fleisch", "Gewürze"
     - **expiry_date**: Ablaufdatum (ISO format)
     - **is_permanent**: true für haltbare Zutaten wie Salz
+
+    **Duplikat-Prüfung:** Bei existierender Zutat wird 409 Conflict zurückgegeben.
     """
     # Normalisiere Namen zu Title Case (Tomaten, nicht TOMATEN oder tomaten)
     normalized_name = ingredient_data.name.strip().title()
     normalized_category = ingredient_data.category.strip().title() if ingredient_data.category else None
-    
+
+    # Prüfe auf Duplikat (case-insensitive)
+    existing = db.query(Ingredient).filter(
+        Ingredient.user_id == current_user.id,
+        Ingredient.name.ilike(normalized_name)
+    ).first()
+
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "error": "Ingredient already exists",
+                "existing_id": existing.id,
+                "existing_name": existing.name,
+                "suggestion": "update_quantity"
+            }
+        )
+
     new_ingredient = Ingredient(
         user_id=current_user.id,
         name=normalized_name,
@@ -73,12 +104,57 @@ def create_ingredient(
         expiry_date=ingredient_data.expiry_date,
         is_permanent=ingredient_data.is_permanent
     )
-    
+
     db.add(new_ingredient)
     db.commit()
     db.refresh(new_ingredient)
-    
+
     return new_ingredient
+
+
+@router.post("/batch", response_model=List[IngredientResponse], status_code=status.HTTP_201_CREATED)
+def create_batch_ingredients(
+    batch_data: BatchIngredientCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Mehrere Zutaten auf einmal hinzufügen (Spice Quick-Select)
+
+    - Duplikate werden übersprungen (nicht als Fehler)
+    - Gibt nur neu erstellte Zutaten zurück
+    """
+    created = []
+
+    for item in batch_data.ingredients:
+        normalized_name = item.name.strip().title()
+        normalized_category = item.category.strip().title() if item.category else None
+
+        # Prüfe auf existierende Zutat
+        existing = db.query(Ingredient).filter(
+            Ingredient.user_id == current_user.id,
+            Ingredient.name.ilike(normalized_name)
+        ).first()
+
+        if existing:
+            continue  # Überspringen, kein Fehler
+
+        new_ingredient = Ingredient(
+            user_id=current_user.id,
+            name=normalized_name,
+            category=normalized_category,
+            is_permanent=item.is_permanent
+        )
+
+        db.add(new_ingredient)
+        created.append(new_ingredient)
+
+    if created:
+        db.commit()
+        for ing in created:
+            db.refresh(ing)
+
+    return created
 
 @router.patch("/{ingredient_id}", response_model=IngredientResponse)
 def update_ingredient(

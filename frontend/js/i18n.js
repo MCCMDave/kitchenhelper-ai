@@ -63,6 +63,7 @@ const translations = {
         'ingredients.edit': 'Bearbeiten',
         'ingredients.delete': 'Löschen',
         'ingredients.expired': 'Abgelaufen',
+        'ingredients.spices': 'Gewürze',
 
         // Recipes
         'recipes.title': 'Rezepte generieren',
@@ -124,6 +125,51 @@ const translations = {
         'profiles.activated': 'Profil aktiviert!',
         'profiles.deactivated': 'Profil deaktiviert!',
         'recipes.select_warning': 'Bitte wähle mindestens eine Zutat aus!',
+        'recipes.no_generated': 'Keine Rezepte generiert. Wähle Zutaten und klicke auf "Generieren"!',
+        'recipes.no_history': 'Noch keine Rezepte generiert.',
+        'recipes.error_generating': 'Fehler beim Generieren',
+        'recipes.error_loading': 'Fehler beim Laden',
+        'recipes.fat': 'Fett',
+
+        // Favorites extended
+        'favorites.share': 'Teilen',
+        'favorites.shopping_list': 'Einkaufsliste',
+        'favorites.link_copied': 'Link kopiert!',
+        'favorites.no_favorites': 'Keine Favoriten vorhanden',
+        'favorites.creating_link': 'Erstelle Link...',
+        'favorites.creating_list': 'Erstelle Einkaufsliste...',
+        'favorites.list_created': 'Einkaufsliste erstellt!',
+        'favorites.share_text': 'Teile dieses Rezept mit anderen:',
+        'favorites.link_valid_until': 'Link gültig bis:',
+        'favorites.copy': 'Kopieren',
+        'favorites.share_recipe': 'Rezept teilen',
+
+        // Ingredients extended
+        'ingredients.empty': 'Keine Zutaten vorhanden. Füge deine erste Zutat hinzu!',
+        'ingredients.expires': 'Ablauf',
+        'ingredients.no_expiry': 'Kein Ablaufdatum',
+        'ingredients.placeholder': 'z.B. Tomaten',
+        'ingredients.no_category': 'Keine Kategorie',
+        'ingredients.hint_permanent': ' (z.B. Gewürze)',
+        'ingredients.btn_add': 'Hinzufügen',
+        'ingredients.updated': 'Zutat aktualisiert!',
+        'ingredients.deleted': 'Zutat gelöscht!',
+        'ingredients.added': 'Zutat hinzugefügt!',
+        'ingredients.no_spices_selected': 'Keine Gewürze ausgewählt',
+
+        // User Menu
+        'user.emoji_updated': 'Emoji aktualisiert!',
+        'user.emoji_error': 'Fehler beim Aktualisieren des Emojis',
+
+        // Shopping List
+        'shopping.title': 'Einkaufsliste',
+        'shopping.generate': 'Liste erstellen',
+        'shopping.empty': 'Keine Rezepte ausgewählt',
+        'shopping.items': 'Artikel',
+        'shopping.checked': 'erledigt',
+
+        // Common extended
+        'common.error_prefix': 'Fehler: ',
 
         // Settings
         'settings.title': 'Einstellungen',
@@ -213,6 +259,7 @@ const translations = {
         'ingredients.edit': 'Edit',
         'ingredients.delete': 'Delete',
         'ingredients.expired': 'Expired',
+        'ingredients.spices': 'Spices',
 
         // Recipes
         'recipes.title': 'Generate Recipes',
@@ -262,7 +309,63 @@ const translations = {
         'profiles.name': 'Name',
         'profiles.name_placeholder': 'e.g. My Diabetes Profile',
         'profiles.activate_now': 'Activate immediately',
+        'profiles.active': 'Active',
+        'profiles.inactive': 'Inactive',
+        'profiles.no_settings': 'No special settings',
+        'profiles.unit': 'Unit',
+        'profiles.daily_carb_limit': 'Daily Carb Limit (g)',
+        'profiles.confirm_delete': 'Really delete "{name}"?',
+        'profiles.created': 'Profile created!',
+        'profiles.updated': 'Profile updated!',
+        'profiles.deleted': 'Profile deleted!',
+        'profiles.activated': 'Profile activated!',
+        'profiles.deactivated': 'Profile deactivated!',
         'recipes.select_warning': 'Please select at least one ingredient!',
+        'recipes.no_generated': 'No recipes generated. Select ingredients and click "Generate"!',
+        'recipes.no_history': 'No recipes generated yet.',
+        'recipes.error_generating': 'Error generating',
+        'recipes.error_loading': 'Error loading',
+        'recipes.fat': 'Fat',
+
+        // Favorites extended
+        'favorites.share': 'Share',
+        'favorites.shopping_list': 'Shopping List',
+        'favorites.link_copied': 'Link copied!',
+        'favorites.no_favorites': 'No favorites available',
+        'favorites.creating_link': 'Creating link...',
+        'favorites.creating_list': 'Creating shopping list...',
+        'favorites.list_created': 'Shopping list created!',
+        'favorites.share_text': 'Share this recipe with others:',
+        'favorites.link_valid_until': 'Link valid until:',
+        'favorites.copy': 'Copy',
+        'favorites.share_recipe': 'Share Recipe',
+
+        // Ingredients extended
+        'ingredients.empty': 'No ingredients yet. Add your first ingredient!',
+        'ingredients.expires': 'Expires',
+        'ingredients.no_expiry': 'No expiry date',
+        'ingredients.placeholder': 'e.g. Tomatoes',
+        'ingredients.no_category': 'No category',
+        'ingredients.hint_permanent': ' (e.g. Spices)',
+        'ingredients.btn_add': 'Add',
+        'ingredients.updated': 'Ingredient updated!',
+        'ingredients.deleted': 'Ingredient deleted!',
+        'ingredients.added': 'Ingredient added!',
+        'ingredients.no_spices_selected': 'No spices selected',
+
+        // User Menu
+        'user.emoji_updated': 'Emoji updated!',
+        'user.emoji_error': 'Error updating emoji',
+
+        // Shopping List
+        'shopping.title': 'Shopping List',
+        'shopping.generate': 'Create List',
+        'shopping.empty': 'No recipes selected',
+        'shopping.items': 'Items',
+        'shopping.checked': 'done',
+
+        // Common extended
+        'common.error_prefix': 'Error: ',
 
         // Settings
         'settings.title': 'Settings',

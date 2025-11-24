@@ -82,16 +82,19 @@ const Recipes = {
             this.renderGeneratedRecipes();
 
             if (response.daily_count_remaining !== undefined) {
-                UI.info(`Noch ${response.daily_count_remaining} Rezepte heute verfügbar`);
+                const msg = i18n.currentLang === 'de'
+                    ? `Noch ${response.daily_count_remaining} Rezepte heute verfügbar`
+                    : `${response.daily_count_remaining} recipes remaining today`;
+                UI.info(msg);
             }
 
             // Refresh user data for updated counts
             await Auth.refreshUser();
         } catch (error) {
-            UI.showError(container, 'Fehler beim Generieren: ' + error.message);
+            UI.showError(container, i18n.t('recipes.error_generating') + ': ' + error.message);
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Rezepte generieren';
+            btn.textContent = i18n.t('recipes.generate');
         }
     },
 
@@ -100,7 +103,7 @@ const Recipes = {
         const container = document.getElementById('recipes-list');
 
         if (!this.generatedRecipes || this.generatedRecipes.length === 0) {
-            UI.showEmpty(container, 'Keine Rezepte generiert. Wähle Zutaten und klicke auf "Generieren"!', '🍽️');
+                UI.showEmpty(container, i18n.t('recipes.no_generated'), '🍽️');
             return;
         }
 
@@ -117,13 +120,13 @@ const Recipes = {
             const recipes = response.recipes || [];
 
             if (recipes.length === 0) {
-                UI.showEmpty(container, 'Noch keine Rezepte generiert.', '');
+                UI.showEmpty(container, i18n.t('recipes.no_history'), '');
                 return;
             }
 
             container.innerHTML = recipes.map(recipe => this.renderRecipeCard(recipe, true)).join('');
         } catch (error) {
-            UI.showError(container, 'Fehler beim Laden: ' + error.message);
+            UI.showError(container, i18n.t('recipes.error_loading') + ': ' + error.message);
         }
     },
 
@@ -160,7 +163,7 @@ const Recipes = {
         const leftoverTipsLabel = i18n.t('recipes.leftover_tips');
         const nutritionLabel = i18n.t('recipes.nutrition');
         const addFavoriteLabel = i18n.t('recipes.add_favorite');
-        const fatLabel = i18n.currentLang === 'de' ? 'Fett' : 'Fat';
+        const fatLabel = i18n.t('recipes.fat');
 
         return `
             <div class="recipe-card" data-id="${recipe.id}">

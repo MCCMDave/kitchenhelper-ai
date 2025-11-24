@@ -116,6 +116,8 @@ api.updateIngredient = (id, data) => api.patch(`/ingredients/${id}`, data);
 
 api.deleteIngredient = (id) => api.delete(`/ingredients/${id}`);
 
+api.createBatchIngredients = (ingredients) => api.post('/ingredients/batch', { ingredients });
+
 // ==================== RECIPES API ====================
 api.generateRecipes = (data) => api.post('/recipes/generate', data);
 
@@ -149,3 +151,69 @@ api.createProfileFromTemplate = (profileType) =>
 api.updateProfile = (id, data) => api.patch(`/profiles/${id}`, data);
 
 api.deleteProfile = (id) => api.delete(`/profiles/${id}`);
+
+// ==================== SHOPPING LIST API ====================
+api.generateShoppingList = (recipeIds = [], favoriteIds = [], scaleFactor = 1.0) =>
+    api.post('/shopping-list/generate', {
+        recipe_ids: recipeIds,
+        favorite_ids: favoriteIds,
+        scale_factor: scaleFactor
+    });
+
+api.exportShoppingListText = async (recipeIds = [], favoriteIds = [], scaleFactor = 1.0) => {
+    const token = api.getToken();
+    const response = await fetch(`${CONFIG.API_BASE_URL}/shopping-list/export/text`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            recipe_ids: recipeIds,
+            favorite_ids: favoriteIds,
+            scale_factor: scaleFactor
+        })
+    });
+    return response.blob();
+};
+
+api.exportShoppingListJson = async (recipeIds = [], favoriteIds = [], scaleFactor = 1.0) => {
+    const token = api.getToken();
+    const response = await fetch(`${CONFIG.API_BASE_URL}/shopping-list/export/json`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            recipe_ids: recipeIds,
+            favorite_ids: favoriteIds,
+            scale_factor: scaleFactor
+        })
+    });
+    return response.blob();
+};
+
+// ==================== SHARE API ====================
+api.createShareLink = (recipeId = null, favoriteId = null, expiresHours = 168) =>
+    api.post('/share/create', {
+        recipe_id: recipeId,
+        favorite_id: favoriteId,
+        expires_hours: expiresHours
+    });
+
+api.getSharedRecipe = (shareId) => api.get(`/share/${shareId}`);
+
+api.revokeShareLink = (shareId) => api.delete(`/share/${shareId}`);
+
+api.getMyShareLinks = () => api.get('/share/my/links');
+
+// ==================== NUTRITION API ====================
+api.lookupNutrition = (ingredient) =>
+    api.get(`/nutrition/lookup?ingredient=${encodeURIComponent(ingredient)}`);
+
+api.bulkNutritionLookup = (ingredients) =>
+    api.post('/nutrition/bulk', { ingredients });
+
+api.calculateMealNutrition = (ingredientsString, servings = 1) =>
+    api.get(`/nutrition/calculate-meal?ingredients=${encodeURIComponent(ingredientsString)}&servings=${servings}`);

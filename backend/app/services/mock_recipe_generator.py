@@ -1,9 +1,19 @@
 """
 Mock Recipe Generator - 100% free!
 Generates recipes based on templates WITHOUT API calls
+Now with real nutrition data from OpenFoodFacts!
 """
 import random
 from typing import List, Dict
+
+# Import nutrition service for real nutrition data
+try:
+    from app.services.nutrition_service import nutrition_service
+    NUTRITION_SERVICE_AVAILABLE = True
+except ImportError:
+    NUTRITION_SERVICE_AVAILABLE = False
+    print("[MockGenerator] Nutrition service not available, using fallback values")
+
 
 class MockRecipeGenerator:
     """Mock Recipe Generator with Templates"""
@@ -94,83 +104,83 @@ class MockRecipeGenerator:
     TEMPLATES_DE = {
         "pasta": {
             "name": "Mediterrane Pasta mit {ingredient1}",
-            "description": "Schnelle und leckere Pasta mit frischen Zutaten. Perfekt fuer den Feierabend!",
+            "description": "Schnelle und leckere Pasta mit frischen Zutaten. Perfekt für den Feierabend!",
             "difficulty": 2,
             "cooking_time": "25 Min",
             "method": "Pfanne",
             "ingredients": [
                 {"name": "Vollkornnudeln", "amount": "200g", "carbs": 60},
                 {"name": "{ingredient1}", "amount": "300g", "carbs": 9},
-                {"name": "Olivenoel", "amount": "2 EL", "carbs": 0},
+                {"name": "Olivenöl", "amount": "2 EL", "carbs": 0},
                 {"name": "Knoblauch", "amount": "2 Zehen", "carbs": 2},
                 {"name": "Salz & Pfeffer", "amount": "nach Geschmack", "carbs": 0},
             ],
             "nutrition": {"calories": 450, "protein": 15, "carbs": 71, "fat": 12},
-            "leftover_tip": "Uebrige {ingredient1} koennen fuer Salat oder Smoothie verwendet werden."
+            "leftover_tip": "Übrige {ingredient1} können für Salat oder Smoothie verwendet werden."
         },
         "salad": {
-            "name": "Frischer {ingredient1}-Salat mit Haehnchen",
-            "description": "Leichter und proteinreicher Salat - ideal fuer Low-Carb!",
+            "name": "Frischer {ingredient1}-Salat mit Hähnchen",
+            "description": "Leichter und proteinreicher Salat - ideal für Low-Carb!",
             "difficulty": 1,
             "cooking_time": "15 Min",
             "method": "Schneiden",
             "ingredients": [
                 {"name": "{ingredient1}", "amount": "200g", "carbs": 6},
-                {"name": "Haehnchenbrust", "amount": "150g", "carbs": 0},
-                {"name": "Gurke", "amount": "1 Stueck", "carbs": 4},
-                {"name": "Olivenoel", "amount": "2 EL", "carbs": 0},
+                {"name": "Hähnchenbrust", "amount": "150g", "carbs": 0},
+                {"name": "Gurke", "amount": "1 Stück", "carbs": 4},
+                {"name": "Olivenöl", "amount": "2 EL", "carbs": 0},
                 {"name": "Zitronensaft", "amount": "1 EL", "carbs": 1},
             ],
             "nutrition": {"calories": 320, "protein": 35, "carbs": 11, "fat": 15},
-            "leftover_tip": "Uebrige {ingredient1} bleiben im Kuehlschrank 2-3 Tage frisch."
+            "leftover_tip": "Übrige {ingredient1} bleiben im Kühlschrank 2-3 Tage frisch."
         },
         "soup": {
             "name": "Cremige {ingredient1}-Suppe",
-            "description": "Waermende Suppe mit viel Gemuese - perfekt fuer kalte Tage!",
+            "description": "Wärmende Suppe mit viel Gemüse - perfekt für kalte Tage!",
             "difficulty": 2,
             "cooking_time": "35 Min",
             "method": "Topf",
             "ingredients": [
                 {"name": "{ingredient1}", "amount": "400g", "carbs": 20},
                 {"name": "Kartoffeln", "amount": "200g", "carbs": 30},
-                {"name": "Gemuesebruehe", "amount": "500ml", "carbs": 2},
+                {"name": "Gemüsebrühe", "amount": "500ml", "carbs": 2},
                 {"name": "Sahne", "amount": "100ml", "carbs": 4},
-                {"name": "Zwiebeln", "amount": "1 Stueck", "carbs": 8},
+                {"name": "Zwiebeln", "amount": "1 Stück", "carbs": 8},
             ],
             "nutrition": {"calories": 280, "protein": 8, "carbs": 32, "fat": 14},
-            "leftover_tip": "Suppe laesst sich gut einfrieren (bis zu 3 Monate)."
+            "leftover_tip": "Suppe lässt sich gut einfrieren (bis zu 3 Monate)."
         },
         "stirfry": {
-            "name": "Asiatisches Wok-Gemuese mit {ingredient1}",
+            "name": "Asiatisches Wok-Gemüse mit {ingredient1}",
             "description": "Schnelles Pfannengericht im Asia-Style - knackig und gesund!",
             "difficulty": 2,
             "cooking_time": "20 Min",
             "method": "Wok/Pfanne",
             "ingredients": [
                 {"name": "{ingredient1}", "amount": "250g", "carbs": 12},
-                {"name": "Paprika", "amount": "1 Stueck", "carbs": 6},
+                {"name": "Paprika", "amount": "1 Stück", "carbs": 6},
                 {"name": "Sojasauce", "amount": "3 EL", "carbs": 3},
-                {"name": "Ingwer", "amount": "1 Stueck", "carbs": 1},
+                {"name": "Ingwer", "amount": "1 Stück", "carbs": 1},
                 {"name": "Reis", "amount": "150g", "carbs": 45},
             ],
             "nutrition": {"calories": 380, "protein": 12, "carbs": 67, "fat": 8},
-            "leftover_tip": "Reste eignen sich perfekt als Mittagessen am naechsten Tag."
+            "leftover_tip": "Reste eignen sich perfekt als Mittagessen am nächsten Tag."
         },
         "bake": {
-            "name": "Ueberbackenes {ingredient1}-Gratin",
-            "description": "Herzhafter Auflauf mit Kaese ueberbacken - Comfort Food deluxe!",
+            "name": "Überbackenes {ingredient1}-Gratin",
+            "description": "Herzhafter Auflauf mit Käse überbacken - Comfort Food deluxe!",
             "difficulty": 3,
             "cooking_time": "45 Min",
             "method": "Ofen",
             "ingredients": [
                 {"name": "{ingredient1}", "amount": "400g", "carbs": 20},
-                {"name": "Kaese", "amount": "150g", "carbs": 2},
+                {"name": "Käse", "amount": "150g", "carbs": 2},
                 {"name": "Sahne", "amount": "200ml", "carbs": 8},
                 {"name": "Muskatnuss", "amount": "1 Prise", "carbs": 0},
                 {"name": "Butter", "amount": "30g", "carbs": 0},
             ],
             "nutrition": {"calories": 520, "protein": 22, "carbs": 30, "fat": 38},
-            "leftover_tip": "Im Ofen bei 180 Grad 15 Minuten aufwaermen."
+            "leftover_tip": "Im Ofen bei 180 Grad 15 Minuten aufwärmen."
         },
     }
 
@@ -208,7 +218,7 @@ class MockRecipeGenerator:
             template = templates[template_key].copy()
 
             # Choose main ingredient
-            main_ingredient = random.choice(ingredients) if ingredients else ("Vegetables" if language == "en" else "Gemuese")
+            main_ingredient = random.choice(ingredients) if ingredients else ("Vegetables" if language == "en" else "Gemüse")
 
             # Replace placeholders
             recipe = {
@@ -231,9 +241,18 @@ class MockRecipeGenerator:
                 ingredient_copy["name"] = ingredient_copy["name"].replace("{ingredient1}", main_ingredient)
                 recipe["ingredients"].append(ingredient_copy)
 
-            # Calculate nutrition
-            nutrition = template["nutrition"].copy()
-            carbs_per_serving = nutrition["carbs"]
+            # Calculate nutrition using real data if available
+            if NUTRITION_SERVICE_AVAILABLE:
+                # Use nutrition service for real values
+                nutrition = nutrition_service.calculate_recipe_nutrition(
+                    recipe["ingredients"],
+                    servings
+                )
+            else:
+                # Fallback to template values
+                nutrition = template["nutrition"].copy()
+
+            carbs_per_serving = nutrition.get("carbs", 0)
 
             # Only calculate chosen unit (KE or BE)
             if diabetes_unit == "BE":

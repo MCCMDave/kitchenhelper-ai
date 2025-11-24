@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" data-i18n="auth.password_confirm">Passwort bestaetigen</label>
+                    <label class="form-label" data-i18n="auth.password_confirm">Passwort bestätigen</label>
                     <div class="password-input-wrapper">
                         <input type="password" id="register-password-confirm" class="form-control" data-i18n-placeholder="auth.password_repeat" placeholder="Passwort wiederholen" required>
                         <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
@@ -99,7 +99,7 @@
     <div id="password-reset-modal" class="modal-overlay">
         <div class="modal password-reset-modal">
             <div class="modal-header">
-                <h3 class="modal-title" data-i18n="reset.title">Passwort zuruecksetzen</h3>
+                <h3 class="modal-title" data-i18n="reset.title">Passwort zurücksetzen</h3>
                 <button class="modal-close" onclick="closeResetModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -136,10 +136,10 @@
                         </div>
                     </div>
                     <button class="btn btn-primary btn-block" onclick="resetPassword()" data-i18n="reset.change_password">
-                        Passwort aendern
+                        Passwort ändern
                     </button>
                     <button class="btn btn-ghost btn-block" onclick="showResetStep1()" style="margin-top: var(--spacing-sm);" data-i18n="reset.back">
-                        Zurueck
+                        Zurück
                     </button>
                 </div>
 
@@ -148,7 +148,7 @@
                     <div style="text-align: center; padding: var(--spacing-lg);">
                         <div style="font-size: 48px; margin-bottom: var(--spacing-md);">✅</div>
                         <p style="color: var(--success); font-weight: var(--font-semibold);" data-i18n="reset.success">
-                            Passwort erfolgreich geaendert!
+                            Passwort erfolgreich geändert!
                         </p>
                         <p style="color: var(--text-muted); margin-top: var(--spacing-sm);" data-i18n="reset.success_hint">
                             Du kannst dich jetzt mit deinem neuen Passwort anmelden.
@@ -396,12 +396,13 @@
                 console.log('[PasswordReset] Response:', response);
 
                 if (response.dev_token) {
-                    alert('DEV MODE: Reset-Token: ' + response.dev_token + '\n\nKopiere diesen Token in das naechste Feld.');
+                    alert('DEV MODE: Reset-Token: ' + response.dev_token + '\n\nKopiere diesen Token in das nächste Feld.');
                 }
 
                 showResetStep2();
             } catch (error) {
-                showError(error.message || 'Fehler beim Anfordern des Reset-Codes.');
+                const lang = i18n.currentLang;
+                showError(error.message || (lang === 'de' ? 'Fehler beim Anfordern des Reset-Codes.' : 'Error requesting reset code.'));
             }
         }
 
@@ -425,7 +426,8 @@
                 await api.post('/auth/reset-password', { token, new_password: newPassword });
                 showResetSuccess();
             } catch (error) {
-                showError(error.message || 'Fehler beim Zuruecksetzen des Passworts.');
+                const lang = i18n.currentLang;
+                showError(error.message || (lang === 'de' ? 'Fehler beim Zurücksetzen des Passworts.' : 'Error resetting password.'));
             }
         }
 

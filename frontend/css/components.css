@@ -577,7 +577,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .form-control::placeholder {
-    color: #808080;
+    color: #9a9a9a;
 }
 
 [data-theme="dark"] .form-control:focus {
@@ -642,7 +642,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .nutrition-label {
-    color: #808080;
+    color: #a0a0a0;
 }
 
 /* Buttons im Dark Mode */
@@ -773,7 +773,7 @@ textarea.form-control {
 
 /* Empty State im Dark Mode */
 [data-theme="dark"] .empty-state {
-    color: #808080;
+    color: #a0a0a0;
 }
 
 [data-theme="dark"] .empty-state-title {
@@ -782,7 +782,7 @@ textarea.form-control {
 
 /* Loading im Dark Mode */
 [data-theme="dark"] .loading {
-    color: #808080;
+    color: #a0a0a0;
 }
 
 [data-theme="dark"] .spinner {

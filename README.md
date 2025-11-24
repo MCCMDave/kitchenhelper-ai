@@ -216,6 +216,47 @@ pip install reportlab==4.0.7
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3
 - **Auth**: JWT Bearer Tokens
 - **PDF**: ReportLab
+- **Deployment**: Docker (x86_64 & ARM64)
+
+---
+
+## Docker Setup
+
+### Development (Windows)
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+2. Copy environment file:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+3. Edit `.env` and change `JWT_SECRET_KEY`
+4. Start container:
+   ```powershell
+   docker compose up -d
+   ```
+5. Visit: http://localhost:8000
+
+**Or use the helper script:**
+```powershell
+.\dev-start.ps1 -Docker    # Start in Docker
+.\dev-start.ps1            # Start local dev server
+.\dev-start.ps1 -Help      # Show all options
+```
+
+### Production (Raspberry Pi)
+
+See: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+
+### Docker Commands
+
+```bash
+docker compose build       # Build image
+docker compose up -d       # Start container
+docker compose down        # Stop container
+docker compose logs -f     # View logs
+```
+
+Full documentation: [docs/DOCKER-SETUP.md](docs/DOCKER-SETUP.md)
 
 ## Subscription Tiers (Demo)
 

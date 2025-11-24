@@ -1,0 +1,51 @@
+# ============================================
+# KitchenHelper-AI Docker Compose
+# Development & Production Configuration
+# ============================================
+
+services:
+  kitchenhelper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kitchenhelper-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persistent storage for database
+      - ./backend/database:/app/database
+      # Persistent storage for logs
+      - ./logs:/app/logs
+    environment:
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-CHANGE-THIS-IN-PRODUCTION}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./database/kitchenhelper.db}
+      - DEBUG=${DEBUG:-False}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8000}
+    restart: unless-stopped
+    # Resource limits (optimized for Raspberry Pi)
+    mem_limit: 512m
+    cpus: "0.5"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # Optional: Frontend served via nginx
+  # Uncomment when ready for production
+  # frontend:
+  #   image: nginx:alpine
+  #   container_name: kitchenhelper-frontend
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html:ro
+  #   depends_on:
+  #     - kitchenhelper
+  #   restart: unless-stopped
+
+# Named volumes for better management (optional)
+# volumes:
+#   db-data:
+#   log-data:

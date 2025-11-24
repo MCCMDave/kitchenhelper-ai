@@ -193,6 +193,12 @@ const Favorites = {
                     <button class="btn btn-primary" onclick="Favorites.exportPDF(${recipe.id})">
                         📄 ${i18n.t('favorites.export_pdf')}
                     </button>
+                    <button class="btn btn-secondary" onclick="Favorites.shareRecipe(${favorite.id})">
+                        🔗 ${i18n.t('favorites.share')}
+                    </button>
+                    <button class="btn btn-secondary" onclick="Favorites.exportShoppingList([${favorite.id}])">
+                        🛒 ${i18n.t('favorites.shopping_list')}
+                    </button>
                     <button class="btn btn-danger" onclick="Favorites.removeAndCloseModal(${favorite.id})">
                         ❌ ${i18n.t('favorites.remove')}
                     </button>
@@ -287,6 +293,112 @@ const Favorites = {
     // Check if recipe is favorited (quick cache lookup)
     isFavorite(recipeId) {
         return this.favoriteIds.has(recipeId);
+    },
+
+    // Share recipe - create share link
+    async shareRecipe(favoriteId) {
+        try {
+            UI.info(i18n.t('favorites.creating_link'));
+
+            const result = await api.createShareLink(null, favoriteId, 168); // 7 days
+
+            // Show share modal
+            const shareUrl = window.location.origin + result.share_url;
+            const expiresAt = new Date(result.expires_at).toLocaleDateString();
+
+            const modalContent = `
+                <div class="share-modal-content">
+                    <p>${i18n.t('favorites.share_text')}</p>
+
+                    <div class="share-url-container">
+                        <input type="text" class="form-control share-url-input" value="${shareUrl}" readonly id="share-url-input">
+                        <button class="btn btn-primary" onclick="Favorites.copyShareUrl()">
+                            📋 ${i18n.t('favorites.copy')}
+                        </button>
+                    </div>
+
+                    <p class="share-expiry">
+                        ${i18n.t('favorites.link_valid_until')} ${expiresAt}
+                    </p>
+
+                    <div class="share-buttons">
+                        <button class="btn btn-secondary" onclick="Favorites.shareViaWhatsApp('${shareUrl}')">
+                            💬 WhatsApp
+                        </button>
+                        <button class="btn btn-secondary" onclick="Favorites.shareViaEmail('${shareUrl}', '${result.recipe_name}')">
+                            ✉️ Email
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            UI.showModal(
+                '🔗 ' + i18n.t('favorites.share_recipe'),
+                modalContent,
+                { size: 'medium' }
+            );
+
+        } catch (error) {
+            console.error('[Favorites] Share error:', error);
+            UI.error('Error: ' + error.message);
+        }
+    },
+
+    // Copy share URL to clipboard
+    copyShareUrl() {
+        const input = document.getElementById('share-url-input');
+        input.select();
+        document.execCommand('copy');
+
+        UI.success(i18n.t('favorites.link_copied'));
+    },
+
+    // Share via WhatsApp
+    shareViaWhatsApp(url) {
+        const text = encodeURIComponent(`Check out this recipe: ${url}`);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    },
+
+    // Share via Email
+    shareViaEmail(url, recipeName) {
+        const subject = encodeURIComponent(`Recipe: ${recipeName}`);
+        const body = encodeURIComponent(`I wanted to share this recipe with you:\n\n${url}\n\nEnjoy!`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    },
+
+    // Export shopping list for favorites
+    async exportShoppingList(favoriteIds) {
+        try {
+            UI.info(i18n.t('favorites.creating_list'));
+
+            const blob = await api.exportShoppingListText([], favoriteIds, 1.0);
+
+            // Download file
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'shopping_list.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            UI.success(i18n.t('favorites.list_created'));
+
+        } catch (error) {
+            console.error('[Favorites] Shopping list error:', error);
+            UI.error(i18n.t('common.error_prefix') + error.message);
+        }
+    },
+
+    // Export shopping list for ALL favorites
+    async exportAllShoppingList() {
+        const favoriteIds = this.items.map(f => f.id);
+        if (favoriteIds.length === 0) {
+            UI.warning(i18n.t('favorites.no_favorites'));
+            return;
+        }
+        await this.exportShoppingList(favoriteIds);
     },
 
     // Toggle favorite status for a recipe

@@ -97,16 +97,16 @@
     --info: #42A5F5;
     --info-light: #1a2a3a;
 
-    /* Neutrals */
-    --text: #e0e0e0;
-    --text-light: #b0b0b0;
-    --text-muted: #808080;
+    /* Neutrals - Improved contrast for WCAG AA (min 4.5:1) */
+    --text: #f0f0f0;
+    --text-light: #c8c8c8;
+    --text-muted: #a0a0a0;
     --bg: #121212;
     --bg-dark: #0a0a0a;
     --white: #1e1e1e;
     --black: #ffffff;
-    --border: #333333;
-    --border-light: #2a2a2a;
+    --border: #404040;
+    --border-light: #333333;
 
     /* Shadows */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);

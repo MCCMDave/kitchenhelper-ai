@@ -69,7 +69,10 @@
                 <section id="ingredients-section" class="section active">
                     <div class="page-header">
                         <h1 class="page-title" data-i18n="ingredients.title">🥗 My Ingredients</h1>
-                        <button class="btn btn-primary" onclick="Ingredients.showAddModal()" data-i18n="ingredients.add">+ Add Ingredient</button>
+                        <div class="page-header-actions">
+                            <button class="btn btn-outline" onclick="Ingredients.showSpiceQuickSelect()">⚡ <span data-i18n="ingredients.spices">Gewürze</span></button>
+                            <button class="btn btn-primary" onclick="Ingredients.showAddModal()" data-i18n="ingredients.add">+ Add Ingredient</button>
+                        </div>
                     </div>
                     <div class="filters" style="margin-bottom: var(--spacing-lg);">
                         <select id="ingredient-category-filter" class="form-control" style="max-width: 200px;" onchange="Ingredients.load()">
@@ -272,7 +275,6 @@
 
             // Load initial data
             await Ingredients.load();
-            populateCategoryFilter();
 
             // Load profiles for active badge
             await Profiles.load();
@@ -319,16 +321,6 @@
             }
         }
 
-        function populateCategoryFilter() {
-            const select = document.getElementById('ingredient-category-filter');
-            CONFIG.CATEGORIES.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                select.appendChild(option);
-            });
-        }
-
         function setupSettingsForm() {
             // Profile form
             document.getElementById('settings-form').addEventListener('submit', async (e) => {
@@ -339,7 +331,7 @@
 
                 // Validate username
                 if (username && (username.length < 3 || !/^[a-zA-Z0-9_-]+$/.test(username))) {
-                    UI.error('Benutzername muss 3-20 Zeichen lang sein und darf nur Buchstaben, Zahlen, - und _ enthalten.');
+                    UI.error(i18n.t('error.username_invalid'));
                     return;
                 }
 
@@ -351,7 +343,7 @@
 
                     if (Object.keys(data).length > 0) {
                         await Auth.updateProfile(data);
-                        UI.success('Profil aktualisiert!');
+                        UI.success(i18n.currentLang === 'de' ? 'Profil aktualisiert!' : 'Profile updated!');
 
                         // Update User Menu
                         const user = Auth.getCurrentUser();
@@ -369,18 +361,18 @@
                 const confirm = document.getElementById('settings-password-confirm').value;
 
                 if (password !== confirm) {
-                    UI.error('Passwörter stimmen nicht überein!');
+                    UI.error(i18n.t('error.passwords_not_match'));
                     return;
                 }
 
                 if (password.length < 6) {
-                    UI.error('Passwort muss mindestens 6 Zeichen lang sein!');
+                    UI.error(i18n.t('error.password_too_short'));
                     return;
                 }
 
                 try {
                     await Auth.updateProfile({ password });
-                    UI.success('Passwort geändert!');
+                    UI.success(i18n.currentLang === 'de' ? 'Passwort geändert!' : 'Password changed!');
                     document.getElementById('password-form').reset();
                 } catch (error) {
                     UI.error(error.message);
@@ -396,12 +388,17 @@
                 document.getElementById('settings-emoji').value = user.emoji || '👤';
 
                 const tierInfo = Auth.getTierInfo();
+                const lang = i18n.currentLang;
+                const labels = lang === 'de'
+                    ? { username: 'Benutzername', email: 'E-Mail', subscription: 'Abonnement', recipes: 'Rezepte heute', member: 'Mitglied seit' }
+                    : { username: 'Username', email: 'Email', subscription: 'Subscription', recipes: 'Recipes today', member: 'Member since' };
+
                 document.getElementById('account-info').innerHTML = `
-                    <p><strong>Benutzername:</strong> ${user.username}</p>
-                    <p><strong>E-Mail:</strong> ${user.email}</p>
-                    <p><strong>Subscription:</strong> ${tierInfo.name}</p>
-                    <p><strong>Rezepte heute:</strong> ${user.daily_recipe_count} / ${user.daily_limit}</p>
-                    <p><strong>Mitglied seit:</strong> ${UI.formatDate(user.created_at)}</p>
+                    <p><strong>${labels.username}:</strong> ${user.username}</p>
+                    <p><strong>${labels.email}:</strong> ${user.email}</p>
+                    <p><strong>${labels.subscription}:</strong> ${tierInfo.name}</p>
+                    <p><strong>${labels.recipes}:</strong> ${user.daily_recipe_count} / ${user.daily_limit}</p>
+                    <p><strong>${labels.member}:</strong> ${UI.formatDate(user.created_at)}</p>
                 `;
             }
         }
@@ -417,14 +414,17 @@
                 try {
                     await Auth.updateProfile({ emoji });
                     UserMenu.updateUserInfo(Auth.getCurrentUser());
-                    UI.success('Emoji aktualisiert!');
+                    UI.success(i18n.currentLang === 'de' ? 'Emoji aktualisiert!' : 'Emoji updated!');
                 } catch (error) {
                     UI.error(error.message);
                 }
             },
 
             deleteAccount() {
-                UI.confirm('Bist du sicher? Dein Account und alle Daten werden unwiderruflich geloescht!', async () => {
+                const msg = i18n.currentLang === 'de'
+                    ? 'Bist du sicher? Dein Account und alle Daten werden unwiderruflich gelöscht!'
+                    : 'Are you sure? Your account and all data will be permanently deleted!';
+                UI.confirm(msg, async () => {
                     try {
                         await api.deleteMe();
                         Auth.logout();

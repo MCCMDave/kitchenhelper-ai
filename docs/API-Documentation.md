@@ -602,6 +602,200 @@ Abo-Status prüfen
 
 ---
 
+## Shopping List
+
+### POST /shopping-list/generate
+Einkaufsliste aus Rezepten/Favoriten generieren
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Request:**
+```json
+{
+  "recipe_ids": [1, 2],
+  "favorite_ids": [3, 4],
+  "scale_factor": 1.0
+}
+```
+
+**Response (200):**
+```json
+{
+  "items": [
+    {"name": "Tomaten", "amount": "300g", "category": "Vegetables", "checked": false},
+    {"name": "Pasta", "amount": "200g", "category": "Pantry", "checked": false}
+  ],
+  "total_items": 2,
+  "recipes_included": ["Mediterrane Pasta", "Salat"],
+  "created_at": "2025-11-24T10:00:00Z"
+}
+```
+
+---
+
+### POST /shopping-list/export/text
+Einkaufsliste als Textdatei exportieren
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Response (200):** Plain text file download
+
+---
+
+### POST /shopping-list/export/json
+Einkaufsliste als JSON exportieren
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Response (200):** JSON file download
+
+---
+
+## Sharing
+
+### POST /share/create
+Rezept-Sharing-Link erstellen
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Request:**
+```json
+{
+  "recipe_id": 1,
+  "favorite_id": null,
+  "expires_hours": 168
+}
+```
+
+**Response (200):**
+```json
+{
+  "share_id": "abc123xyz",
+  "share_url": "/shared/abc123xyz",
+  "expires_at": "2025-12-01T10:00:00Z",
+  "recipe_name": "Mediterrane Pasta"
+}
+```
+
+---
+
+### GET /share/{share_id}
+Geteiltes Rezept abrufen (öffentlich, keine Authentifizierung nötig)
+
+**Response (200):**
+```json
+{
+  "name": "Mediterrane Pasta",
+  "description": "...",
+  "difficulty": 2,
+  "cooking_time": "25 min",
+  "method": "Pfanne",
+  "servings": 2,
+  "ingredients": [...],
+  "nutrition_per_serving": {...},
+  "shared_by": "Max",
+  "shared_at": "2025-11-24T10:00:00Z"
+}
+```
+
+---
+
+### DELETE /share/{share_id}
+Sharing-Link widerrufen
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Response (200):**
+```json
+{
+  "message": "Share link revoked successfully"
+}
+```
+
+---
+
+## Nutrition
+
+### GET /nutrition/lookup
+Nährwerte für einzelne Zutat abfragen
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Query Parameters:**
+- `ingredient`: Zutatname (z.B. "tomato", "Kartoffel")
+
+**Response (200):**
+```json
+{
+  "name": "Kartoffel",
+  "calories": 77,
+  "protein": 2.0,
+  "carbs": 17.0,
+  "fat": 0.1,
+  "fiber": 2.2,
+  "per": "100g",
+  "source": "fallback_database",
+  "ke": 1.7,
+  "be": 1.4
+}
+```
+
+---
+
+### POST /nutrition/bulk
+Nährwerte für mehrere Zutaten abfragen
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Request:**
+```json
+{
+  "ingredients": ["tomato", "potato", "chicken"]
+}
+```
+
+**Response (200):**
+```json
+{
+  "items": [...],
+  "total_calories": 260,
+  "total_protein": 33.9,
+  "total_carbs": 20.9,
+  "total_fat": 3.9,
+  "total_ke": 2.1,
+  "total_be": 1.7
+}
+```
+
+---
+
+### GET /nutrition/calculate-meal
+Nährwerte für Mahlzeit mit Mengenangaben berechnen
+
+**Headers:** `Authorization: Bearer {token}`
+
+**Query Parameters:**
+- `ingredients`: Komma-getrennt, z.B. "chicken:150g,rice:200g"
+- `servings`: Anzahl Portionen (default: 1)
+
+**Response (200):**
+```json
+{
+  "servings": 2,
+  "per_serving": {
+    "calories": 350,
+    "protein": 25.5,
+    "carbs": 45.0,
+    "fat": 8.5,
+    "ke": 4.5,
+    "be": 3.8
+  },
+  "ingredients_parsed": [...]
+}
+```
+
+---
+
 ## Webhooks
 
 ### Stripe Events

@@ -1,0 +1,86 @@
+# ============================================
+# Docker Ignore - KitchenHelper-AI
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+*.manifest
+*.spec
+
+# Virtual Environments
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Database files (use volume mount instead)
+*.db
+*.db-journal
+
+# Environment files (secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Documentation & Misc
+docs/
+*.md
+!README.md
+LICENSE
+prompts/
+prototypes/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test files
+tests/
+test_*.py
+*_test.py
+pytest.ini
+.pytest_cache/
+.coverage
+htmlcov/
+TestUserDaten*
+
+# Frontend (not needed in backend container)
+frontend/
+
+# Scripts (not needed in container)
+scripts/
+*.ps1
+*.sh
+!deploy.sh
+
+# Claude history
+claude_history.json
+.claude/

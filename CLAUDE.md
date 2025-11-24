@@ -54,6 +54,15 @@ Kitchenhelper/
   - Rezeptausgabe komplett sprachabhaengig
   - Profile-System als Checkbox-Grid (statt Add/Edit Modals)
   - Warnhinweise bei Profil-Aktivierung als Popup
+  - Dark Mode Kontrast verbessert (WCAG AA)
+  - Smart Ingredients System:
+    - Auto-Category Detection (500+ Zutaten-Mapping)
+    - Auto-Suggest Dropdown beim Tippen
+    - Spice Quick-Select (20 haeufige Gewuerze mit einem Klick)
+    - Duplicate Prevention (409 Conflict bei doppelten Zutaten)
+    - Batch-Create API fuer mehrere Zutaten gleichzeitig
+  - Shopping List Backend komplett (Konsolidierung, Export als TXT/JSON)
+  - Vollstaendige i18n-Migration (alle inline-Checks entfernt)
 - **Naechster Schritt:** Testing, Deployment, echte KI-Integration
 
 ## Wichtige Befehle
@@ -146,4 +155,4 @@ STRIPE_WEBHOOK_SECRET=<webhook-secret>
 
 ---
 
-**Letzte Aktualisierung:** 24. November 2025
+**Letzte Aktualisierung:** 24. November 2025 (17:00)

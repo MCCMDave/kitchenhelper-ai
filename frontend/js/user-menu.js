@@ -95,11 +95,11 @@ const UserMenu = {
             if (userEmoji) {
                 userEmoji.textContent = emoji;
             }
-            UI.success('Emoji aktualisiert!');
+            UI.success(i18n.t('user.emoji_updated'));
             console.log('[UserMenu] Emoji updated to:', emoji);
         } catch (error) {
             console.error('[UserMenu] Emoji update error:', error);
-            UI.error('Fehler beim Aktualisieren des Emojis');
+            UI.error(i18n.t('user.emoji_error'));
         }
     }
 };
