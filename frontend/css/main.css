@@ -461,6 +461,13 @@ body {
     font-weight: var(--font-bold);
 }
 
+.spice-add {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: var(--font-bold);
+    line-height: 1;
+}
+
 .spice-actions {
     display: flex;
     gap: var(--spacing-md);

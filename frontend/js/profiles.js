@@ -128,6 +128,23 @@ const Profiles = {
         }
     },
 
+    // Silent reload without loading indicator (for toggles)
+    async silentReload() {
+        try {
+            const response = await api.getProfiles();
+            this.items = response.profiles || [];
+
+            // Update active profiles set
+            this.activeProfiles.clear();
+            this.items.filter(p => p.is_active).forEach(p => this.activeProfiles.add(p.profile_type));
+
+            this.render();
+            this.updateActiveProfilesBadge();
+        } catch (error) {
+            console.error('[Profiles] Silent reload error:', error);
+        }
+    },
+
     // Get active profiles
     getActiveProfiles() {
         return this.items.filter(p => p.is_active);
@@ -265,7 +282,7 @@ const Profiles = {
                 ? i18n.t('profiles.activated')
                 : i18n.t('profiles.deactivated'));
 
-            await this.load();
+            await this.silentReload();
         } catch (error) {
             UI.error(error.message);
             await this.load(); // Reload to reset checkboxes

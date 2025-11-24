@@ -455,6 +455,28 @@ const i18n = {
             el.placeholder = this.t(key);
         });
 
+        // Re-render active modules to update dynamic content
+        if (typeof Ingredients !== 'undefined' && Ingredients.items && Ingredients.items.length > 0) {
+            Ingredients.render();
+        }
+
+        if (typeof Recipes !== 'undefined' && Recipes.generatedRecipes && Recipes.generatedRecipes.length > 0) {
+            Recipes.renderGeneratedRecipes();
+        }
+
+        if (typeof Favorites !== 'undefined' && Favorites.items && Favorites.items.length > 0) {
+            Favorites.render();
+        }
+
+        if (typeof Profiles !== 'undefined' && Profiles.items) {
+            Profiles.render();
+        }
+
+        // Update ingredient selection checkboxes if on recipes tab
+        if (typeof Recipes !== 'undefined' && document.getElementById('ingredient-checkboxes')) {
+            Recipes.loadIngredientSelection();
+        }
+
         console.log('[i18n] UI updated');
     }
 };

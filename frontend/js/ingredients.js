@@ -398,16 +398,19 @@ const Ingredients = {
         }
     },
 
-    // Render ingredients list
+    // Render ingredients list (exclude spices)
     render() {
         const container = document.getElementById('ingredients-list');
 
-        if (!this.items || this.items.length === 0) {
+        // Filter out spices from main list
+        const nonSpiceItems = this.items.filter(item => item.category !== 'Gewürze');
+
+        if (!nonSpiceItems || nonSpiceItems.length === 0) {
             UI.showEmpty(container, i18n.t('ingredients.empty'), '🥗');
             return;
         }
 
-        container.innerHTML = this.items.map(item => this.renderCard(item)).join('');
+        container.innerHTML = nonSpiceItems.map(item => this.renderCard(item)).join('');
     },
 
     // Render single ingredient card
@@ -609,24 +612,38 @@ const Ingredients = {
         });
     },
 
-    // Get items for recipe selection
+    // Get items for recipe selection (exclude spices)
     getItems() {
+        return this.items.filter(item => item.category !== 'Gewürze');
+    },
+
+    // Get ALL items (including spices) - for internal use
+    getAllItems() {
         return this.items;
     },
 
     // ==================== SPICE QUICK-SELECT ====================
     showSpiceQuickSelect() {
         const lang = i18n.currentLang;
-        const existingNames = new Set(this.items.map(i => i.name.toLowerCase()));
+
+        // Get existing spices (lowercase for comparison)
+        const existingSpices = this.getAllItems()
+            .filter(i => i.category === 'Gewürze')
+            .map(i => ({ name: i.name.toLowerCase(), id: i.id }));
+        const existingNames = new Set(existingSpices.map(s => s.name));
 
         const spicesHtml = COMMON_SPICES.map(spice => {
-            const isOwned = existingNames.has(spice.name.toLowerCase());
+            const spiceId = spice.name.toLowerCase();
+            const existing = existingSpices.find(s => s.name === spiceId);
+            const isOwned = existingNames.has(spiceId);
+
             return `
-                <label class="spice-checkbox ${isOwned ? 'owned' : ''}">
-                    <input type="checkbox" value="${spice.name}" ${isOwned ? 'disabled checked' : ''}>
+                <label class="spice-checkbox ${isOwned ? 'owned' : ''}"
+                       onclick="Ingredients.toggleSpice('${spice.name}', ${existing ? existing.id : 'null'})"
+                       style="cursor: pointer;">
                     <span class="spice-icon">${spice.icon}</span>
                     <span class="spice-name">${spice.name}</span>
-                    ${isOwned ? `<span class="spice-owned">✓</span>` : ''}
+                    ${isOwned ? `<span class="spice-owned">✓</span>` : `<span class="spice-add">+</span>`}
                 </label>
             `;
         }).join('');
@@ -634,58 +651,44 @@ const Ingredients = {
         const modalContent = `
             <div class="spice-quickselect">
                 <p class="spice-intro">${lang === 'de'
-                    ? 'Wähle Gewürze aus, die du hinzufügen möchtest:'
-                    : 'Select spices you want to add:'}</p>
+                    ? 'Klicke auf ein Gewürz um es hinzuzufügen/zu entfernen:'
+                    : 'Click on a spice to add/remove it:'}</p>
                 <div class="spice-grid">${spicesHtml}</div>
-                <div class="spice-actions">
-                    <button class="btn btn-outline" onclick="Ingredients.selectAllSpices()">
-                        ${lang === 'de' ? 'Alle auswählen' : 'Select all'}
-                    </button>
-                    <button class="btn btn-primary" onclick="Ingredients.addSelectedSpices()">
-                        ${lang === 'de' ? 'Hinzufügen' : 'Add selected'}
-                    </button>
-                </div>
             </div>
         `;
 
         UI.showModal(
-            lang === 'de' ? '⚡ Gewürze schnell hinzufügen' : '⚡ Quick-add Spices',
+            lang === 'de' ? '⚡ Gewürze verwalten' : '⚡ Manage Spices',
             modalContent,
             { size: 'medium' }
         );
     },
 
-    selectAllSpices() {
-        document.querySelectorAll('.spice-checkbox input:not(:disabled)').forEach(cb => {
-            cb.checked = true;
-        });
-    },
-
-    async addSelectedSpices() {
-        const selected = [];
-        document.querySelectorAll('.spice-checkbox input:checked:not(:disabled)').forEach(cb => {
-            selected.push({
-                name: cb.value,
-                category: 'Gewürze',
-                is_permanent: true
-            });
-        });
-
-        if (selected.length === 0) {
-            UI.warning(i18n.t('ingredients.no_spices_selected'));
-            return;
-        }
-
+    async toggleSpice(spiceName, spiceId) {
         try {
-            const created = await api.createBatchIngredients(selected);
-            UI.closeModal();
+            if (spiceId) {
+                // Remove spice
+                await api.deleteIngredient(spiceId);
+                const msg = i18n.currentLang === 'de'
+                    ? `${spiceName} entfernt`
+                    : `${spiceName} removed`;
+                UI.success(msg);
+            } else {
+                // Add spice
+                await api.createIngredient({
+                    name: spiceName,
+                    category: 'Gewürze',
+                    is_permanent: true
+                });
+                const msg = i18n.currentLang === 'de'
+                    ? `${spiceName} hinzugefügt`
+                    : `${spiceName} added`;
+                UI.success(msg);
+            }
 
-            const msg = i18n.currentLang === 'de'
-                ? `${created.length} Gewürz${created.length === 1 ? '' : 'e'} hinzugefügt!`
-                : `${created.length} spice${created.length === 1 ? '' : 's'} added!`;
-            UI.success(msg);
-
+            // Reload items and refresh modal
             await this.load();
+            this.showSpiceQuickSelect();
         } catch (error) {
             UI.error(error.message);
         }
