@@ -2,6 +2,8 @@
 
 AI-powered recipe generator that creates personalized recipes based on your available ingredients. Special support for diabetes with carb unit (KE/BE) calculations.
 
+**English Version** | [Deutsche Version](README.de.md)
+
 ## Features
 
 - **AI Recipe Generation** - Generate recipes from your ingredients (Mock AI for demo)
