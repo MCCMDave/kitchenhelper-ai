@@ -2,7 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.utils.database import init_db
-from app.routes import auth, users, ingredients, recipes, favorites, diet_profiles, shopping_list, share, nutrition
+from app.routes import auth, users, ingredients, recipes, favorites, diet_profiles, shopping_list, share, nutrition, admin
+from app.middleware.logger import APIRequestLoggerMiddleware
+import os
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -19,6 +21,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# API Request Logger (only in DEBUG mode)
+if os.getenv("DEBUG", "False").lower() == "true":
+    app.add_middleware(APIRequestLoggerMiddleware)
+
 # ✅ ROUTES EINBINDEN
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
@@ -29,6 +35,7 @@ app.include_router(diet_profiles.router, prefix="/api")
 app.include_router(shopping_list.router, prefix="/api")
 app.include_router(share.router, prefix="/api")
 app.include_router(nutrition.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
 
 # Startup Event
 @app.on_event("startup")
