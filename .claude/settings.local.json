@@ -27,7 +27,16 @@
       "Bash(powershell -Command:*)",
       "Bash(.venvScriptspython.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000)",
       "Bash(timeout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(python oci-instance-sniper.py:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(DEBUG=True ./venv/Scripts/python.exe:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(python:*)",
+      "Bash(iconv:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
