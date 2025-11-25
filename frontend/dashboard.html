@@ -114,6 +114,9 @@
                     <div class="page-header">
                         <h1 class="page-title" data-i18n="favorites.title">⭐ My Favorites</h1>
                     </div>
+                    <div class="search-bar" style="margin-bottom: var(--spacing-lg);">
+                        <input type="text" id="favorites-search" class="form-control" placeholder="Search favorites..." data-i18n-placeholder="favorites.search_placeholder" oninput="Favorites.search(this.value)">
+                    </div>
                     <div id="favorites-list" class="grid grid-2"></div>
                 </section>
 

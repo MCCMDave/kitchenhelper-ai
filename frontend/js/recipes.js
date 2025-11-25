@@ -182,7 +182,11 @@ const Recipes = {
                     <div class="recipe-meta">
                         <span class="recipe-meta-item">⚡ ${difficultyLabel}: ${UI.getDifficultyStars(recipe.difficulty || 2)}</span>
                         <span class="recipe-meta-item">⏱️ ${timeLabel}: ${recipe.cooking_time || '?'}</span>
-                        <span class="recipe-meta-item">👥 ${servingsLabel}: ${recipe.servings || 2}</span>
+                        <span class="recipe-meta-item">
+                            👥 ${servingsLabel}:
+                            <span id="servings-${recipe.id}">${recipe.servings || 2}</span>
+                            <button class="btn-icon" onclick="Recipes.showPortionCalculator(${recipe.id})" title="${i18n.t('recipes.adjust_portions')}">⚙️</button>
+                        </span>
                         ${recipe.method ? `<span class="recipe-meta-item">🍳 ${methodLabel}: ${recipe.method}</span>` : ''}
                     </div>
 
@@ -242,6 +246,64 @@ const Recipes = {
             } else {
                 UI.error(error.message);
             }
+        }
+    },
+
+    // Show portion calculator
+    showPortionCalculator(recipeId) {
+        const recipe = this.generatedRecipes.find(r => r.id === recipeId) ||
+                      this.historyRecipes?.find(r => r.id === recipeId);
+
+        if (!recipe) {
+            UI.error('Recipe not found');
+            return;
+        }
+
+        const currentServings = recipe.servings || 2;
+        const options = [1, 2, 4, 6, 8, 10];
+
+        const content = `
+            <div style="padding: var(--spacing-lg);">
+                <h3>${i18n.t('recipes.adjust_portions')}</h3>
+                <p style="margin: var(--spacing-md) 0; color: var(--text-muted);">
+                    ${i18n.currentLang === 'de' ? 'Aktuell' : 'Current'}: ${currentServings} ${i18n.t('recipes.portions')}
+                </p>
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap; margin: var(--spacing-lg) 0;">
+                    ${options.map(n => `
+                        <button class="btn ${n === currentServings ? 'btn-primary' : 'btn-outline'}"
+                                onclick="Recipes.adjustPortions(${recipeId}, ${n})"
+                                style="min-width: 60px;">
+                            ${n}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        UI.showModal(content);
+    },
+
+    // Adjust portions
+    async adjustPortions(recipeId, servings) {
+        try {
+            UI.closeModal();
+            UI.info(i18n.currentLang === 'de' ? 'Berechne Portionen...' : 'Calculating portions...');
+
+            const adjustedRecipe = await api.calculatePortions(recipeId, servings);
+
+            // Update the recipe in memory
+            const idx = this.generatedRecipes.findIndex(r => r.id === recipeId);
+            if (idx !== -1) {
+                this.generatedRecipes[idx] = adjustedRecipe;
+                this.renderGeneratedRecipes();
+            }
+
+            UI.success(i18n.currentLang === 'de'
+                ? `Portionen angepasst: ${servings}`
+                : `Servings adjusted: ${servings}`);
+        } catch (error) {
+            console.error('[Recipes] Portion calculation error:', error);
+            UI.error(error.message);
         }
     }
 };

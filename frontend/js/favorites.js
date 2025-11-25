@@ -2,6 +2,7 @@
 
 const Favorites = {
     items: [],
+    filteredItems: [], // For search results
     favoriteIds: new Set(), // Cache for quick lookups
 
     // Load all favorites and build cache
@@ -34,6 +35,7 @@ const Favorites = {
             });
             console.log('[Favorites] Cache built with', this.favoriteIds.size, 'recipe IDs');
 
+            this.filteredItems = this.items; // Initialize filtered items
             this.render();
         } catch (error) {
             console.error('[Favorites] Load error:', error);
@@ -41,17 +43,62 @@ const Favorites = {
         }
     },
 
+    // Search favorites
+    search(query) {
+        const searchQuery = query.toLowerCase().trim();
+
+        if (!searchQuery) {
+            this.filteredItems = this.items;
+        } else {
+            this.filteredItems = this.items.filter(fav => {
+                const recipe = fav.recipe;
+                if (!recipe) return false;
+
+                // Search in recipe name
+                if (recipe.name && recipe.name.toLowerCase().includes(searchQuery)) {
+                    return true;
+                }
+
+                // Search in ingredients
+                if (recipe.ingredients) {
+                    const ingredients = typeof recipe.ingredients === 'string'
+                        ? JSON.parse(recipe.ingredients)
+                        : recipe.ingredients;
+
+                    const hasIngredient = ingredients.some(ing =>
+                        ing.name && ing.name.toLowerCase().includes(searchQuery)
+                    );
+                    if (hasIngredient) return true;
+                }
+
+                // Search in description
+                if (recipe.description && recipe.description.toLowerCase().includes(searchQuery)) {
+                    return true;
+                }
+
+                return false;
+            });
+        }
+
+        this.render();
+    },
+
     // Render favorites list as compact cards
     render() {
         const container = document.getElementById('favorites-list');
 
-        if (!this.items || this.items.length === 0) {
-            UI.showEmpty(container, i18n.t('favorites.empty'), '⭐');
+        const itemsToRender = this.filteredItems || this.items;
+
+        if (!itemsToRender || itemsToRender.length === 0) {
+            const searchInput = document.getElementById('favorites-search');
+            const isSearching = searchInput && searchInput.value.trim();
+            const message = isSearching ? i18n.t('favorites.no_results') : i18n.t('favorites.empty');
+            UI.showEmpty(container, message, '⭐');
             return;
         }
 
-        console.log('[Favorites] Rendering', this.items.length, 'items');
-        container.innerHTML = this.items.map(fav => this.renderCard(fav)).join('');
+        console.log('[Favorites] Rendering', itemsToRender.length, 'items');
+        container.innerHTML = itemsToRender.map(fav => this.renderCard(fav)).join('');
     },
 
     // Render compact favorite card (click opens modal)

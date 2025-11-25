@@ -126,6 +126,8 @@ api.getRecipeHistory = (limit = 20, offset = 0) =>
 
 api.getRecipe = (id) => api.get(`/recipes/${id}`);
 
+api.calculatePortions = (recipeId, servings) => api.get(`/recipes/${recipeId}/portions?servings=${servings}`);
+
 // ==================== FAVORITES API ====================
 api.getFavorites = () => api.get('/favorites/');
 

@@ -85,6 +85,8 @@ const translations = {
         'recipes.already_favorite': 'Bereits in Favoriten!',
         'recipes.favorite_limit': 'Favoriten-Limit erreicht!',
         'recipes.remaining': 'Noch {count} Rezepte heute verfügbar',
+        'recipes.portions': 'Portionen',
+        'recipes.adjust_portions': 'Portionen anpassen',
 
         // Favorites
         'favorites.title': 'Meine Favoriten',
@@ -143,6 +145,8 @@ const translations = {
         'favorites.link_valid_until': 'Link gültig bis:',
         'favorites.copy': 'Kopieren',
         'favorites.share_recipe': 'Rezept teilen',
+        'favorites.search_placeholder': 'Favoriten durchsuchen...',
+        'favorites.no_results': 'Keine Favoriten gefunden',
 
         // Ingredients extended
         'ingredients.empty': 'Keine Zutaten vorhanden. Füge deine erste Zutat hinzu!',
@@ -281,6 +285,8 @@ const translations = {
         'recipes.already_favorite': 'Already in favorites!',
         'recipes.favorite_limit': 'Favorite limit reached!',
         'recipes.remaining': '{count} recipes remaining today',
+        'recipes.portions': 'Servings',
+        'recipes.adjust_portions': 'Adjust Servings',
 
         // Favorites
         'favorites.title': 'My Favorites',
@@ -339,6 +345,8 @@ const translations = {
         'favorites.link_valid_until': 'Link valid until:',
         'favorites.copy': 'Copy',
         'favorites.share_recipe': 'Share Recipe',
+        'favorites.search_placeholder': 'Search favorites...',
+        'favorites.no_results': 'No favorites found',
 
         // Ingredients extended
         'ingredients.empty': 'No ingredients yet. Add your first ingredient!',

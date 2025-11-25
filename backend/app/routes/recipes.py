@@ -252,6 +252,87 @@ def get_recipe(
     )
 
 
+@router.get("/{recipe_id}/portions", response_model=RecipeResponse)
+def calculate_portions(
+    recipe_id: int,
+    servings: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Calculate recipe portions (adjust ingredient amounts)
+
+    - **recipe_id**: ID of the recipe
+    - **servings**: Desired number of servings
+
+    Returns: Recipe with adjusted ingredient amounts
+    """
+    # Validate servings
+    if servings < 1 or servings > 20:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Servings must be between 1 and 20"
+        )
+
+    # Load recipe
+    recipe = db.query(Recipe).filter(
+        Recipe.id == recipe_id,
+        Recipe.user_id == current_user.id
+    ).first()
+
+    if not recipe:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Recipe not found"
+        )
+
+    # Parse ingredients
+    ingredients = json.loads(recipe.ingredients_json) if recipe.ingredients_json else []
+    nutrition = json.loads(recipe.nutrition_json) if recipe.nutrition_json else {}
+
+    # Calculate multiplier
+    original_servings = recipe.servings or 2
+    multiplier = servings / original_servings
+
+    # Adjust ingredient amounts
+    adjusted_ingredients = []
+    for ing in ingredients:
+        adjusted_ing = ing.copy()
+        amount_str = ing.get("amount", "")
+
+        # Try to parse and multiply numeric amounts
+        match = re.match(r'(\d+(?:\.\d+)?)\s*(.+)', amount_str)
+        if match:
+            number = float(match.group(1))
+            unit = match.group(2)
+            new_amount = round(number * multiplier, 1)
+            adjusted_ing["amount"] = f"{new_amount} {unit}"
+
+        # Adjust carbs if present
+        if "carbs" in ing and ing["carbs"]:
+            adjusted_ing["carbs"] = round(ing["carbs"] * multiplier, 1)
+
+        adjusted_ingredients.append(adjusted_ing)
+
+    # Return adjusted recipe (without saving)
+    return RecipeResponse(
+        id=recipe.id,
+        user_id=recipe.user_id,
+        name=recipe.name,
+        description=recipe.description,
+        difficulty=recipe.difficulty,
+        cooking_time=recipe.cooking_time,
+        method=recipe.method,
+        servings=servings,  # New servings
+        used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
+        leftover_tips=recipe.leftover_tips,
+        ingredients=[RecipeIngredient(**ing) for ing in adjusted_ingredients],
+        nutrition_per_serving=NutritionInfo(**nutrition),  # Per serving stays same
+        ai_provider=recipe.ai_provider,
+        generated_at=recipe.generated_at
+    )
+
+
 @router.get("/{recipe_id}/export/pdf")
 def export_recipe_as_pdf(
     recipe_id: int,
