@@ -226,11 +226,16 @@ class RecipePDFGenerator:
         return buffer
 
     def _escape(self, text: str) -> str:
-        """Escape special characters for reportlab"""
+        """Escape special characters for reportlab and remove emojis"""
         if not text:
             return ''
+
+        # Remove emojis by filtering out characters outside the Basic Multilingual Plane
+        # This keeps regular text, numbers, punctuation, and accented characters
+        cleaned_text = ''.join(char for char in str(text) if ord(char) < 0x10000)
+
         # Replace special chars that break reportlab
-        return str(text).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        return cleaned_text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 # Singleton Instance

@@ -624,6 +624,9 @@ const Ingredients = {
 
     // ==================== SPICE QUICK-SELECT ====================
     showSpiceQuickSelect() {
+        // Close any existing modal first
+        UI.closeModal();
+
         const lang = i18n.currentLang;
 
         // Get existing spices (lowercase for comparison)
@@ -658,11 +661,14 @@ const Ingredients = {
             </div>
         `;
 
-        UI.showModal(
-            lang === 'de' ? '⚡ Gewürze verwalten' : '⚡ Manage Spices',
-            modalContent,
-            { size: 'medium' }
-        );
+        // Wait for previous modal to close before opening new one
+        setTimeout(() => {
+            UI.showModal(
+                lang === 'de' ? '⚡ Gewürze verwalten' : '⚡ Manage Spices',
+                modalContent,
+                { size: 'medium' }
+            );
+        }, 100);
     },
 
     async toggleSpice(spiceName, spiceId) {

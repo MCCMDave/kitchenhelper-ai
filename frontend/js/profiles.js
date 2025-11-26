@@ -106,7 +106,6 @@ const PROFILE_INFO = {
 const Profiles = {
     items: [],
     activeProfiles: new Set(),
-    disclaimerShownThisSession: {}, // Track per session, not persistent
 
     // Load all profiles
     async load() {
@@ -231,8 +230,8 @@ const Profiles = {
         const info = PROFILE_INFO[profileType];
         const lang = i18n.currentLang;
 
-        // If activating and has disclaimer that hasn't been shown THIS SESSION
-        if (isActive && info && (info.disclaimer_de || info.disclaimer_en) && !this.disclaimerShownThisSession[profileType]) {
+        // If activating and has disclaimer - ALWAYS show it, even if shown before
+        if (isActive && info && (info.disclaimer_de || info.disclaimer_en)) {
             const disclaimer = lang === 'de' ? info.disclaimer_de : info.disclaimer_en;
             const types = CONFIG.getProfileTypes();
             const type = types.find(t => t.value === profileType);
@@ -254,9 +253,6 @@ const Profiles = {
                 if (checkbox) checkbox.checked = false;
                 return;
             }
-
-            // Mark disclaimer as shown for this session only
-            this.disclaimerShownThisSession[profileType] = true;
         }
 
         try {

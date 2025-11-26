@@ -408,9 +408,27 @@ const Favorites = {
 
     // Share via Email
     shareViaEmail(url, recipeName) {
-        const subject = encodeURIComponent(`Recipe: ${recipeName}`);
-        const body = encodeURIComponent(`I wanted to share this recipe with you:\n\n${url}\n\nEnjoy!`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        const lang = i18n.currentLang;
+
+        const subjectText = lang === 'de'
+            ? `Rezept: ${recipeName}`
+            : `Recipe: ${recipeName}`;
+
+        const bodyText = lang === 'de'
+            ? `Hallo!\n\nIch möchte dieses Rezept mit dir teilen:\n\n${recipeName}\n${url}\n\nViel Spaß beim Kochen!\n\nErstellt mit KitchenHelper-AI`
+            : `Hi!\n\nI wanted to share this recipe with you:\n\n${recipeName}\n${url}\n\nEnjoy cooking!\n\nCreated with KitchenHelper-AI`;
+
+        const subject = encodeURIComponent(subjectText);
+        const body = encodeURIComponent(bodyText);
+
+        // Use window.open instead of window.location to avoid navigation issues
+        const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+        const mailWindow = window.open(mailtoLink, '_self');
+
+        // Fallback if popup blocker
+        if (!mailWindow) {
+            window.location.href = mailtoLink;
+        }
     },
 
     // Export shopping list for favorites
