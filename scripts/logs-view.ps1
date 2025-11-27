@@ -28,13 +28,14 @@ function Show-Help {
 }
 
 function Show-DockerLogs {
-    Set-Location $PSScriptRoot
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    Set-Location $projectRoot
 
     # Check if container is running
     $running = docker compose ps --services --filter "status=running" 2>$null
     if (-not $running) {
         Write-Host "[!] No containers running!" -ForegroundColor $Yellow
-        Write-Host "    Start with: .\dev-start.ps1 -Docker" -ForegroundColor $Yellow
+        Write-Host "    Start with: .\scripts\dev-start.ps1 -Docker" -ForegroundColor $Yellow
         exit 1
     }
 

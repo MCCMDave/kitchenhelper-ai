@@ -34,8 +34,9 @@ function Show-Help {
 function Start-LocalDev {
     Write-Host "`n[*] Starting local development server..." -ForegroundColor $Green
 
-    # Navigate to backend
-    $backendPath = Join-Path $PSScriptRoot "backend"
+    # Navigate to backend (go up one level from scripts/)
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    $backendPath = Join-Path $projectRoot "backend"
     Set-Location $backendPath
 
     # Check if venv exists
@@ -66,7 +67,8 @@ function Start-LocalDev {
 
 function Start-Docker {
     Write-Host "`n[*] Starting Docker container..." -ForegroundColor $Green
-    Set-Location $PSScriptRoot
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    Set-Location $projectRoot
 
     # Check for .env file
     if (-not (Test-Path ".env")) {
@@ -93,21 +95,24 @@ function Start-Docker {
 
 function Build-Docker {
     Write-Host "`n[*] Building Docker image..." -ForegroundColor $Green
-    Set-Location $PSScriptRoot
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    Set-Location $projectRoot
     docker compose build --no-cache
     Write-Host "[OK] Build complete!" -ForegroundColor $Green
 }
 
 function Stop-Docker {
     Write-Host "`n[*] Stopping Docker containers..." -ForegroundColor $Yellow
-    Set-Location $PSScriptRoot
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    Set-Location $projectRoot
     docker compose down
     Write-Host "[OK] Containers stopped!" -ForegroundColor $Green
 }
 
 function Show-Logs {
     Write-Host "`n[*] Showing Docker logs (Ctrl+C to exit)..." -ForegroundColor $Yellow
-    Set-Location $PSScriptRoot
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    Set-Location $projectRoot
     docker compose logs -f
 }
 

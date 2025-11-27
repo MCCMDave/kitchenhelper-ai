@@ -21,9 +21,10 @@ if [ "$EUID" -eq 0 ]; then
     echo -e "${YELLOW}Warning: Running as root is not recommended${NC}"
 fi
 
-# Navigate to project directory
+# Navigate to project directory (go up one level from scripts/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT"
 
 echo -e "\n${YELLOW}[1/5] Pulling latest changes from git...${NC}"
 git pull origin main

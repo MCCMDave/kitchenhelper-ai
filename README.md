@@ -1,84 +1,60 @@
-# KitchenHelper-AI
+# KitchenHelper-AI 🍳
 
 AI-powered recipe generator that creates personalized recipes based on your available ingredients. Special support for diabetes with carb unit (KE/BE) calculations.
 
-**English Version** | [Deutsche Version](README.de.md)
+**English Version** | [Deutsche Version](docs/README.de.md)
 
-## Features
+## ✨ Features
 
-- **AI Recipe Generation** - Generate recipes from your ingredients (Mock AI for demo)
-- **Ingredient Management** - Track your ingredients with categories and expiry dates
-- **Favorites System** - Save your favorite recipes with PDF export
-- **Diet Profiles** - Support for multiple diet profiles:
-  - Diabetic (with KE/BE calculations)
-  - Vegan / Vegetarian
-  - Gluten-free / Lactose-free
-  - Keto / Low-Carb / High-Protein
-- **Multi-Language** - English and German (toggle in header)
-- **Dark Mode** - Toggle light/dark theme
-- **Responsive Design** - Works on desktop and mobile
+- 🤖 **AI Recipe Generation** - Generate recipes from your ingredients
+- 📦 **Ingredient Management** - Track ingredients with categories and expiry dates
+- ⭐ **Favorites System** - Save favorite recipes with PDF export
+- 🍽️ **Diet Profiles** - Support for Diabetic, Vegan, Keto, Gluten-free, and more
+- 🌍 **Multi-Language** - English and German support
+- 🌙 **Dark Mode** - Toggle light/dark theme
+- 📱 **Responsive Design** - Works on desktop and mobile
 
-## Quick Start (For Testers)
+## 🚀 Quick Start
 
 ### Prerequisites
+- Python 3.10+
+- Git
+- A web browser
 
-- **Python 3.10+** installed
-- **Git** installed
-- A web browser (Chrome, Firefox, Edge)
+### Installation
 
-### Installation Steps
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/kitchenhelper-ai.git
+cd kitchenhelper-ai
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/kitchenhelper-ai.git
-   cd kitchenhelper-ai
-   ```
+# Set up backend
+cd backend
+python -m venv venv
 
-2. **Set up the backend**
-   ```bash
-   cd backend
+# Windows PowerShell:
+.\venv\Scripts\Activate.ps1
 
-   # Create virtual environment
-   python -m venv venv
+# macOS/Linux:
+source venv/bin/activate
 
-   # Activate virtual environment
-   # Windows PowerShell:
-   .\venv\Scripts\Activate.ps1
+# Install dependencies
+pip install -r requirements.txt
 
-   # Windows Git Bash:
-   source venv/Scripts/activate
+# Initialize database with test users
+python scripts/db_manager.py reset
 
-   # macOS/Linux:
-   source venv/bin/activate
+# Start backend server
+uvicorn app.main:app --reload
+```
 
-   # Install dependencies
-   pip install -r requirements.txt
-   ```
+### Open Frontend
+Simply open `frontend/index.html` in your browser or use VS Code Live Server.
 
-3. **Initialize the database with test users**
-   ```bash
-   # Still in backend folder with venv activated
-   python scripts/db_manager.py reset
-   ```
-
-4. **Start the backend server**
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-   The API will be available at: http://127.0.0.1:8000
-
-   Swagger docs: http://127.0.0.1:8000/docs
-
-5. **Open the frontend**
-
-   Simply open `frontend/index.html` in your browser.
-
-   Or use VS Code with the "Live Server" extension.
+The API will be available at: http://127.0.0.1:8000
+Swagger docs: http://127.0.0.1:8000/docs
 
 ### Test Users
-
-After running `db_manager.py reset`, these test users are available:
 
 | Email | Username | Password |
 |-------|----------|----------|
@@ -86,200 +62,66 @@ After running `db_manager.py reset`, these test users are available:
 | b@b.b | bbb | bbbbbb |
 | test@test.de | testuser | test123 |
 
-Login with either email OR username.
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 kitchenhelper-ai/
-├── backend/
-│   ├── app/
-│   │   ├── models/        # SQLAlchemy Models
-│   │   ├── routes/        # API Endpoints
-│   │   ├── schemas/       # Pydantic Schemas
-│   │   ├── services/      # Business Logic (PDF, Recipe Gen)
-│   │   └── utils/         # Helpers (auth, database, jwt)
-│   ├── database/          # SQLite Database
-│   ├── scripts/           # Utility Scripts
-│   │   ├── db_manager.py  # Database management
-│   │   └── test_login.py  # Login test script
-│   └── requirements.txt
-├── frontend/
-│   ├── css/               # Stylesheets
-│   ├── js/                # JavaScript Modules
-│   ├── index.html         # Login/Register Page
-│   └── dashboard.html     # Main Application
-├── docs/                  # Documentation
-└── README.md
+├── docs/                   # Documentation
+│   ├── README-full.md     # Full documentation
+│   ├── README.de.md       # German documentation
+│   ├── CLAUDE.md          # Claude AI integration notes
+│   ├── ENCODING-RULES.md  # Encoding guidelines
+│   ├── SHORTCUTS.md       # Development shortcuts
+│   └── STATUS-REPORT.md   # Project status
+├── scripts/               # Utility scripts
+│   ├── dev-start.ps1     # Quick development start
+│   ├── deploy.sh         # Deployment script
+│   └── logs-view.ps1     # Log viewer
+├── backend/               # FastAPI backend
+├── frontend/              # Vanilla JS frontend
+├── docker-compose.yml    # Docker setup
+└── README.md             # This file
 ```
 
-## API Endpoints
+## 🛠️ Development Scripts
 
-### Authentication
-- `POST /api/auth/register` - Create new account
-- `POST /api/auth/login` - Login (email or username)
-- `POST /api/auth/request-password-reset` - Request reset token
-- `POST /api/auth/reset-password` - Reset password with token
-
-### User
-- `GET /api/users/me` - Get current user info
-- `PUT /api/users/me` - Update profile (username, email, emoji, password)
-- `DELETE /api/users/me` - Delete account
-
-### Ingredients
-- `GET /api/ingredients` - List all ingredients
-- `POST /api/ingredients` - Add ingredient
-- `PUT /api/ingredients/{id}` - Update ingredient
-- `DELETE /api/ingredients/{id}` - Delete ingredient
-
-### Recipes
-- `POST /api/recipes/generate` - Generate recipes from ingredients
-- `GET /api/recipes/history` - Get recipe history
-- `GET /api/recipes/{id}` - Get single recipe
-- `GET /api/recipes/{id}/export/pdf` - Export recipe as PDF
-
-### Favorites
-- `GET /api/favorites` - List favorites
-- `POST /api/favorites` - Add favorite
-- `DELETE /api/favorites/{id}` - Remove favorite
-
-### Diet Profiles
-- `GET /api/profiles` - List profiles
-- `POST /api/profiles` - Create profile
-- `PUT /api/profiles/{id}` - Update profile
-- `DELETE /api/profiles/{id}` - Delete profile
-
-## Testing the App
-
-### Basic Flow
-
-1. **Register** a new account or login with test user
-2. **Add ingredients** in the Ingredients tab
-3. **Generate recipes** in the Recipes tab
-   - Select ingredients
-   - Click "Generate Recipes"
-4. **Favorite** recipes you like (star button)
-5. **View favorites** - click to open details modal
-6. **Export PDF** - download recipe as PDF
-
-### Features to Test
-
-- [ ] User registration with username + emoji
-- [ ] Login with email OR username
-- [ ] Password reset flow
-- [ ] Add/edit/delete ingredients
-- [ ] Filter ingredients by category
-- [ ] Generate recipes (Mock AI)
-- [ ] Add/remove favorites
-- [ ] View favorite details in modal
-- [ ] Export recipe as PDF
-- [ ] Create diet profiles (Diabetic, Vegan, etc.)
-- [ ] Multiple active profiles
-- [ ] Language toggle (EN/DE)
-- [ ] Dark/Light mode toggle
-- [ ] Responsive design (resize browser)
-- [ ] User menu dropdown (Settings, Profiles, Logout)
-
-## Troubleshooting
-
-### Backend won't start
-```bash
-# Make sure venv is activated
-.\venv\Scripts\Activate.ps1  # Windows
-source venv/bin/activate      # macOS/Linux
-
-# Check all dependencies installed
-pip install -r requirements.txt
-
-# Check port 8000 is free
-```
-
-### Database errors
-```bash
-# Reset database completely
-python scripts/db_manager.py reset
-```
-
-### Frontend can't connect
-- Make sure backend is running on http://127.0.0.1:8000
-- Check browser console for errors
-- Check CORS settings in backend
-
-### PDF Export not working
-```bash
-# Make sure reportlab is installed
-pip install reportlab==4.0.7
-# Restart backend after installing
-```
-
-## Tech Stack
-
-- **Backend**: Python, FastAPI, SQLAlchemy, SQLite
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3
-- **Auth**: JWT Bearer Tokens
-- **PDF**: ReportLab
-- **Deployment**: Docker (x86_64 & ARM64)
-
----
-
-## Docker Setup
-
-### Development (Windows)
-
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-2. Copy environment file:
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-3. Edit `.env` and change `JWT_SECRET_KEY`
-4. Start container:
-   ```powershell
-   docker compose up -d
-   ```
-5. Visit: http://localhost:8000
-
-**Or use the helper script:**
 ```powershell
-.\dev-start.ps1 -Docker    # Start in Docker
-.\dev-start.ps1            # Start local dev server
-.\dev-start.ps1 -Help      # Show all options
+# Quick start development server
+.\scripts\dev-start.ps1
+
+# View logs
+.\scripts\logs-view.ps1
+
+# Deploy to production
+.\scripts\deploy.sh
 ```
 
-### Production (Raspberry Pi)
-
-See: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-
-### Docker Commands
+## 🐳 Docker Deployment
 
 ```bash
-docker compose build       # Build image
-docker compose up -d       # Start container
-docker compose down        # Stop container
-docker compose logs -f     # View logs
+# Build and start containers
+docker-compose up -d
+
+# Stop containers
+docker-compose down
 ```
 
-Full documentation: [docs/DOCKER-SETUP.md](docs/DOCKER-SETUP.md)
+## 📚 Documentation
 
-## Subscription Tiers (Demo)
+For complete documentation, API details, and development guides:
+- [**Full Documentation (English)**](docs/README-full.md)
+- [**Vollständige Dokumentation (Deutsch)**](docs/README.de.md)
+- [**Development Shortcuts**](docs/SHORTCUTS.md)
+- [**Project Status**](docs/STATUS-REPORT.md)
 
-| Tier | Recipes/Day | Favorites |
-|------|-------------|-----------|
-| Demo | 3 | 5 |
-| Basic | 50 | 50 |
-| Premium | Unlimited | Unlimited |
+## 📄 License
 
-## Contributing
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+## 🤝 Contributing
 
-## License
-
-This project is for educational and demonstration purposes.
+Contributions are welcome! Please read the documentation for development guidelines.
 
 ---
 
-**Questions?** Open an issue on GitHub!
+**Built with FastAPI, SQLAlchemy, and Vanilla JavaScript**
