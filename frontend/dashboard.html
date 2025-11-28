@@ -43,6 +43,7 @@
                                     <span id="dropdown-email">email@test.de</span>
                                 </div>
                                 <hr>
+                                <button onclick="UserMenu.goToProModel()" data-i18n="nav.pro_model">💎 Pro Model</button>
                                 <button onclick="UserMenu.goToSettings()" data-i18n="nav.settings">⚙️ Settings</button>
                                 <button onclick="UserMenu.goToProfiles()" data-i18n="nav.profiles">👤 Profiles</button>
                                 <hr>
@@ -204,6 +205,91 @@
                         <button class="btn btn-danger" onclick="Settings.deleteAccount()" data-i18n="settings.delete_account">Delete Account</button>
                     </div>
                 </section>
+
+                <!-- Pro Model Section -->
+                <section id="pro-model-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title">💎 <span data-i18n="pro.title">Pro Model Features</span></h1>
+                    </div>
+
+                    <div class="card" style="max-width: 800px; margin: 0 auto;">
+                        <h2 data-i18n="pro.what_is_pro">Was ist KitchenHelper-AI Pro?</h2>
+                        <p style="margin-bottom: var(--spacing-lg); color: var(--text-muted);" data-i18n="pro.description">
+                            Upgrade to Pro and unlock advanced AI features with better recipe quality and more personalization.
+                        </p>
+
+                        <div style="display: grid; gap: var(--spacing-md);">
+                            <!-- Free Tier -->
+                            <div style="padding: var(--spacing-md); border: 2px solid var(--border); border-radius: var(--border-radius);">
+                                <h3>🆓 <span data-i18n="pro.free_tier">Free Tier</span></h3>
+                                <ul style="list-style: none; padding: 0; margin-top: var(--spacing-md);">
+                                    <li>✅ <span data-i18n="pro.free_basic_recipes">Basic recipe generation</span></li>
+                                    <li>✅ <span data-i18n="pro.free_ingredients">Ingredient management</span></li>
+                                    <li>✅ <span data-i18n="pro.free_profiles">Up to 3 dietary profiles</span></li>
+                                    <li>✅ <span data-i18n="pro.free_favorites">Favorite recipes</span></li>
+                                    <li>⚠️ <span data-i18n="pro.free_model">Uses: llama3.2:3b (smaller model)</span></li>
+                                    <li>⚠️ <span data-i18n="pro.free_limit">Limited daily requests</span></li>
+                                </ul>
+                            </div>
+
+                            <!-- Pro Tier -->
+                            <div style="padding: var(--spacing-md); border: 3px solid var(--primary); border-radius: var(--border-radius); background: linear-gradient(135deg, rgba(87, 103, 255, 0.1), rgba(87, 103, 255, 0.05));">
+                                <h3>💎 <span data-i18n="pro.pro_tier">Pro Tier</span></h3>
+                                <ul style="list-style: none; padding: 0; margin-top: var(--spacing-md);">
+                                    <li>✨ <span data-i18n="pro.pro_advanced">Advanced recipe generation</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_model">Uses: llama3.3:70b (premium model)</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_quality">Better recipe quality & creativity</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_unlimited">Unlimited daily requests</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_profiles">Unlimited dietary profiles</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_priority">Priority support</span></li>
+                                    <li>✨ <span data-i18n="pro.pro_encryption">End-to-end data encryption</span></li>
+                                </ul>
+
+                                <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 1px solid var(--border);">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md);">
+                                        <div>
+                                            <div style="font-size: 2em; font-weight: 700; color: var(--primary);">€4.99<span style="font-size: 0.5em; font-weight: 400;">/Monat</span></div>
+                                            <div style="color: var(--text-muted); font-size: 0.9em;" data-i18n="pro.cancel_anytime">Jederzeit kündbar</div>
+                                        </div>
+                                        <button class="btn btn-primary btn-lg" onclick="ProModel.subscribe()" id="pro-subscribe-btn">
+                                            💎 <span data-i18n="pro.upgrade_now">Jetzt upgraden</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Current Status -->
+                            <div id="pro-status" style="padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--border-radius); text-align: center;">
+                                <div style="font-size: 0.9em; color: var(--text-muted);">
+                                    <span data-i18n="pro.current_tier">Aktueller Plan:</span>
+                                    <strong id="current-tier-display" style="color: var(--primary);">Free</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 1px solid var(--border);">
+                            <h3 data-i18n="pro.faq">Häufige Fragen</h3>
+                            <details style="margin-top: var(--spacing-md);">
+                                <summary style="cursor: pointer; font-weight: 600;" data-i18n="pro.faq_payment">Welche Zahlungsmethoden werden akzeptiert?</summary>
+                                <p style="margin-top: var(--spacing-sm); color: var(--text-muted);" data-i18n="pro.faq_payment_answer">
+                                    Wir akzeptieren Kreditkarten, PayPal und SEPA-Lastschrift.
+                                </p>
+                            </details>
+                            <details style="margin-top: var(--spacing-sm);">
+                                <summary style="cursor: pointer; font-weight: 600;" data-i18n="pro.faq_cancel">Kann ich jederzeit kündigen?</summary>
+                                <p style="margin-top: var(--spacing-sm); color: var(--text-muted);" data-i18n="pro.faq_cancel_answer">
+                                    Ja, du kannst dein Abo jederzeit in den Einstellungen kündigen. Es läuft bis zum Ende des bezahlten Zeitraums.
+                                </p>
+                            </details>
+                            <details style="margin-top: var(--spacing-sm);">
+                                <summary style="cursor: pointer; font-weight: 600;" data-i18n="pro.faq_difference">Was ist der Unterschied zwischen den Modellen?</summary>
+                                <p style="margin-top: var(--spacing-sm); color: var(--text-muted);" data-i18n="pro.faq_difference_answer">
+                                    Das Pro-Modell (llama3.3:70b) ist deutlich größer und intelligenter. Es erstellt kreativere Rezepte, berücksichtigt Präferenzen besser und liefert detailliertere Anweisungen.
+                                </p>
+                            </details>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
@@ -218,6 +304,7 @@
     <script src="js/recipes.js"></script>
     <script src="js/favorites.js"></script>
     <script src="js/profiles.js"></script>
+    <script src="js/pro-model.js"></script>
     <script src="js/user-menu.js"></script>
     <script>
         // ==================== THEME SWITCHER ====================

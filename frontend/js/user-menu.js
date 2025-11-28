@@ -54,6 +54,18 @@ const UserMenu = {
         if (typeof Profiles !== 'undefined') Profiles.load();
     },
 
+    // Navigate to Pro Model page
+    goToProModel() {
+        this.close();
+        // Deactivate all tabs and sections
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Activate pro-model section
+        document.getElementById('pro-model-section').classList.add('active');
+        // Update current tier display
+        if (typeof ProModel !== 'undefined') ProModel.updateDisplay();
+    },
+
     // Update user info in menu
     updateUserInfo(user) {
         if (!user) return;
