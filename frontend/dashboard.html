@@ -172,6 +172,55 @@
                     </div>
 
                     <div class="settings-section">
+                        <h2 class="settings-title" data-i18n="settings.color_scheme">Color Scheme</h2>
+                        <p class="form-hint" data-i18n="settings.color_scheme_hint">Choose a color scheme that suits your preference</p>
+                        <div class="theme-grid">
+                            <button class="theme-card" data-theme="light" onclick="Settings.setTheme('light')">
+                                <div class="theme-preview theme-preview-light">
+                                    <div class="theme-dot" style="background: #4CAF50"></div>
+                                    <div class="theme-dot" style="background: #2196F3"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_light">Light</span>
+                            </button>
+                            <button class="theme-card" data-theme="dark" onclick="Settings.setTheme('dark')">
+                                <div class="theme-preview theme-preview-dark">
+                                    <div class="theme-dot" style="background: #66BB6A"></div>
+                                    <div class="theme-dot" style="background: #42A5F5"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_dark">Dark</span>
+                            </button>
+                            <button class="theme-card" data-theme="sepia" onclick="Settings.setTheme('sepia')">
+                                <div class="theme-preview theme-preview-sepia">
+                                    <div class="theme-dot" style="background: #8B7355"></div>
+                                    <div class="theme-dot" style="background: #7B8B8E"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_sepia">Sepia</span>
+                            </button>
+                            <button class="theme-card" data-theme="nord" onclick="Settings.setTheme('nord')">
+                                <div class="theme-preview theme-preview-nord">
+                                    <div class="theme-dot" style="background: #88C0D0"></div>
+                                    <div class="theme-dot" style="background: #81A1C1"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_nord">Nord</span>
+                            </button>
+                            <button class="theme-card" data-theme="solarized" onclick="Settings.setTheme('solarized')">
+                                <div class="theme-preview theme-preview-solarized">
+                                    <div class="theme-dot" style="background: #268BD2"></div>
+                                    <div class="theme-dot" style="background: #2AA198"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_solarized">Solarized</span>
+                            </button>
+                            <button class="theme-card" data-theme="dracula" onclick="Settings.setTheme('dracula')">
+                                <div class="theme-preview theme-preview-dracula">
+                                    <div class="theme-dot" style="background: #BD93F9"></div>
+                                    <div class="theme-dot" style="background: #8BE9FD"></div>
+                                </div>
+                                <span class="theme-name" data-i18n="settings.theme_dracula">Dracula</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
                         <h2 class="settings-title" data-i18n="settings.change_password">Change Password</h2>
                         <form id="password-form">
                             <div class="form-group">
@@ -353,6 +402,9 @@
         });
 
         async function initDashboard() {
+            // Load saved theme
+            Settings.loadTheme();
+
             // Load user info
             const user = Auth.getCurrentUser();
             if (user) {
@@ -508,6 +560,40 @@
                 } catch (error) {
                     UI.error(error.message);
                 }
+            },
+
+            setTheme(theme, showMessage = true) {
+                // Set the theme on document element
+                document.documentElement.setAttribute('data-theme', theme);
+
+                // Save to localStorage
+                localStorage.setItem('colorTheme', theme);
+
+                // Update active state on theme cards
+                document.querySelectorAll('.theme-card').forEach(card => {
+                    if (card.getAttribute('data-theme') === theme) {
+                        card.setAttribute('data-theme-active', 'true');
+                    } else {
+                        card.removeAttribute('data-theme-active');
+                    }
+                });
+
+                // Success message (only if explicitly requested)
+                if (showMessage) {
+                    const themeName = i18n.currentLang === 'de'
+                        ? i18n.translate(`settings.theme_${theme}`)
+                        : i18n.translate(`settings.theme_${theme}`);
+                    const msg = i18n.currentLang === 'de'
+                        ? `Farbschema "${themeName}" aktiviert!`
+                        : `Color scheme "${themeName}" activated!`;
+                    UI.success(msg);
+                }
+            },
+
+            loadTheme() {
+                // Load theme from localStorage, default to 'light'
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                this.setTheme(savedTheme, false);  // Don't show message on initial load
             },
 
             deleteAccount() {

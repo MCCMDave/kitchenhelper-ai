@@ -114,3 +114,143 @@
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
 }
+
+/* Sepia Mode - Warm, eye-friendly */
+[data-theme="sepia"] {
+    /* Colors */
+    --primary: #8B7355;
+    --primary-dark: #6B5644;
+    --primary-light: #A68A6D;
+    --secondary: #7B8B8E;
+    --secondary-dark: #5B6B6E;
+    --danger: #C65D52;
+    --danger-light: #F4EBE8;
+    --warning: #D48B2E;
+    --warning-light: #F9F2E7;
+    --success: #8B9474;
+    --success-light: #F2F4ED;
+    --info: #7B8B8E;
+    --info-light: #EEF1F2;
+
+    /* Neutrals */
+    --text: #5B4636;
+    --text-light: #7B6656;
+    --text-muted: #9B8676;
+    --bg: #F4F1EA;
+    --bg-dark: #E8E2D5;
+    --white: #FBF9F4;
+    --black: #2B1B0B;
+    --border: #D4CAB8;
+    --border-light: #E4DCC8;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(91, 70, 54, 0.08);
+    --shadow-md: 0 4px 6px rgba(91, 70, 54, 0.12);
+    --shadow-lg: 0 10px 15px rgba(91, 70, 54, 0.15);
+    --shadow-xl: 0 20px 25px rgba(91, 70, 54, 0.18);
+}
+
+/* Nord Theme - Cool, arctic-inspired */
+[data-theme="nord"] {
+    /* Colors */
+    --primary: #88C0D0;
+    --primary-dark: #5E81AC;
+    --primary-light: #8FBCBB;
+    --secondary: #81A1C1;
+    --secondary-dark: #5E81AC;
+    --danger: #BF616A;
+    --danger-light: #3B2C32;
+    --warning: #EBCB8B;
+    --warning-light: #3B3832;
+    --success: #A3BE8C;
+    --success-light: #323B2F;
+    --info: #81A1C1;
+    --info-light: #2E3440;
+
+    /* Neutrals */
+    --text: #ECEFF4;
+    --text-light: #D8DEE9;
+    --text-muted: #A0A8B8;
+    --bg: #2E3440;
+    --bg-dark: #242933;
+    --white: #3B4252;
+    --black: #ECEFF4;
+    --border: #4C566A;
+    --border-light: #434C5E;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.45);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.55);
+}
+
+/* Solarized Dark - Classic, refined */
+[data-theme="solarized"] {
+    /* Colors */
+    --primary: #268BD2;
+    --primary-dark: #2075B6;
+    --primary-light: #3D9FE6;
+    --secondary: #2AA198;
+    --secondary-dark: #258B82;
+    --danger: #DC322F;
+    --danger-light: #3A2322;
+    --warning: #CB4B16;
+    --warning-light: #3A2E22;
+    --success: #859900;
+    --success-light: #2A2E22;
+    --info: #268BD2;
+    --info-light: #223032;
+
+    /* Neutrals */
+    --text: #93A1A1;
+    --text-light: #839496;
+    --text-muted: #657B83;
+    --bg: #002B36;
+    --bg-dark: #001F26;
+    --white: #073642;
+    --black: #FDF6E3;
+    --border: #586E75;
+    --border-light: #073642;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Dracula Theme - Popular, vibrant */
+[data-theme="dracula"] {
+    /* Colors */
+    --primary: #BD93F9;
+    --primary-dark: #9D73D9;
+    --primary-light: #D5ACFF;
+    --secondary: #8BE9FD;
+    --secondary-dark: #6BC9DD;
+    --danger: #FF5555;
+    --danger-light: #3F2B2B;
+    --warning: #FFB86C;
+    --warning-light: #3F362B;
+    --success: #50FA7B;
+    --success-light: #2B3F31;
+    --info: #8BE9FD;
+    --info-light: #2B363F;
+
+    /* Neutrals */
+    --text: #F8F8F2;
+    --text-light: #D8D8D2;
+    --text-muted: #A8A8A2;
+    --bg: #282A36;
+    --bg-dark: #1E1F2A;
+    --white: #44475A;
+    --black: #F8F8F2;
+    --border: #6272A4;
+    --border-light: #44475A;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.7);
+}
