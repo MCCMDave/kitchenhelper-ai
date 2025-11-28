@@ -56,6 +56,16 @@ class APIClient {
             return data;
         } catch (error) {
             console.error('API Error:', error);
+
+            // Handle network errors (server not reachable)
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                const lang = localStorage.getItem('kitchenhelper_lang') || 'en';
+                const message = lang === 'de'
+                    ? 'Server nicht erreichbar. Bitte prüfe deine Verbindung.'
+                    : 'Server not reachable. Please check your connection.';
+                throw new Error(message);
+            }
+
             throw error;
         }
     }
