@@ -183,6 +183,7 @@ def profile_to_response(profile: DietProfile) -> DietProfileResponse:
         name=profile.name,
         settings=parse_settings_json(profile.settings_json),
         is_active=profile.is_active,
+        strict_ingredients_only=profile.strict_ingredients_only,
         created_at=profile.created_at,
         updated_at=profile.updated_at
     )
@@ -270,7 +271,8 @@ def create_profile(
         profile_type=profile_data.profile_type,
         name=profile_data.name,
         settings_json=json.dumps(validated_settings) if validated_settings else None,
-        is_active=profile_data.is_active
+        is_active=profile_data.is_active,
+        strict_ingredients_only=profile_data.strict_ingredients_only
     )
 
     db.add(new_profile)
@@ -431,6 +433,9 @@ def update_profile(
                     detail=f"Active profile limit reached ({limit}). Deactivate another profile or upgrade your subscription."
                 )
         profile.is_active = update_data["is_active"]
+
+    if "strict_ingredients_only" in update_data:
+        profile.strict_ingredients_only = update_data["strict_ingredients_only"]
 
     db.commit()
     db.refresh(profile)

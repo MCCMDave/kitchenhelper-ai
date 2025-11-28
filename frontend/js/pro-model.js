@@ -3,7 +3,7 @@
 const ProModel = {
     // Update display with current tier
     updateDisplay() {
-        const user = Auth.currentUser;
+        const user = Auth.getCurrentUser();
         if (!user) return;
 
         const tierDisplay = document.getElementById('current-tier-display');
@@ -39,10 +39,22 @@ const ProModel = {
 
     // Subscribe to Pro
     async subscribe() {
-        const user = Auth.currentUser;
+        // Check if user is authenticated first
+        if (!Auth.isAuthenticated()) {
+            UI.error(i18n.t('pro.login_required'));
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+            return;
+        }
+
+        const user = Auth.getCurrentUser();
 
         if (!user) {
             UI.error(i18n.t('pro.login_required'));
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
             return;
         }
 
@@ -89,7 +101,7 @@ const ProModel = {
 
     // Cancel subscription
     async cancel() {
-        const user = Auth.currentUser;
+        const user = Auth.getCurrentUser();
 
         if (!user || user.subscription_tier !== 'pro') {
             UI.error(i18n.t('pro.not_subscribed'));

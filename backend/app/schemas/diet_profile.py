@@ -10,6 +10,7 @@ class DietProfileCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Custom Name fuer das Profil")
     settings: Optional[Dict[str, Any]] = Field(default={}, description="Profil-spezifische Einstellungen")
     is_active: bool = Field(default=True, description="Profil aktiv?")
+    strict_ingredients_only: bool = Field(default=False, description="Nur vorhandene Zutaten verwenden (True) oder neue zur Einkaufsliste (False)")
 
 
 class DietProfileUpdate(BaseModel):
@@ -17,6 +18,7 @@ class DietProfileUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     settings: Optional[Dict[str, Any]] = None
     is_active: Optional[bool] = None
+    strict_ingredients_only: Optional[bool] = None
 
 
 # Response Schemas (Output)
@@ -28,6 +30,7 @@ class DietProfileResponse(BaseModel):
     name: str
     settings: Dict[str, Any]
     is_active: bool
+    strict_ingredients_only: bool
     created_at: datetime
     updated_at: Optional[datetime]
 

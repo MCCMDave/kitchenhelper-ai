@@ -19,6 +19,9 @@ class DietProfile(Base):
     name = Column(String, nullable=False)  # Custom Name vom User
     is_active = Column(Boolean, default=True)
 
+    # Ingredient Mode: Only use user's existing ingredients (True) or suggest new ones for shopping list (False)
+    strict_ingredients_only = Column(Boolean, default=False)
+
     # Settings als JSON (flexibel fuer verschiedene Profile)
     settings_json = Column(Text, nullable=True)
     # Beispiel Diabetes: {"unit": "KE", "daily_carb_limit": 180}

@@ -264,6 +264,7 @@
             } catch (error) {
                 console.error('[Login] Error:', error);
                 let message = i18n.t('error.login_failed');
+                let clearEmail = false;
 
                 if (error.message.includes('fetch')) {
                     message = i18n.t('error.fetch_failed');
@@ -271,7 +272,24 @@
                     message = error.message;
                 }
 
+                // Detect if email/username is wrong (401/404) vs wrong password (401)
+                // If status is 404 or message contains "not found", clear email field
+                if (error.status === 404 || message.toLowerCase().includes('not found') ||
+                    message.toLowerCase().includes('user not found') ||
+                    message.toLowerCase().includes('invalid email')) {
+                    clearEmail = true;
+                }
+
                 showError(message);
+
+                // Clear password field always
+                document.getElementById('login-password').value = '';
+
+                // Clear email only if user not found
+                if (clearEmail) {
+                    document.getElementById('login-email').value = '';
+                }
+
                 setLoading(btn, false);
             }
         });
