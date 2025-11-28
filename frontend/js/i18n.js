@@ -42,7 +42,7 @@ const translations = {
         'error.registration_failed': 'Registrierung fehlgeschlagen.',
         'error.email_taken': 'Diese E-Mail ist bereits registriert.',
         'error.username_taken': 'Dieser Benutzername ist bereits vergeben.',
-        'error.fetch_failed': 'Verbindungsfehler. Ist der Server gestartet?',
+        'error.fetch_failed': 'Server nicht erreichbar. Bitte prüfe deine Verbindung.',
         'error.reset_code_required': 'Bitte gib den Reset-Code ein.',
 
         // Dashboard Navigation
@@ -168,6 +168,10 @@ const translations = {
         'profiles.deleted': 'Präferenz gelöscht!',
         'profiles.activated': 'Präferenz aktiviert!',
         'profiles.deactivated': 'Präferenz deaktiviert!',
+        'profiles.strict_mode': 'Nur vorhandene Zutaten verwenden',
+        'profiles.strict_mode_hint': 'KI schlägt nur Rezepte mit deinen gespeicherten Zutaten vor',
+        'profiles.shopping_mode': 'Neue Zutaten zur Einkaufsliste hinzufügen',
+        'profiles.shopping_mode_hint': 'KI kann neue Zutaten vorschlagen (profil-konform)',
         'recipes.select_warning': 'Bitte wähle mindestens eine Zutat aus!',
         'recipes.no_generated': 'Keine Rezepte generiert. Wähle Zutaten und klicke auf "Generieren"!',
         'recipes.no_history': 'Noch keine Rezepte generiert.',
@@ -284,7 +288,7 @@ const translations = {
         'error.registration_failed': 'Registration failed.',
         'error.email_taken': 'This email is already registered.',
         'error.username_taken': 'This username is already taken.',
-        'error.fetch_failed': 'Connection error. Is the server running?',
+        'error.fetch_failed': 'Server unreachable. Please check your connection.',
         'error.reset_code_required': 'Please enter the reset code.',
 
         // Dashboard Navigation
@@ -410,6 +414,10 @@ const translations = {
         'profiles.deleted': 'Preference deleted!',
         'profiles.activated': 'Preference activated!',
         'profiles.deactivated': 'Preference deactivated!',
+        'profiles.strict_mode': 'Use only existing ingredients',
+        'profiles.strict_mode_hint': 'AI suggests only recipes with your saved ingredients',
+        'profiles.shopping_mode': 'Add new ingredients to shopping list',
+        'profiles.shopping_mode_hint': 'AI can suggest new ingredients (profile-compliant)',
         'recipes.select_warning': 'Please select at least one ingredient!',
         'recipes.no_generated': 'No recipes generated. Select ingredients and click "Generate"!',
         'recipes.no_history': 'No recipes generated yet.',

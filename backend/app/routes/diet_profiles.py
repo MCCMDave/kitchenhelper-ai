@@ -24,7 +24,17 @@ ALLOWED_PROFILE_TYPES = [
     "low_carb",
     "high_protein",
     "gluten_free",
-    "lactose_free"
+    "lactose_free",
+    # Additional dietary preferences
+    "paleo",
+    "low_fodmap",
+    "kosher",
+    "halal",
+    "histamine_free",
+    "nut_free",
+    "pescatarian",
+    "pregnancy",
+    "mediterranean"
 ]
 
 # Standard-Templates fuer schnelle Profil-Erstellung
@@ -79,6 +89,61 @@ STANDARD_PROFILES = {
         "name": "Laktosefrei",
         "settings": {
             "exclude_ingredients": ["Milch", "Sahne", "Joghurt", "Quark"]
+        }
+    },
+    "paleo": {
+        "name": "Paleo",
+        "settings": {
+            "exclude_ingredients": ["Getreide", "Hülsenfrüchte", "Milchprodukte", "Zucker"]
+        }
+    },
+    "low_fodmap": {
+        "name": "Low FODMAP",
+        "settings": {
+            "exclude_ingredients": ["Zwiebeln", "Knoblauch", "Weizen", "Bohnen", "Äpfel"]
+        }
+    },
+    "kosher": {
+        "name": "Koscher",
+        "settings": {
+            "exclude_ingredients": ["Schweinefleisch", "Meeresfrüchte", "Milch+Fleisch"]
+        }
+    },
+    "halal": {
+        "name": "Halal",
+        "settings": {
+            "exclude_ingredients": ["Schweinefleisch", "Alkohol"]
+        }
+    },
+    "histamine_free": {
+        "name": "Histaminarm",
+        "settings": {
+            "exclude_ingredients": ["Käse", "Wurst", "Tomaten", "Spinat", "Alkohol"]
+        }
+    },
+    "nut_free": {
+        "name": "Nussfrei",
+        "settings": {
+            "exclude_ingredients": ["Nüsse", "Erdnüsse", "Mandeln", "Haselnüsse"]
+        }
+    },
+    "pescatarian": {
+        "name": "Pescetarisch",
+        "settings": {
+            "exclude_ingredients": ["Fleisch", "Geflügel"]
+        }
+    },
+    "pregnancy": {
+        "name": "Schwangerschaft",
+        "settings": {
+            "exclude_ingredients": ["Rohmilch", "Rohfisch", "Alkohol", "Leber"]
+        }
+    },
+    "mediterranean": {
+        "name": "Mittelmeer-Diät",
+        "settings": {
+            "daily_oil": "Olivenöl bevorzugt",
+            "focus": "Viel Gemüse, Fisch, Vollkorn"
         }
     }
 }

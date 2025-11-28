@@ -20,7 +20,17 @@ const CONFIG = {
         { value: 'lactose_free', label_de: 'Laktosefrei', label_en: 'Lactose-free', emoji: '🥛' },
         { value: 'low_carb', label_de: 'Low Carb', label_en: 'Low Carb', emoji: '🥗' },
         { value: 'vegan', label_de: 'Vegan', label_en: 'Vegan', emoji: '🌱' },
-        { value: 'vegetarian', label_de: 'Vegetarisch', label_en: 'Vegetarian', emoji: '🥕' }
+        { value: 'vegetarian', label_de: 'Vegetarisch', label_en: 'Vegetarian', emoji: '🥕' },
+        // Additional dietary preferences
+        { value: 'paleo', label_de: 'Paleo', label_en: 'Paleo', emoji: '🦴' },
+        { value: 'low_fodmap', label_de: 'Low FODMAP', label_en: 'Low FODMAP', emoji: '🌾' },
+        { value: 'kosher', label_de: 'Koscher', label_en: 'Kosher', emoji: '✡️' },
+        { value: 'halal', label_de: 'Halal', label_en: 'Halal', emoji: '☪️' },
+        { value: 'histamine_free', label_de: 'Histaminarm', label_en: 'Low Histamine', emoji: '🧪' },
+        { value: 'nut_free', label_de: 'Nussfrei', label_en: 'Nut-free', emoji: '🚫🥜' },
+        { value: 'pescatarian', label_de: 'Pescetarisch', label_en: 'Pescatarian', emoji: '🐟' },
+        { value: 'pregnancy', label_de: 'Schwangerschaft', label_en: 'Pregnancy', emoji: '🤰' },
+        { value: 'mediterranean', label_de: 'Mittelmeer', label_en: 'Mediterranean', emoji: '🫒' }
     ],
 
     // Ingredient Categories (translated) - sorted alphabetically per language

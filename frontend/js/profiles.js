@@ -100,6 +100,92 @@ const PROFILE_INFO = {
         color: '#95a5a6',
         disclaimer_de: null,
         disclaimer_en: null
+    },
+    paleo: {
+        emoji: '🦴',
+        color: '#8e44ad',
+        disclaimer_de: null,
+        disclaimer_en: null
+    },
+    low_fodmap: {
+        emoji: '🌾',
+        color: '#d35400',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Die Low FODMAP Diät sollte idealerweise unter Anleitung eines Ernährungsberaters
+            durchgeführt werden. Sie ist als temporäre Eliminationsdiät gedacht.
+        `,
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            The Low FODMAP diet should ideally be followed under the guidance of a nutritionist.
+            It is intended as a temporary elimination diet.
+        `
+    },
+    kosher: {
+        emoji: '✡️',
+        color: '#3498db',
+        disclaimer_de: null,
+        disclaimer_en: null
+    },
+    halal: {
+        emoji: '☪️',
+        color: '#27ae60',
+        disclaimer_de: null,
+        disclaimer_en: null
+    },
+    histamine_free: {
+        emoji: '🧪',
+        color: '#e67e22',
+        disclaimer_de: `
+            <strong>ℹ️ Hinweis:</strong><br>
+            Bei Histaminintoleranz sollten Sie mit einem Arzt oder Ernährungsberater sprechen.
+            Die Verträglichkeit kann individuell variieren.
+        `,
+        disclaimer_en: `
+            <strong>ℹ️ Notice:</strong><br>
+            For histamine intolerance, consult your doctor or nutritionist.
+            Tolerance can vary individually.
+        `
+    },
+    nut_free: {
+        emoji: '🚫🥜',
+        color: '#c0392b',
+        disclaimer_de: `
+            <strong>⚠️ Allergie-Hinweis:</strong><br>
+            Bei Nussallergien können bereits kleinste Mengen gefährlich sein.
+            Achten Sie auf Kreuzkontamination in der Küche und prüfen Sie alle Zutaten sorgfältig.
+        `,
+        disclaimer_en: `
+            <strong>⚠️ Allergy Notice:</strong><br>
+            For nut allergies, even the smallest amounts can be dangerous.
+            Watch for cross-contamination in the kitchen and check all ingredients carefully.
+        `
+    },
+    pescatarian: {
+        emoji: '🐟',
+        color: '#16a085',
+        disclaimer_de: null,
+        disclaimer_en: null
+    },
+    pregnancy: {
+        emoji: '🤰',
+        color: '#e91e63',
+        disclaimer_de: `
+            <strong>⚠️ Schwangerschafts-Hinweis:</strong><br>
+            Bitte sprechen Sie mit Ihrem Frauenarzt über Ihre Ernährung während der Schwangerschaft.
+            Vermeiden Sie Rohmilch, rohen Fisch, rohes Fleisch und Alkohol.
+        `,
+        disclaimer_en: `
+            <strong>⚠️ Pregnancy Notice:</strong><br>
+            Please consult your gynecologist about your diet during pregnancy.
+            Avoid raw milk, raw fish, raw meat and alcohol.
+        `
+    },
+    mediterranean: {
+        emoji: '🫒',
+        color: '#2980b9',
+        disclaimer_de: null,
+        disclaimer_en: null
     }
 };
 
@@ -190,6 +276,7 @@ const Profiles = {
             const info = PROFILE_INFO[type.value] || {};
             const existing = existingMap.get(type.value);
             const isActive = existing?.is_active || false;
+            const strictMode = existing?.strict_ingredients_only || false;
             const hasDisclaimer = info.disclaimer_de || info.disclaimer_en;
 
             return `
@@ -209,6 +296,30 @@ const Profiles = {
                             ` : ''}
                         </span>
                     </label>
+                    ${isActive ? `
+                        <div class="profile-ingredient-mode" style="margin-top: var(--spacing-sm); padding-left: var(--spacing-lg);">
+                            <label class="profile-mode-option">
+                                <input type="radio"
+                                       name="mode-${type.value}"
+                                       ${strictMode ? 'checked' : ''}
+                                       onchange="Profiles.updateIngredientMode('${type.value}', true)">
+                                <span class="mode-label">
+                                    <strong data-i18n="profiles.strict_mode">Nur vorhandene Zutaten</strong>
+                                    <small data-i18n="profiles.strict_mode_hint" style="display: block; color: var(--text-muted);">KI schlägt nur Rezepte mit gespeicherten Zutaten vor</small>
+                                </span>
+                            </label>
+                            <label class="profile-mode-option">
+                                <input type="radio"
+                                       name="mode-${type.value}"
+                                       ${!strictMode ? 'checked' : ''}
+                                       onchange="Profiles.updateIngredientMode('${type.value}', false)">
+                                <span class="mode-label">
+                                    <strong data-i18n="profiles.shopping_mode">Neue Zutaten zur Einkaufsliste</strong>
+                                    <small data-i18n="profiles.shopping_mode_hint" style="display: block; color: var(--text-muted);">KI kann neue Zutaten vorschlagen</small>
+                                </span>
+                            </label>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }).join('');
@@ -281,6 +392,27 @@ const Profiles = {
         } catch (error) {
             UI.error(error.message);
             await this.load(); // Reload to reset checkboxes
+        }
+    },
+
+    // Update ingredient mode (strict vs. shopping list)
+    async updateIngredientMode(profileType, strictMode) {
+        try {
+            const existing = this.items.find(p => p.profile_type === profileType);
+            if (!existing) {
+                UI.error('Profile not found');
+                return;
+            }
+
+            await api.updateProfile(existing.id, {
+                strict_ingredients_only: strictMode
+            });
+
+            // Silent reload to update state
+            await this.silentReload();
+        } catch (error) {
+            UI.error(error.message);
+            await this.load();
         }
     },
 
