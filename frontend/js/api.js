@@ -229,3 +229,9 @@ api.bulkNutritionLookup = (ingredients) =>
 
 api.calculateMealNutrition = (ingredientsString, servings = 1) =>
     api.get(`/nutrition/calculate-meal?ingredients=${encodeURIComponent(ingredientsString)}&servings=${servings}`);
+
+// ==================== SCANNER API ====================
+api.scanBarcode = (barcode) => api.get(`/scanner/barcode/${barcode}`);
+
+api.searchProducts = (query, page = 1, pageSize = 20) =>
+    api.get(`/scanner/search/${encodeURIComponent(query)}?page=${page}&page_size=${pageSize}`);

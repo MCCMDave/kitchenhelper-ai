@@ -18,6 +18,93 @@
                 <span class="lang-toggle-text">DE</span>
             </button>
 
+            <!-- Theme Dropdown -->
+            <div class="theme-menu" style="position: absolute; top: var(--spacing-md); right: 60px;">
+                <button class="theme-toggle" onclick="ThemeMenu.toggle(event)" aria-label="Farbschema wählen" title="Farbschema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+
+                <div class="theme-dropdown" id="theme-dropdown">
+                    <div class="theme-dropdown-grid">
+                        <!-- Light Modes -->
+                        <button class="theme-dot-btn" data-theme="light" onclick="ThemeMenu.setTheme('light')" title="Hell">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #4CAF50"></div>
+                                <div class="theme-dot" style="background: #2196F3"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="sepia" onclick="ThemeMenu.setTheme('sepia')" title="Sepia">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #8B7355"></div>
+                                <div class="theme-dot" style="background: #7B8B8E"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="ocean-light" onclick="ThemeMenu.setTheme('ocean-light')" title="Ozean Hell">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #0891B2"></div>
+                                <div class="theme-dot" style="background: #3B82F6"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="forest-light" onclick="ThemeMenu.setTheme('forest-light')" title="Wald Hell">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #059669"></div>
+                                <div class="theme-dot" style="background: #16A34A"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="sunset-light" onclick="ThemeMenu.setTheme('sunset-light')" title="Sonnenuntergang Hell">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #F97316"></div>
+                                <div class="theme-dot" style="background: #EC4899"></div>
+                            </div>
+                        </button>
+
+                        <!-- Dark Modes -->
+                        <button class="theme-dot-btn" data-theme="dark" onclick="ThemeMenu.setTheme('dark')" title="Dunkel">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #66BB6A"></div>
+                                <div class="theme-dot" style="background: #42A5F5"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="nord" onclick="ThemeMenu.setTheme('nord')" title="Nord">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #88C0D0"></div>
+                                <div class="theme-dot" style="background: #81A1C1"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="solarized" onclick="ThemeMenu.setTheme('solarized')" title="Solarized">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #268BD2"></div>
+                                <div class="theme-dot" style="background: #2AA198"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="dracula" onclick="ThemeMenu.setTheme('dracula')" title="Dracula">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #BD93F9"></div>
+                                <div class="theme-dot" style="background: #8BE9FD"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="ocean-dark" onclick="ThemeMenu.setTheme('ocean-dark')" title="Ozean Dunkel">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #06B6D4"></div>
+                                <div class="theme-dot" style="background: #60A5FA"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="forest-dark" onclick="ThemeMenu.setTheme('forest-dark')" title="Wald Dunkel">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #10B981"></div>
+                                <div class="theme-dot" style="background: #22C55E"></div>
+                            </div>
+                        </button>
+                        <button class="theme-dot-btn" data-theme="sunset-dark" onclick="ThemeMenu.setTheme('sunset-dark')" title="Sonnenuntergang Dunkel">
+                            <div class="theme-dot-double">
+                                <div class="theme-dot" style="background: #FB923C"></div>
+                                <div class="theme-dot" style="background: #F472B6"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="auth-header">
                 <h1 class="auth-title">KitchenHelper-AI</h1>
                 <p class="auth-subtitle" data-i18n="auth.subtitle">Dein KI-Rezeptgenerator</p>
@@ -169,15 +256,89 @@
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script>
+        // ==================== THEME MENU ====================
+        const ThemeMenu = {
+            init() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                this.setTheme(savedTheme, false);
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.theme-menu')) {
+                        this.close();
+                    }
+                });
+
+                // Update active theme dot
+                this.updateActiveDot(savedTheme);
+            },
+
+            toggle(event) {
+                event.stopPropagation();
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.toggle('show');
+            },
+
+            close() {
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.remove('show');
+            },
+
+            setTheme(theme, showMessage = true) {
+                // Set theme on document
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('colorTheme', theme);
+
+                // Update theme icon
+                const icon = document.querySelector('.theme-icon');
+                if (icon) {
+                    const darkThemes = ['dark', 'nord', 'solarized', 'dracula', 'ocean-dark', 'forest-dark', 'sunset-dark'];
+                    icon.textContent = darkThemes.includes(theme) ? '☀️' : '🌙';
+                }
+
+                // Update active dot
+                this.updateActiveDot(theme);
+
+                // Close dropdown
+                this.close();
+
+                // Success message
+                if (showMessage && typeof UI !== 'undefined') {
+                    const themeName = i18n.translate(`settings.theme_${theme}`);
+                    const msg = i18n.currentLang === 'de'
+                        ? `Farbschema "${themeName}" aktiviert!`
+                        : `Color scheme "${themeName}" activated!`;
+                    UI.success(msg);
+                }
+
+                console.log('[ThemeMenu] Set to:', theme);
+            },
+
+            updateActiveDot(theme) {
+                // Remove active state from all dots
+                document.querySelectorAll('.theme-dot-btn').forEach(btn => {
+                    btn.removeAttribute('data-theme-active');
+                });
+
+                // Add active state to current theme
+                const activeBtn = document.querySelector(`.theme-dot-btn[data-theme="${theme}"]`);
+                if (activeBtn) {
+                    activeBtn.setAttribute('data-theme-active', 'true');
+                }
+            }
+        };
+
         // Redirect if already logged in
         if (Auth.redirectIfAuthenticated()) {
             // Will redirect to dashboard
         }
 
-        // Initialize i18n
+        // Initialize i18n and theme
         document.addEventListener('DOMContentLoaded', () => {
             i18n.init();
             i18n.updateUI();
+            ThemeMenu.init();
 
             // Update lang toggle text
             const langText = document.querySelector('.lang-toggle-text');

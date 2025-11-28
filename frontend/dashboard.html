@@ -26,9 +26,92 @@
                             <span class="lang-toggle-text">DE</span>
                         </button>
 
-                        <button id="theme-toggle" class="theme-toggle" aria-label="Theme umschalten" title="Dark/Light Mode">
-                            <span class="theme-icon">🌙</span>
-                        </button>
+                        <!-- Theme Dropdown -->
+                        <div class="theme-menu">
+                            <button class="theme-toggle" onclick="ThemeMenu.toggle(event)" aria-label="Farbschema wählen" title="Farbschema">
+                                <span class="theme-icon">🌙</span>
+                            </button>
+
+                            <div class="theme-dropdown" id="theme-dropdown">
+                                <div class="theme-dropdown-grid">
+                                    <!-- Light Modes -->
+                                    <button class="theme-dot-btn" data-theme="light" onclick="ThemeMenu.setTheme('light')" title="Hell">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #4CAF50"></div>
+                                            <div class="theme-dot" style="background: #2196F3"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="sepia" onclick="ThemeMenu.setTheme('sepia')" title="Sepia">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #8B7355"></div>
+                                            <div class="theme-dot" style="background: #7B8B8E"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="ocean-light" onclick="ThemeMenu.setTheme('ocean-light')" title="Ozean Hell">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #0891B2"></div>
+                                            <div class="theme-dot" style="background: #3B82F6"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="forest-light" onclick="ThemeMenu.setTheme('forest-light')" title="Wald Hell">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #059669"></div>
+                                            <div class="theme-dot" style="background: #16A34A"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="sunset-light" onclick="ThemeMenu.setTheme('sunset-light')" title="Sonnenuntergang Hell">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #F97316"></div>
+                                            <div class="theme-dot" style="background: #EC4899"></div>
+                                        </div>
+                                    </button>
+
+                                    <!-- Dark Modes -->
+                                    <button class="theme-dot-btn" data-theme="dark" onclick="ThemeMenu.setTheme('dark')" title="Dunkel">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #66BB6A"></div>
+                                            <div class="theme-dot" style="background: #42A5F5"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="nord" onclick="ThemeMenu.setTheme('nord')" title="Nord">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #88C0D0"></div>
+                                            <div class="theme-dot" style="background: #81A1C1"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="solarized" onclick="ThemeMenu.setTheme('solarized')" title="Solarized">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #268BD2"></div>
+                                            <div class="theme-dot" style="background: #2AA198"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="dracula" onclick="ThemeMenu.setTheme('dracula')" title="Dracula">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #BD93F9"></div>
+                                            <div class="theme-dot" style="background: #8BE9FD"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="ocean-dark" onclick="ThemeMenu.setTheme('ocean-dark')" title="Ozean Dunkel">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #06B6D4"></div>
+                                            <div class="theme-dot" style="background: #60A5FA"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="forest-dark" onclick="ThemeMenu.setTheme('forest-dark')" title="Wald Dunkel">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #10B981"></div>
+                                            <div class="theme-dot" style="background: #22C55E"></div>
+                                        </div>
+                                    </button>
+                                    <button class="theme-dot-btn" data-theme="sunset-dark" onclick="ThemeMenu.setTheme('sunset-dark')" title="Sonnenuntergang Dunkel">
+                                        <div class="theme-dot-double">
+                                            <div class="theme-dot" style="background: #FB923C"></div>
+                                            <div class="theme-dot" style="background: #F472B6"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- User Menu mit Emoji + Dropdown -->
                         <div class="user-menu">
@@ -62,6 +145,7 @@
                 <nav class="tabs nav-tabs">
                     <button class="tab active" data-section="ingredients" data-i18n="nav.ingredients">Ingredients</button>
                     <button class="tab" data-section="recipes" data-i18n="nav.recipes">Recipes</button>
+                    <button class="tab" data-section="scanner" data-i18n="nav.scanner">Scanner</button>
                     <button class="tab" data-section="favorites" data-i18n="nav.favorites">Favorites</button>
                 </nav>
 
@@ -108,6 +192,67 @@
                     <!-- Recipe History -->
                     <h2 style="margin: var(--spacing-xl) 0 var(--spacing-lg);" data-i18n="recipes.history">Recent Recipes</h2>
                     <div id="recipe-history" class="grid grid-2"></div>
+                </section>
+
+                <!-- Scanner Section -->
+                <section id="scanner-section" class="section">
+                    <div class="page-header">
+                        <h1 class="page-title" data-i18n="scanner.title">📸 Food Scanner</h1>
+                    </div>
+
+                    <!-- Scanner Mode Tabs -->
+                    <div class="scanner-mode-tabs" style="margin-bottom: var(--spacing-lg);">
+                        <button class="scanner-mode-tab active" id="scanner-mode-barcode" data-i18n="scanner.mode_barcode">
+                            📷 Barcode Scanner
+                        </button>
+                        <button class="scanner-mode-tab" id="scanner-mode-ocr" data-i18n="scanner.mode_ocr">
+                            📝 OCR (Ingredients List)
+                        </button>
+                    </div>
+
+                    <!-- Barcode Scanner Section -->
+                    <div id="barcode-section" class="scanner-mode-section">
+                        <div class="card">
+                            <h3 data-i18n="scanner.barcode_title">Scan Product Barcode</h3>
+                            <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);" data-i18n="scanner.barcode_hint">
+                                Point your camera at a product barcode to get ingredient information
+                            </p>
+
+                            <!-- Scanner Reader -->
+                            <div id="scanner-reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+
+                            <!-- Scanner Controls -->
+                            <div class="scanner-controls" style="margin-top: var(--spacing-lg); text-align: center;">
+                                <button id="scanner-start" class="btn btn-primary" data-i18n="scanner.start_scan">
+                                    📷 Start Scan
+                                </button>
+                                <button id="scanner-stop" class="btn btn-danger" style="display: none;" data-i18n="scanner.stop_scan">
+                                    ⏹️ Stop Scan
+                                </button>
+                            </div>
+
+                            <!-- Scanner Result -->
+                            <div id="scanner-result" style="margin-top: var(--spacing-lg); display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- OCR Scanner Section -->
+                    <div id="ocr-section" class="scanner-mode-section" style="display: none;">
+                        <div class="card">
+                            <h3 data-i18n="scanner.ocr_title">Scan Ingredient List</h3>
+                            <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);" data-i18n="scanner.ocr_hint">
+                                Take a photo of ingredient lists on packaging to extract them
+                            </p>
+
+                            <!-- OCR Video Preview -->
+                            <div style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
+                                <video id="ocr-video" autoplay playsinline style="width: 100%; border-radius: var(--border-radius);"></video>
+                                <button id="ocr-capture" class="btn btn-primary" style="display: none; margin-top: var(--spacing-md);" onclick="Scanner.captureOCRImage()" data-i18n="scanner.capture">
+                                    📸 Capture
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Favorites Section -->
@@ -171,54 +316,6 @@
                         </form>
                     </div>
 
-                    <div class="settings-section">
-                        <h2 class="settings-title" data-i18n="settings.color_scheme">Color Scheme</h2>
-                        <p class="form-hint" data-i18n="settings.color_scheme_hint">Choose a color scheme that suits your preference</p>
-                        <div class="theme-grid">
-                            <button class="theme-card" data-theme="light" onclick="Settings.setTheme('light')">
-                                <div class="theme-preview theme-preview-light">
-                                    <div class="theme-dot" style="background: #4CAF50"></div>
-                                    <div class="theme-dot" style="background: #2196F3"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_light">Light</span>
-                            </button>
-                            <button class="theme-card" data-theme="dark" onclick="Settings.setTheme('dark')">
-                                <div class="theme-preview theme-preview-dark">
-                                    <div class="theme-dot" style="background: #66BB6A"></div>
-                                    <div class="theme-dot" style="background: #42A5F5"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_dark">Dark</span>
-                            </button>
-                            <button class="theme-card" data-theme="sepia" onclick="Settings.setTheme('sepia')">
-                                <div class="theme-preview theme-preview-sepia">
-                                    <div class="theme-dot" style="background: #8B7355"></div>
-                                    <div class="theme-dot" style="background: #7B8B8E"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_sepia">Sepia</span>
-                            </button>
-                            <button class="theme-card" data-theme="nord" onclick="Settings.setTheme('nord')">
-                                <div class="theme-preview theme-preview-nord">
-                                    <div class="theme-dot" style="background: #88C0D0"></div>
-                                    <div class="theme-dot" style="background: #81A1C1"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_nord">Nord</span>
-                            </button>
-                            <button class="theme-card" data-theme="solarized" onclick="Settings.setTheme('solarized')">
-                                <div class="theme-preview theme-preview-solarized">
-                                    <div class="theme-dot" style="background: #268BD2"></div>
-                                    <div class="theme-dot" style="background: #2AA198"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_solarized">Solarized</span>
-                            </button>
-                            <button class="theme-card" data-theme="dracula" onclick="Settings.setTheme('dracula')">
-                                <div class="theme-preview theme-preview-dracula">
-                                    <div class="theme-dot" style="background: #BD93F9"></div>
-                                    <div class="theme-dot" style="background: #8BE9FD"></div>
-                                </div>
-                                <span class="theme-name" data-i18n="settings.theme_dracula">Dracula</span>
-                            </button>
-                        </div>
-                    </div>
 
                     <div class="settings-section">
                         <h2 class="settings-title" data-i18n="settings.change_password">Change Password</h2>
@@ -351,42 +448,82 @@
     <script src="js/ui.js"></script>
     <script src="js/ingredients.js"></script>
     <script src="js/recipes.js"></script>
+    <script src="js/scanner.js"></script>
     <script src="js/favorites.js"></script>
     <script src="js/profiles.js"></script>
     <script src="js/pro-model.js"></script>
     <script src="js/user-menu.js"></script>
     <script>
-        // ==================== THEME SWITCHER ====================
-        const Theme = {
+        // ==================== THEME MENU ====================
+        const ThemeMenu = {
             init() {
                 // Load saved theme
-                const savedTheme = localStorage.getItem('kitchenhelper_theme') || 'light';
-                this.setTheme(savedTheme);
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                this.setTheme(savedTheme, false);
 
-                // Setup toggle button
-                const toggle = document.getElementById('theme-toggle');
-                if (toggle) {
-                    toggle.addEventListener('click', () => this.toggle());
-                }
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.theme-menu')) {
+                        this.close();
+                    }
+                });
+
+                // Update active theme dot
+                this.updateActiveDot(savedTheme);
             },
 
-            setTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('kitchenhelper_theme', theme);
+            toggle(event) {
+                event.stopPropagation();
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.toggle('show');
+            },
 
-                // Update icon
+            close() {
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.remove('show');
+            },
+
+            setTheme(theme, showMessage = true) {
+                // Set theme on document
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('colorTheme', theme);
+
+                // Update theme icon
                 const icon = document.querySelector('.theme-icon');
                 if (icon) {
-                    icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+                    const darkThemes = ['dark', 'nord', 'solarized', 'dracula', 'ocean-dark', 'forest-dark', 'sunset-dark'];
+                    icon.textContent = darkThemes.includes(theme) ? '☀️' : '🌙';
                 }
 
-                console.log('[Theme] Set to:', theme);
+                // Update active dot
+                this.updateActiveDot(theme);
+
+                // Close dropdown
+                this.close();
+
+                // Success message
+                if (showMessage) {
+                    const themeName = i18n.translate(`settings.theme_${theme}`);
+                    const msg = i18n.currentLang === 'de'
+                        ? `Farbschema "${themeName}" aktiviert!`
+                        : `Color scheme "${themeName}" activated!`;
+                    UI.success(msg);
+                }
+
+                console.log('[ThemeMenu] Set to:', theme);
             },
 
-            toggle() {
-                const current = document.documentElement.getAttribute('data-theme');
-                const newTheme = current === 'dark' ? 'light' : 'dark';
-                this.setTheme(newTheme);
+            updateActiveDot(theme) {
+                // Remove active state from all dots
+                document.querySelectorAll('.theme-dot-btn').forEach(btn => {
+                    btn.removeAttribute('data-theme-active');
+                });
+
+                // Add active state to current theme
+                const activeBtn = document.querySelector(`.theme-dot-btn[data-theme="${theme}"]`);
+                if (activeBtn) {
+                    activeBtn.setAttribute('data-theme-active', 'true');
+                }
             }
         };
 
@@ -397,7 +534,7 @@
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', () => {
-            Theme.init();
+            ThemeMenu.init();
             initDashboard();
         });
 
@@ -450,6 +587,9 @@
                 case 'recipes':
                     await Recipes.loadIngredientSelection();
                     await Recipes.loadHistory();
+                    break;
+                case 'scanner':
+                    await Scanner.init();
                     break;
                 case 'favorites':
                     await Favorites.load();
@@ -563,13 +703,22 @@
             },
 
             setTheme(theme, showMessage = true) {
-                // Set the theme on document element
-                document.documentElement.setAttribute('data-theme', theme);
+                // Use ThemeMenu to set the theme
+                ThemeMenu.setTheme(theme, showMessage);
 
-                // Save to localStorage
-                localStorage.setItem('colorTheme', theme);
+                // Update settings UI
+                this.updateThemeUI(theme);
+            },
 
-                // Update active state on theme cards
+            loadTheme() {
+                // Load theme from localStorage, default to 'light'
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                // Theme is already loaded by ThemeMenu.init(), just update the settings UI
+                this.updateThemeUI(savedTheme);
+            },
+
+            updateThemeUI(theme) {
+                // Update active state on theme cards in settings
                 document.querySelectorAll('.theme-card').forEach(card => {
                     if (card.getAttribute('data-theme') === theme) {
                         card.setAttribute('data-theme-active', 'true');
@@ -577,23 +726,6 @@
                         card.removeAttribute('data-theme-active');
                     }
                 });
-
-                // Success message (only if explicitly requested)
-                if (showMessage) {
-                    const themeName = i18n.currentLang === 'de'
-                        ? i18n.translate(`settings.theme_${theme}`)
-                        : i18n.translate(`settings.theme_${theme}`);
-                    const msg = i18n.currentLang === 'de'
-                        ? `Farbschema "${themeName}" aktiviert!`
-                        : `Color scheme "${themeName}" activated!`;
-                    UI.success(msg);
-                }
-            },
-
-            loadTheme() {
-                // Load theme from localStorage, default to 'light'
-                const savedTheme = localStorage.getItem('colorTheme') || 'light';
-                this.setTheme(savedTheme, false);  // Don't show message on initial load
             },
 
             deleteAccount() {

@@ -47,6 +47,73 @@ body {
     gap: var(--spacing-md);
 }
 
+/* ==================== THEME MENU ==================== */
+.theme-menu {
+    position: relative;
+}
+
+.theme-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: var(--spacing-md);
+    z-index: var(--z-modal);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+}
+
+.theme-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.theme-dropdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    min-width: 180px;
+}
+
+.theme-dot-btn {
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-dot-btn:hover {
+    background: var(--bg);
+    border-color: var(--border);
+}
+
+.theme-dot-btn[data-theme-active="true"] {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.theme-dot-double {
+    display: flex;
+    gap: 4px;
+}
+
+.theme-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
 /* ==================== USER MENU ==================== */
 .user-menu {
     position: relative;
