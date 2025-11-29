@@ -36,30 +36,35 @@
                                 <div class="theme-dropdown-grid">
                                     <!-- Light Modes -->
                                     <button class="theme-dot-btn" data-theme="light" onclick="ThemeMenu.setTheme('light')" title="Hell">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌞</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #4CAF50"></div>
                                             <div class="theme-dot" style="background: #2196F3"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="sepia" onclick="ThemeMenu.setTheme('sepia')" title="Sepia">
+                                        <span style="font-size: 14px; margin-right: 4px;">📜</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #8B7355"></div>
                                             <div class="theme-dot" style="background: #7B8B8E"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="ocean-light" onclick="ThemeMenu.setTheme('ocean-light')" title="Ozean Hell">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌊</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #0891B2"></div>
                                             <div class="theme-dot" style="background: #3B82F6"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="forest-light" onclick="ThemeMenu.setTheme('forest-light')" title="Wald Hell">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌲</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #059669"></div>
                                             <div class="theme-dot" style="background: #16A34A"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="sunset-light" onclick="ThemeMenu.setTheme('sunset-light')" title="Sonnenuntergang Hell">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌅</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #F97316"></div>
                                             <div class="theme-dot" style="background: #EC4899"></div>
@@ -68,42 +73,49 @@
 
                                     <!-- Dark Modes -->
                                     <button class="theme-dot-btn" data-theme="dark" onclick="ThemeMenu.setTheme('dark')" title="Dunkel">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌙</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #66BB6A"></div>
                                             <div class="theme-dot" style="background: #42A5F5"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="nord" onclick="ThemeMenu.setTheme('nord')" title="Nord">
+                                        <span style="font-size: 14px; margin-right: 4px;">❄️</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #88C0D0"></div>
                                             <div class="theme-dot" style="background: #81A1C1"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="solarized" onclick="ThemeMenu.setTheme('solarized')" title="Solarized">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌃</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #268BD2"></div>
                                             <div class="theme-dot" style="background: #2AA198"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="dracula" onclick="ThemeMenu.setTheme('dracula')" title="Dracula">
+                                        <span style="font-size: 14px; margin-right: 4px;">🧛</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #BD93F9"></div>
                                             <div class="theme-dot" style="background: #8BE9FD"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="ocean-dark" onclick="ThemeMenu.setTheme('ocean-dark')" title="Ozean Dunkel">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌊</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #06B6D4"></div>
                                             <div class="theme-dot" style="background: #60A5FA"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="forest-dark" onclick="ThemeMenu.setTheme('forest-dark')" title="Wald Dunkel">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌲</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #10B981"></div>
                                             <div class="theme-dot" style="background: #22C55E"></div>
                                         </div>
                                     </button>
                                     <button class="theme-dot-btn" data-theme="sunset-dark" onclick="ThemeMenu.setTheme('sunset-dark')" title="Sonnenuntergang Dunkel">
+                                        <span style="font-size: 14px; margin-right: 4px;">🌆</span>
                                         <div class="theme-dot-double">
                                             <div class="theme-dot" style="background: #FB923C"></div>
                                             <div class="theme-dot" style="background: #F472B6"></div>
@@ -171,6 +183,13 @@
                 <section id="recipes-section" class="section">
                     <div class="page-header">
                         <h1 class="page-title" data-i18n="recipes.title">🍽️ Generate Recipes</h1>
+                        <div class="page-header-actions">
+                            <label class="toggle" style="font-size: 14px;">
+                                <input type="checkbox" id="strict-ingredients-toggle" onchange="Recipes.toggleStrictMode(this.checked)">
+                                <span class="toggle-slider"></span>
+                                <span data-i18n="recipes.only_available">Nur vorhandene Zutaten</span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Ingredient Selection -->
@@ -488,11 +507,24 @@
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('colorTheme', theme);
 
-                // Update theme icon
+                // Update theme icon based on theme
                 const icon = document.querySelector('.theme-icon');
                 if (icon) {
-                    const darkThemes = ['dark', 'nord', 'solarized', 'dracula', 'ocean-dark', 'forest-dark', 'sunset-dark'];
-                    icon.textContent = darkThemes.includes(theme) ? '☀️' : '🌙';
+                    const themeIcons = {
+                        'light': '🌞',
+                        'sepia': '📜',
+                        'ocean-light': '🌊',
+                        'forest-light': '🌲',
+                        'sunset-light': '🌅',
+                        'dark': '🌙',
+                        'nord': '❄️',
+                        'solarized': '🌃',
+                        'dracula': '🧛',
+                        'ocean-dark': '🌊',
+                        'forest-dark': '🌲',
+                        'sunset-dark': '🌆'
+                    };
+                    icon.textContent = themeIcons[theme] || '🌙';
                 }
 
                 // Update active dot
@@ -587,6 +619,7 @@
                 case 'recipes':
                     await Recipes.loadIngredientSelection();
                     await Recipes.loadHistory();
+                    Recipes.loadStrictMode();
                     break;
                 case 'scanner':
                     await Scanner.init();

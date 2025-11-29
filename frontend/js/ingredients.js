@@ -643,11 +643,12 @@ const Ingredients = {
 
             return `
                 <label class="spice-checkbox ${isOwned ? 'owned' : ''}"
-                       onclick="Ingredients.toggleSpice('${spiceName}', ${existing ? existing.id : 'null'})"
+                       onclick="Ingredients.toggleSpice('${spiceName}', ${existing ? existing.id : 'null'}, this)"
                        style="cursor: pointer;">
                     <span class="spice-icon">${spice.icon}</span>
                     <span class="spice-name">${spiceName}</span>
-                    ${isOwned ? `<span class="spice-owned">✓</span>` : `<span class="spice-add">+</span>`}
+                    <span class="spice-owned" style="display: ${isOwned ? 'inline' : 'none'}">✓</span>
+                    <span class="spice-add" style="display: ${isOwned ? 'none' : 'inline'}">+</span>
                 </label>
             `;
         }).join('');
@@ -671,7 +672,7 @@ const Ingredients = {
         }, 100);
     },
 
-    async toggleSpice(spiceName, spiceId) {
+    async toggleSpice(spiceName, spiceId, labelElement) {
         try {
             if (spiceId) {
                 // Remove spice
@@ -680,9 +681,19 @@ const Ingredients = {
                     ? `${spiceName} entfernt`
                     : `${spiceName} removed`;
                 UI.success(msg);
+
+                // Update UI locally without reload
+                if (labelElement) {
+                    labelElement.classList.remove('owned');
+                    const ownedSpan = labelElement.querySelector('.spice-owned');
+                    const addSpan = labelElement.querySelector('.spice-add');
+                    if (ownedSpan) ownedSpan.style.display = 'none';
+                    if (addSpan) addSpan.style.display = 'inline';
+                    labelElement.setAttribute('onclick', `Ingredients.toggleSpice('${spiceName}', null, this)`);
+                }
             } else {
                 // Add spice
-                await api.createIngredient({
+                const response = await api.createIngredient({
                     name: spiceName,
                     category: 'Gewürze',
                     is_permanent: true
@@ -691,11 +702,20 @@ const Ingredients = {
                     ? `${spiceName} hinzugefügt`
                     : `${spiceName} added`;
                 UI.success(msg);
+
+                // Update UI locally without reload
+                if (labelElement && response.ingredient) {
+                    labelElement.classList.add('owned');
+                    const ownedSpan = labelElement.querySelector('.spice-owned');
+                    const addSpan = labelElement.querySelector('.spice-add');
+                    if (ownedSpan) ownedSpan.style.display = 'inline';
+                    if (addSpan) addSpan.style.display = 'none';
+                    labelElement.setAttribute('onclick', `Ingredients.toggleSpice('${spiceName}', ${response.ingredient.id}, this)`);
+                }
             }
 
-            // Reload items and refresh modal
+            // Silently reload items in background
             await this.load();
-            this.showSpiceQuickSelect();
         } catch (error) {
             UI.error(error.message);
         }

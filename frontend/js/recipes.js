@@ -3,6 +3,7 @@
 const Recipes = {
     generatedRecipes: [],
     selectedIngredients: new Set(),
+    strictIngredientsMode: false,
 
     // Load ingredient selection checkboxes
     async loadIngredientSelection() {
@@ -304,6 +305,27 @@ const Recipes = {
         } catch (error) {
             console.error('[Recipes] Portion calculation error:', error);
             UI.error(error.message);
+        }
+    },
+
+    // Toggle strict ingredients mode
+    toggleStrictMode(enabled) {
+        this.strictIngredientsMode = enabled;
+        localStorage.setItem('strictIngredientsMode', enabled);
+
+        const msg = i18n.currentLang === 'de'
+            ? (enabled ? 'Nur vorhandene Zutaten aktiviert' : 'Alle Zutaten aktiviert')
+            : (enabled ? 'Only available ingredients enabled' : 'All ingredients enabled');
+        UI.success(msg);
+    },
+
+    // Load strict mode state
+    loadStrictMode() {
+        const saved = localStorage.getItem('strictIngredientsMode');
+        this.strictIngredientsMode = saved === 'true';
+        const toggle = document.getElementById('strict-ingredients-toggle');
+        if (toggle) {
+            toggle.checked = this.strictIngredientsMode;
         }
     }
 };

@@ -253,14 +253,47 @@ const Profiles = {
             return type ? type.label : p.profile_type;
         }).join(', ');
 
+        // Check if collapsed state is saved
+        const isCollapsed = localStorage.getItem('profilesCollapsed') === 'true';
+
         badge.innerHTML = `
-            <div class="active-profiles-group" title="${i18n.t('profiles.active')}: ${profileNames}">
+            <button class="active-profiles-toggle" onclick="Profiles.toggleBadge()" title="${isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden'}">
+                ${isCollapsed ? '▶' : '▼'}
+            </button>
+            <div class="active-profiles-group ${isCollapsed ? 'collapsed' : ''}" onclick="Profiles.goToProfilesPage()">
                 ${activeProfiles.map(p => {
                     const info = PROFILE_INFO[p.profile_type] || {};
-                    return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};">${info.emoji || ''}</span>`;
+                    const types = CONFIG.getProfileTypes();
+                    const type = types.find(t => t.value === p.profile_type);
+                    const name = type ? type.label : p.profile_type;
+                    return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};" data-name="${name}">${info.emoji || ''}</span>`;
                 }).join('')}
             </div>
         `;
+    },
+
+    // Toggle badge visibility
+    toggleBadge() {
+        const group = document.querySelector('.active-profiles-group');
+        const toggle = document.querySelector('.active-profiles-toggle');
+        if (!group || !toggle) return;
+
+        const isCollapsed = group.classList.toggle('collapsed');
+        localStorage.setItem('profilesCollapsed', isCollapsed);
+        toggle.textContent = isCollapsed ? '▶' : '▼';
+        toggle.title = isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden';
+    },
+
+    // Navigate to profiles page
+    goToProfilesPage() {
+        // Deactivate all tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // Deactivate all sections
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Activate profiles section
+        document.getElementById('profiles-section').classList.add('active');
+        // Load profiles
+        this.load();
     },
 
     // Render profiles as checkboxes

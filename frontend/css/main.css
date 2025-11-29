@@ -103,15 +103,29 @@ body {
 }
 
 .theme-dot-double {
-    display: flex;
-    gap: 4px;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .theme-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+}
+
+.theme-dot:first-child {
+    left: 0;
+    border-radius: 50% 0 0 50%;
+}
+
+.theme-dot:last-child {
+    right: 0;
+    border-radius: 0 50% 50% 0;
 }
 
 /* ==================== USER MENU ==================== */
@@ -826,12 +840,35 @@ body {
 .active-profiles-badge {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .active-profiles-group {
     display: flex;
     gap: 4px;
     cursor: pointer;
+    max-height: 28px;
+    overflow: hidden;
+    transition: max-height var(--transition-base);
+}
+
+.active-profiles-group.collapsed {
+    max-height: 0;
+}
+
+.active-profiles-toggle {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: transform var(--transition-fast);
+    display: flex;
+    align-items: center;
+}
+
+.active-profiles-toggle:hover {
+    transform: scale(1.1);
 }
 
 .active-profile-badge {
@@ -845,10 +882,28 @@ body {
     color: white;
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-fast);
+    position: relative;
 }
 
 .active-profile-badge:hover {
     transform: scale(1.1);
+}
+
+.active-profile-badge:hover::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-dark);
+    color: var(--text);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    pointer-events: none;
 }
 
 /* ==================== INGREDIENT SELECTION ==================== */

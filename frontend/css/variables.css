@@ -290,7 +290,7 @@
     --shadow-xl: 0 20px 25px rgba(14, 116, 144, 0.18);
 }
 
-/* Ocean Dark - Deep blue, calming */
+/* Ocean Dark - Deep blue, calming - Improved contrast */
 [data-theme="ocean-dark"] {
     /* Colors */
     --primary: #06B6D4;
@@ -307,14 +307,14 @@
     --info: #60A5FA;
     --info-light: #26303A;
 
-    /* Neutrals */
-    --text: #E0F2FE;
-    --text-light: #BAE6FD;
-    --text-muted: #7DD3FC;
+    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    --text: #F0F9FF;
+    --text-light: #E0F2FE;
+    --text-muted: #BAE6FD;
     --bg: #0C4A6E;
     --bg-dark: #082F49;
     --white: #075985;
-    --black: #E0F2FE;
+    --black: #F0F9FF;
     --border: #0369A1;
     --border-light: #075985;
 
@@ -360,7 +360,7 @@
     --shadow-xl: 0 20px 25px rgba(4, 120, 87, 0.18);
 }
 
-/* Forest Dark - Deep green, natural */
+/* Forest Dark - Deep green, natural - Improved contrast */
 [data-theme="forest-dark"] {
     /* Colors */
     --primary: #10B981;
@@ -377,14 +377,14 @@
     --info: #06B6D4;
     --info-light: #263A36;
 
-    /* Neutrals */
-    --text: #D1FAE5;
-    --text-light: #A7F3D0;
-    --text-muted: #6EE7B7;
+    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    --text: #ECFDF5;
+    --text-light: #D1FAE5;
+    --text-muted: #A7F3D0;
     --bg: #064E3B;
     --bg-dark: #022C22;
     --white: #065F46;
-    --black: #D1FAE5;
+    --black: #ECFDF5;
     --border: #047857;
     --border-light: #065F46;
 
@@ -430,7 +430,7 @@
     --shadow-xl: 0 20px 25px rgba(124, 45, 18, 0.18);
 }
 
-/* Sunset Dark - Warm orange/pink */
+/* Sunset Dark - Warm orange/pink - Improved contrast */
 [data-theme="sunset-dark"] {
     /* Colors */
     --primary: #FB923C;
@@ -447,14 +447,14 @@
     --info: #FBBF24;
     --info-light: #3A3226;
 
-    /* Neutrals */
-    --text: #FFF7ED;
-    --text-light: #FFEDD5;
-    --text-muted: #FED7AA;
+    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    --text: #FFFBF5;
+    --text-light: #FFF7ED;
+    --text-muted: #FFEDD5;
     --bg: #7C2D12;
     --bg-dark: #431407;
     --white: #9A3412;
-    --black: #FFF7ED;
+    --black: #FFFBF5;
     --border: #C2410C;
     --border-light: #9A3412;
 
