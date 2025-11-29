@@ -307,13 +307,13 @@
     --info: #60A5FA;
     --info-light: #26303A;
 
-    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    /* Neutrals - Enhanced contrast for better readability */
     --text: #F0F9FF;
     --text-light: #E0F2FE;
     --text-muted: #BAE6FD;
-    --bg: #0C4A6E;
-    --bg-dark: #082F49;
-    --white: #075985;
+    --bg: #0A3A52;
+    --bg-dark: #062838;
+    --white: #0C4A6E;
     --black: #F0F9FF;
     --border: #0369A1;
     --border-light: #075985;
@@ -377,12 +377,12 @@
     --info: #06B6D4;
     --info-light: #263A36;
 
-    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    /* Neutrals - Enhanced contrast for better readability */
     --text: #ECFDF5;
     --text-light: #D1FAE5;
     --text-muted: #A7F3D0;
-    --bg: #064E3B;
-    --bg-dark: #022C22;
+    --bg: #053D2E;
+    --bg-dark: #021F18;
     --white: #065F46;
     --black: #ECFDF5;
     --border: #047857;
@@ -447,12 +447,12 @@
     --info: #FBBF24;
     --info-light: #3A3226;
 
-    /* Neutrals - Improved contrast (WCAG AA compliant) */
+    /* Neutrals - Enhanced contrast for better readability */
     --text: #FFFBF5;
     --text-light: #FFF7ED;
     --text-muted: #FFEDD5;
-    --bg: #7C2D12;
-    --bg-dark: #431407;
+    --bg: #6B240E;
+    --bg-dark: #3D1405;
     --white: #9A3412;
     --black: #FFFBF5;
     --border: #C2410C;

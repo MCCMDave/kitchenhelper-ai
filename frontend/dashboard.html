@@ -20,11 +20,26 @@
                         <div id="active-profiles" class="active-profiles-badge">
                             <!-- Wird dynamisch befüllt -->
                         </div>
-                        <!-- Language Toggle -->
-                        <button class="lang-toggle header-lang-toggle" onclick="i18n.toggle()" title="Sprache / Language">
-                            <span class="lang-icon">🌍</span>
-                            <span class="lang-toggle-text">DE</span>
-                        </button>
+                        <!-- Language Dropdown -->
+                        <div class="lang-menu">
+                            <button class="lang-toggle header-lang-toggle" onclick="i18n.toggleDropdown(event)" title="Sprache / Language">
+                                <span class="lang-icon">🌍</span>
+                                <span class="lang-toggle-text">DE</span>
+                            </button>
+
+                            <div class="lang-dropdown" id="lang-dropdown">
+                                <button class="lang-option" onclick="i18n.setLanguage('de')">🇩🇪 Deutsch</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('en')">🇬🇧 English</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('fr')">🇫🇷 Français</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('es')">🇪🇸 Español</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('it')">🇮🇹 Italiano</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('pt')">🇵🇹 Português</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('sv')">🇸🇪 Svenska</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('no')">🇳🇴 Norsk</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('da')">🇩🇰 Dansk</button>
+                                <button class="lang-option" onclick="i18n.setLanguage('nl')">🇳🇱 Nederlands</button>
+                            </div>
+                        </div>
 
                         <!-- Theme Dropdown -->
                         <div class="theme-menu">
@@ -530,8 +545,8 @@
                 // Update active dot
                 this.updateActiveDot(theme);
 
-                // Close dropdown
-                this.close();
+                // Don't close dropdown - keep it open
+                // this.close();
 
                 // Success message
                 if (showMessage) {

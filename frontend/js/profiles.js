@@ -256,32 +256,42 @@ const Profiles = {
         // Check if collapsed state is saved
         const isCollapsed = localStorage.getItem('profilesCollapsed') === 'true';
 
+        // Generate mini badges for collapsed state
+        const miniBadges = activeProfiles.map(p => {
+            const info = PROFILE_INFO[p.profile_type] || {};
+            return info.emoji || '';
+        }).join('');
+
         badge.innerHTML = `
             <button class="active-profiles-toggle" onclick="Profiles.toggleBadge()" title="${isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden'}">
                 ${isCollapsed ? '▶' : '▼'}
             </button>
-            <div class="active-profiles-group ${isCollapsed ? 'collapsed' : ''}" onclick="Profiles.goToProfilesPage()">
-                ${activeProfiles.map(p => {
-                    const info = PROFILE_INFO[p.profile_type] || {};
-                    const types = CONFIG.getProfileTypes();
-                    const type = types.find(t => t.value === p.profile_type);
-                    const name = type ? type.label : p.profile_type;
-                    return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};" data-name="${name}">${info.emoji || ''}</span>`;
-                }).join('')}
-            </div>
+            ${isCollapsed ? `
+                <div class="active-profiles-mini-circle" onclick="Profiles.goToProfilesPage()" title="Aktive Präferenzen">
+                    ${miniBadges}
+                </div>
+            ` : `
+                <div class="active-profiles-group" onclick="Profiles.goToProfilesPage()">
+                    ${activeProfiles.map(p => {
+                        const info = PROFILE_INFO[p.profile_type] || {};
+                        const types = CONFIG.getProfileTypes();
+                        const type = types.find(t => t.value === p.profile_type);
+                        const name = type ? type.label : p.profile_type;
+                        return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};" data-name="${name}" title="${name}">${info.emoji || ''}</span>`;
+                    }).join('')}
+                </div>
+            `}
         `;
     },
 
     // Toggle badge visibility
     toggleBadge() {
-        const group = document.querySelector('.active-profiles-group');
-        const toggle = document.querySelector('.active-profiles-toggle');
-        if (!group || !toggle) return;
+        const currentState = localStorage.getItem('profilesCollapsed') === 'true';
+        const newState = !currentState;
+        localStorage.setItem('profilesCollapsed', newState);
 
-        const isCollapsed = group.classList.toggle('collapsed');
-        localStorage.setItem('profilesCollapsed', isCollapsed);
-        toggle.textContent = isCollapsed ? '▶' : '▼';
-        toggle.title = isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden';
+        // Re-render the badge with new state
+        this.updateBadge();
     },
 
     // Navigate to profiles page

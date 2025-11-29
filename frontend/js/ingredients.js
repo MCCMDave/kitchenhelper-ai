@@ -714,8 +714,8 @@ const Ingredients = {
                 }
             }
 
-            // Silently reload items in background
-            await this.load();
+            // Don't reload - UI is already updated locally to prevent flickering
+            // await this.load();
         } catch (error) {
             UI.error(error.message);
         }
