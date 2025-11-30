@@ -12,8 +12,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Persistent storage for database
-      - ./backend/database:/app/database
+      # Persistent storage for database (auto-created if not exists)
+      - ./database:/app/database
       # Persistent storage for logs
       - ./logs:/app/logs
     environment:
