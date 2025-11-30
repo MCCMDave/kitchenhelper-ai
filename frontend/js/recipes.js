@@ -47,7 +47,7 @@ const Recipes = {
         document.getElementById('selected-count').textContent = `${count} ${i18n.t('recipes.selected')}`;
     },
 
-    // Generate recipes
+    // Generate recipes with streaming (if available)
     async generate() {
         if (this.selectedIngredients.size === 0) {
             UI.warning(i18n.t('recipes.select_warning') || 'Please select at least one ingredient!');
@@ -59,7 +59,33 @@ const Recipes = {
 
         btn.disabled = true;
         btn.textContent = 'Generiere...';
-        UI.showLoading(container);
+
+        // Check if streaming is supported (only for AI provider with Ollama)
+        const useStreaming = false; // TODO: Enable when ready to test (set to true)
+
+        if (useStreaming) {
+            this.generateWithStreaming();
+        } else {
+            this.generateClassic();
+        }
+    },
+
+    // Classic generation (current method)
+    async generateClassic() {
+        const container = document.getElementById('recipes-list');
+        const btn = document.getElementById('generate-btn');
+
+        // Enhanced loading message with Pro promotion
+        const loadingMsg = i18n.currentLang === 'de'
+            ? '🤖 AI generiert Rezept... Dies kann 30-60s dauern.<br><small style="opacity: 0.7;">💡 Mit Pro-Modell: 10x schneller (2-3s)</small>'
+            : '🤖 AI generating recipe... This may take 30-60s.<br><small style="opacity: 0.7;">💡 With Pro Model: 10x faster (2-3s)</small>';
+
+        container.innerHTML = `
+            <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-muted);">
+                <div class="spinner"></div>
+                <p style="margin-top: var(--spacing-md);">${loadingMsg}</p>
+            </div>
+        `;
 
         try {
             // Get active diet profiles
@@ -94,6 +120,123 @@ const Recipes = {
         } catch (error) {
             UI.showError(container, i18n.t('recipes.error_generating') + ': ' + error.message);
         } finally {
+            const btn = document.getElementById('generate-btn');
+            btn.disabled = false;
+            btn.textContent = i18n.t('recipes.generate');
+        }
+    },
+
+    // Streaming generation (like ChatGPT - text appears word by word)
+    async generateWithStreaming() {
+        const container = document.getElementById('recipes-list');
+        const btn = document.getElementById('generate-btn');
+
+        // Show streaming UI
+        const streamingMsg = i18n.currentLang === 'de'
+            ? '🤖 AI schreibt Rezept...'
+            : '🤖 AI writing recipe...';
+
+        container.innerHTML = `
+            <div style="padding: var(--spacing-xl);">
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); color: var(--text-muted);">
+                    <div class="spinner" style="width: 20px; height: 20px;"></div>
+                    <span>${streamingMsg}</span>
+                </div>
+                <div id="streaming-output" style="
+                    font-family: monospace;
+                    white-space: pre-wrap;
+                    background: var(--bg-secondary);
+                    padding: var(--spacing-md);
+                    border-radius: var(--radius-md);
+                    min-height: 200px;
+                    color: var(--text-light);
+                "></div>
+            </div>
+        `;
+
+        const outputDiv = document.getElementById('streaming-output');
+
+        try {
+            // Get active diet profiles
+            let dietProfiles = [];
+            try {
+                const profilesResponse = await api.getProfiles(true);
+                dietProfiles = profilesResponse.profiles.map(p => p.profile_type);
+            } catch (e) {
+                // Ignore
+            }
+
+            // Connect to SSE stream
+            const token = localStorage.getItem('token');
+            const url = `${api.API_BASE_URL}/recipes/generate/stream`;
+
+            const eventSource = new EventSource(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            let fullText = '';
+
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.error) {
+                    eventSource.close();
+                    UI.error(data.error);
+                    btn.disabled = false;
+                    btn.textContent = i18n.t('recipes.generate');
+                    return;
+                }
+
+                if (data.done) {
+                    eventSource.close();
+
+                    // Parse final JSON and display recipes
+                    try {
+                        // Extract JSON from fullText
+                        let jsonText = fullText;
+                        if (fullText.includes('```json')) {
+                            jsonText = fullText.split('```json')[1].split('```')[0].trim();
+                        } else if (fullText.includes('```')) {
+                            jsonText = fullText.split('```')[1].split('```')[0].trim();
+                        }
+
+                        const recipes = JSON.parse(jsonText);
+                        this.generatedRecipes = recipes;
+                        this.renderGeneratedRecipes();
+
+                        UI.success(i18n.currentLang === 'de' ? 'Rezept fertig!' : 'Recipe complete!');
+                    } catch (e) {
+                        console.error('Parse error:', e);
+                        UI.error('Failed to parse recipe');
+                    }
+
+                    btn.disabled = false;
+                    btn.textContent = i18n.t('recipes.generate');
+                    return;
+                }
+
+                if (data.token) {
+                    fullText += data.token;
+                    outputDiv.textContent = fullText;
+
+                    // Auto-scroll to bottom
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                }
+            };
+
+            eventSource.onerror = (error) => {
+                console.error('SSE error:', error);
+                eventSource.close();
+                UI.error('Streaming failed');
+                btn.disabled = false;
+                btn.textContent = i18n.t('recipes.generate');
+            };
+
+        } catch (error) {
+            console.error('Streaming error:', error);
+            UI.error(error.message);
             btn.disabled = false;
             btn.textContent = i18n.t('recipes.generate');
         }

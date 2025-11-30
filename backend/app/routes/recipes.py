@@ -44,6 +44,87 @@ def increment_recipe_count(user: User, db: Session):
     user.last_recipe_date = datetime.utcnow()
     db.commit()
 
+@router.post("/generate/stream")
+def generate_recipes_stream(
+    request: RecipeGenerateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Stream recipe generation in real-time (Server-Sent Events)
+
+    - Returns text tokens as they are generated
+    - User sees AI "typing" the recipe live
+    - Only works with Ollama (Free tier) - Pro users use fast non-streaming Gemini
+    """
+    # 1. Daily Limit Check
+    if not check_daily_limit(current_user, db):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={"error": "daily_limit_reached", "message": "Tageslimit erreicht"}
+        )
+
+    # 2. Load ingredients
+    ingredients = db.query(Ingredient).filter(
+        Ingredient.id.in_(request.ingredient_ids),
+        Ingredient.user_id == current_user.id
+    ).all()
+
+    if not ingredients:
+        raise HTTPException(status_code=400, detail="Keine Zutaten gefunden")
+
+    ingredient_names = [ing.name for ing in ingredients]
+
+    # 3. Get diabetes unit
+    diabetes_unit = request.diabetes_unit or "KE"
+    active_diabetes_profile = db.query(DietProfile).filter(
+        DietProfile.user_id == current_user.id,
+        DietProfile.profile_type == "diabetic",
+        DietProfile.is_active == True
+    ).first()
+
+    if active_diabetes_profile and active_diabetes_profile.settings_json:
+        try:
+            settings = json.loads(active_diabetes_profile.settings_json)
+            diabetes_unit = settings.get("unit", "KE")
+        except:
+            pass
+
+    # 4. Stream generator function
+    def event_stream():
+        """SSE format: data: <content>\n\n"""
+        try:
+            for token in ai_generator.generate_with_streaming(
+                ingredients=ingredient_names,
+                count=3,
+                servings=request.servings,
+                diet_profiles=request.diet_profiles,
+                diabetes_unit=diabetes_unit,
+                language=request.language,
+                user_tier=current_user.subscription_tier.value
+            ):
+                # SSE format
+                yield f"data: {json.dumps({'token': token})}\n\n"
+
+            # Signal completion
+            yield f"data: {json.dumps({'done': True})}\n\n"
+
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+    # Increment counter
+    increment_recipe_count(current_user, db)
+
+    # Return SSE stream
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"  # Disable nginx buffering
+        }
+    )
+
 @router.post("/generate", response_model=RecipeListResponse)
 def generate_recipes(
     request: RecipeGenerateRequest,

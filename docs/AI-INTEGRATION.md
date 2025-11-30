@@ -28,11 +28,21 @@ Recipe JSON Response
 
 | Tier | Provider | Generierungszeit | Kosten | Datenschutz |
 |------|----------|------------------|--------|-------------|
-| Free | Ollama | ~7-10s | 0€ | ✅ Lokal |
-| Pro  | Gemini | ~2-3s | ~0.001€/Rezept | ⚠️ Cloud |
-| Pro  | Ollama (Fallback) | ~7-10s | 0€ | ✅ Lokal |
+| Free | Ollama (llama3.2:3B) | ~35-40s | 0€ | ✅ Lokal |
+| Pro  | Gemini Flash | ~2-3s | ~0.001€/Rezept | ⚠️ Cloud |
+| Pro  | Ollama (Fallback) | ~35-40s | 0€ | ✅ Lokal |
 
-**User-Wahrnehmung:** 2-3x Geschwindigkeitsunterschied deutlich spürbar!
+**User-Wahrnehmung:** 10-15x Geschwindigkeitsunterschied macht Premium sehr attraktiv!
+
+**Gemessene Performance (Pi 5, 8GB RAM, CPU-only):**
+- **llama3.2:latest (3B):** 4,3 tokens/s, Q4_K_M Quantisierung
+  - Rezeptgenerierung: ~35-40s für mittleres Rezept
+  - Qualität: Gut, wenige Fehler
+- **llama3.2:1b:** 7,8 tokens/s (1,8x schneller)
+  - Rezeptgenerierung: ~18-20s
+  - Qualität: ❌ **Unbrauchbar** (Halluzinationen, falsche Zutaten)
+
+**Empfehlung:** llama3.2:latest (3B) nutzen - Qualität >> Geschwindigkeit
 
 ## Setup
 

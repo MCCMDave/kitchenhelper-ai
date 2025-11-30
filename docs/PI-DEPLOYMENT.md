@@ -48,7 +48,7 @@ cd ~
 git clone https://github.com/MCCMDave/kitchenhelper-ai.git
 
 # Username: MCCMDave
-# Password: <DEIN-GITHUB-PERSONAL-ACCESS-TOKEN>
+# Password: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDM1uSPZPyblIi0eCgKu+RW76CNxeXKrD7P9r2maIb7/ dave@dave
 
 # In Projekt wechseln
 cd kitchenhelper-ai
@@ -98,6 +98,10 @@ curl -fsSL https://ollama.ai/install.sh | sh
 
 # Modell laden (~2GB, dauert 2-5 Min)
 ollama pull llama3.2
+
+# WICHTIG: Nutze llama3.2:latest (3B), NICHT :1b!
+# :1b ist 2x schneller (18s statt 38s), aber Qualität unbrauchbar
+# (Halluzinationen, falsche Zutaten, z.B. "Hähnchen in Carbonara")
 
 # Test
 curl http://localhost:11434/api/tags

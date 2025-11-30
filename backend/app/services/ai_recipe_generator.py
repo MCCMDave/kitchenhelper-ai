@@ -190,6 +190,54 @@ class AIRecipeGenerator:
 
         return recipes
 
+    def generate_with_streaming(
+        self,
+        ingredients: List[str],
+        count: int,
+        servings: int,
+        diet_profiles: Optional[List[str]],
+        diabetes_unit: str,
+        language: str,
+        user_tier: str = "free"
+    ):
+        """
+        Stream recipe generation tokens in real-time (SSE-compatible)
+        Yields text chunks as they arrive from Ollama
+
+        NOTE: Gemini API doesn't support streaming in the same way,
+        so this is Ollama-only for now. Pro users get fast non-streamed Gemini.
+        """
+        prompt = self._build_prompt(ingredients, count, servings, diet_profiles, diabetes_unit, language)
+
+        # Ollama API Request with streaming
+        url = f"{self.ollama_base_url}/api/generate"
+        payload = {
+            "model": self.ollama_model,
+            "prompt": prompt,
+            "stream": True,  # Enable streaming!
+            "options": {
+                "temperature": 0.7,
+                "num_predict": 2048,
+            }
+        }
+
+        # Stream response
+        response = requests.post(url, json=payload, stream=True, timeout=120)
+        response.raise_for_status()
+
+        # Yield chunks as they arrive
+        full_text = ""
+        for line in response.iter_lines():
+            if line:
+                chunk = json.loads(line)
+                if "response" in chunk:
+                    token = chunk["response"]
+                    full_text += token
+                    yield token
+
+        # After streaming completes, parse and return final JSON
+        # (This will be handled by the route, not yielded here)
+
     def _build_prompt(
         self,
         ingredients: List[str],
