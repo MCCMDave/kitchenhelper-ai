@@ -21,6 +21,14 @@ services:
       - DATABASE_URL=${DATABASE_URL:-sqlite:///./database/kitchenhelper.db}
       - DEBUG=${DEBUG:-False}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8000}
+      # AI Providers
+      - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash-exp}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2}
+    extra_hosts:
+      # Allow container to access host's Ollama service
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     # Resource limits (optimized for Raspberry Pi)
     mem_limit: 512m

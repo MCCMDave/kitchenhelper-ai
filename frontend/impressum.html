@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum - KitchenHelper-AI</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .impressum-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .impressum-container h1 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        .impressum-container h2 {
+            color: var(--text);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        .impressum-container p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+        .impressum-container strong {
+            color: var(--text);
+        }
+        .impressum-container a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .impressum-container a:hover {
+            text-decoration: underline;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: var(--primary-dark);
+        }
+        .powered-by {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+        .powered-by h3 {
+            color: var(--text);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .tech-list {
+            list-style: none;
+            padding: 0;
+        }
+        .tech-list li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+        }
+        .tech-list a {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="impressum-container">
+        <a href="index.html" class="back-btn">← Zurück zur Startseite</a>
+
+        <h1>Impressum</h1>
+
+        <h2>Angaben gemäß § 5 TMG</h2>
+        <p>
+            <strong>Melucio-Labs</strong><br>
+            David Vaupel<br>
+            Hamburger Chaussee 30<br>
+            14641 Nauen<br>
+            Deutschland
+        </p>
+
+        <h2>Kontakt</h2>
+        <p>
+            <strong>E-Mail:</strong> <span id="email-placeholder">[E-Mail wird später hinzugefügt]</span><br>
+            <strong>Hinweis:</strong> Eine offizielle E-Mail-Adresse wird in Kürze eingerichtet.
+        </p>
+
+        <h2>Verantwortlich für den Inhalt</h2>
+        <p>
+            David Vaupel<br>
+            Anschrift wie oben
+        </p>
+
+        <h2>Haftungsausschluss</h2>
+
+        <h3>Haftung für Inhalte</h3>
+        <p>
+            Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
+        </p>
+
+        <h3>Haftung für Links</h3>
+        <p>
+            Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+        </p>
+
+        <h2>Datenschutz</h2>
+        <p>
+            Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies stets auf freiwilliger Basis.
+        </p>
+        <p>
+            <strong>Wichtig:</strong> Wir verwenden lokale Verschlüsselung für Ihre Daten. Im Free-Modus werden Daten serverseitig verschlüsselt (SSE). Im Pro-Modus nutzen wir End-to-End-Verschlüsselung (E2EE), sodass nur Sie Zugriff auf Ihre Rezepte und Präferenzen haben.
+        </p>
+        <p>
+            Eine ausführliche Datenschutzerklärung finden Sie in der Dokumentation: <a href="docs/DATA-ENCRYPTION.md" target="_blank">DATA-ENCRYPTION.md</a>
+        </p>
+
+        <div class="powered-by">
+            <h3>🔧 Powered by Open Source</h3>
+            <p>Diese Anwendung nutzt folgende Open-Source-Technologien:</p>
+            <ul class="tech-list">
+                <li><strong>Ollama</strong> - Lokale AI-Inferenz (<a href="https://ollama.ai" target="_blank">ollama.ai</a>)</li>
+                <li><strong>FastAPI</strong> - Modern Web Framework (<a href="https://fastapi.tiangolo.com" target="_blank">fastapi.tiangolo.com</a>)</li>
+                <li><strong>SQLAlchemy</strong> - SQL Toolkit (<a href="https://www.sqlalchemy.org" target="_blank">sqlalchemy.org</a>)</li>
+                <li><strong>Open Food Facts</strong> - Produktdatenbank (<a href="https://world.openfoodfacts.org" target="_blank">openfoodfacts.org</a>)</li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 14px;">
+                Vielen Dank an alle Contributors dieser Projekte! 💚
+            </p>
+        </div>
+
+        <p style="margin-top: 40px; text-align: center; color: var(--text-secondary); font-size: 14px;">
+            © 2025 Melucio-Labs · KitchenHelper-AI · Alle Rechte vorbehalten
+        </p>
+    </div>
+</body>
+</html>

@@ -1,35 +1,68 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
 venv/
 env/
-*.db
-*.db-journal
+.venv/
+backend/venv/
 
 # Environment & Secrets
 .env
+.env.local
+*.env.local
 backend/.env
 !.env.example
 
-# Database
+# Database (WICHTIG - nie committen!)
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
 backend/database/*.db
 
-# IDE (persönliche Settings)
+# IDE
 .vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Claude Code local history (never commit)
+# Claude Code
 claude_history.json
+.claude/shell-snapshots/
 
 # Logs
 *.log
 logs/
+backend/logs/
 
 # Test data (sensitive)
 TestUserDaten*
 
-# Docker (nicht ignorieren, nur Laufzeit-Dateien)
-# Docker Volumes werden im Container erstellt
+# Docker Build Artifacts
+*.tar.gz
+*.zip
+docker-compose.override.yml
+
+# Node (falls Frontend später React/Vue)
+node_modules/
+dist/
+build/
+.cache/
+
+# Python Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Alembic (Migration backups)
+backend/migrations/versions/*.pyc

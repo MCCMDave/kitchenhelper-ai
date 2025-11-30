@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     # CORS - Allowed Origins (comma-separated in .env)
     ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000,http://127.0.0.1:8000"
 
+    # AI Providers
+    GOOGLE_AI_API_KEY: str = ""  # Gemini API Key (Pro users)
+    GEMINI_MODEL: str = "gemini-2.0-flash-exp"
+    OLLAMA_BASE_URL: str = "http://localhost:11434"  # Local Ollama
+    OLLAMA_MODEL: str = "llama3.2"
+
     @property
     def cors_origins(self) -> List[str]:
         """Parse ALLOWED_ORIGINS string into list"""

@@ -20,6 +20,7 @@ from app.models.diet_profile import DietProfile
 from app.utils.database import get_db
 from app.utils.auth import get_current_user
 from app.services.mock_recipe_generator import mock_generator
+from app.services.ai_recipe_generator import ai_generator
 from app.services.pdf_generator import pdf_generator
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
@@ -51,12 +52,16 @@ def generate_recipes(
 ):
     """
     Rezepte generieren (Mock oder AI)
-    
+
     - **ingredient_ids**: Liste von Zutaten-IDs
-    - **ai_provider**: "mock" (kostenlos!), "anthropic", "openai", "gemini"
+    - **ai_provider**: "mock" (template-based, kostenlos) oder "ai" (KI-generiert)
     - **diet_profiles**: z.B. ["diabetic", "vegan"]
     - **servings**: Anzahl Portionen (1-10)
-    
+
+    **AI Provider "ai":**
+    - Free Tier: Ollama (lokal, datenschutzfreundlich, ~7-10s)
+    - Pro Tier: Gemini Flash (schnell, ~2-3s) mit Ollama Fallback
+
     **Daily Limits:**
     - Demo: 3 Rezepte/Tag
     - Basic: 50 Rezepte/Tag
@@ -105,8 +110,9 @@ def generate_recipes(
         except (json.JSONDecodeError, TypeError):
             pass
 
-    # 4. Generate recipes (Mock - free!)
+    # 4. Generate recipes based on provider and user tier
     if request.ai_provider == "mock":
+        # Mock Generator - Always free
         generated_recipes = mock_generator.generate_recipes(
             ingredients=ingredient_names,
             count=3,
@@ -115,11 +121,31 @@ def generate_recipes(
             diabetes_unit=diabetes_unit,
             language=request.language
         )
+    elif request.ai_provider == "ai":
+        # AI Generator - Tier-based (Free: Ollama, Pro: Gemini with Ollama fallback)
+        try:
+            generated_recipes = ai_generator.generate_recipes(
+                ingredients=ingredient_names,
+                count=3,
+                servings=request.servings,
+                diet_profiles=request.diet_profiles,
+                diabetes_unit=diabetes_unit,
+                language=request.language,
+                user_tier=current_user.subscription_tier.value
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail={
+                    "error": "ai_generation_failed",
+                    "message": f"AI-Generierung fehlgeschlagen: {str(e)}",
+                    "fallback": "Bitte nutze 'mock' als Provider"
+                }
+            )
     else:
-        # Spaeter: Echte AI-Integration
         raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail=f"AI Provider '{request.ai_provider}' noch nicht implementiert. Nutze 'mock'!"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Ungültiger AI Provider '{request.ai_provider}'. Nutze 'mock' oder 'ai'."
         )
 
     # 5. In Datenbank speichern
