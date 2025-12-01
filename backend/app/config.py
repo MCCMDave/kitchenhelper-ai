@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434"  # Local Ollama
     OLLAMA_MODEL: str = "llama3.2"
 
+    # Email (Resend.com)
+    RESEND_API_KEY: str = ""  # Resend API Key (get from resend.com)
+    RESEND_FROM_EMAIL: str = "KitchenHelper <noreply@yourdomain.com>"  # Change after domain verification
+    RESEND_REPLY_TO: str = "support@yourdomain.com"  # Support email (optional)
+
     @property
     def cors_origins(self) -> List[str]:
         """Parse ALLOWED_ORIGINS string into list"""

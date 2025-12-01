@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Enum, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.utils.database import Base
@@ -28,10 +28,14 @@ class User(Base):
     )
     stripe_customer_id = Column(String, nullable=True)
     
+    # Email Verification
+    email_verified = Column(Boolean, default=False, nullable=False)
+    email_verified_at = Column(DateTime(timezone=True), nullable=True)
+
     # Limits
     daily_recipe_count = Column(Integer, default=0)
     last_recipe_date = Column(DateTime(timezone=True), nullable=True)
-    
+
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
