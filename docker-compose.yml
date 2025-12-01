@@ -9,8 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: kitchenhelper-api
-    ports:
-      - "8000:8000"
+    network_mode: host
     volumes:
       # Persistent storage for database (auto-created if not exists)
       - ./database:/app/database
@@ -24,11 +23,8 @@ services:
       # AI Providers
       - GOOGLE_AI_API_KEY=${GOOGLE_AI_API_KEY:-}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash-exp}
-      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2}
-    extra_hosts:
-      # Allow container to access host's Ollama service
-      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     # Resource limits (optimized for Raspberry Pi)
     mem_limit: 512m
