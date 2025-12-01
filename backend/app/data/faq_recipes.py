@@ -6,6 +6,64 @@ from typing import List, Dict
 
 
 FAQ_CATEGORIES: List[Dict] = [
+    # === SNACKS (Low-KE for Diabetics) ===
+    {
+        "id": "snack-low-ke-1",
+        "title_de": "Snack: Gemüse-Sticks (0,5 KE)",
+        "title_en": "Snack: Veggie Sticks (0.5 KE)",
+        "description_de": "Knackige Gemüse-Snacks, ideal für zwischendurch",
+        "description_en": "Crunchy veggie snacks, perfect for in-between",
+        "ingredients": ["Gurke", "Karotten", "Paprika", "Hummus"],
+        "diet_profiles": ["diabetic", "low_carb", "vegan"],
+        "servings": 1,
+        "max_time": 5
+    },
+    {
+        "id": "snack-low-ke-2",
+        "title_de": "Snack: Käse-Würfel mit Nüssen (0,8 KE)",
+        "title_en": "Snack: Cheese Cubes with Nuts (0.8 KE)",
+        "description_de": "Proteinreicher Snack, sehr sättigend",
+        "description_en": "High-protein snack, very filling",
+        "ingredients": ["Käse", "Mandeln", "Walnüsse"],
+        "diet_profiles": ["diabetic", "low_carb", "high_protein"],
+        "servings": 1,
+        "max_time": 3
+    },
+    {
+        "id": "snack-low-ke-3",
+        "title_de": "Snack: Beeren mit Joghurt (1,5 KE)",
+        "title_en": "Snack: Berries with Yogurt (1.5 KE)",
+        "description_de": "Fruchtig-frischer Snack, nicht zu süß",
+        "description_en": "Fruity-fresh snack, not too sweet",
+        "ingredients": ["Heidelbeeren", "Erdbeeren", "Naturjoghurt", "Zimt"],
+        "diet_profiles": ["diabetic"],
+        "servings": 1,
+        "max_time": 5
+    },
+    {
+        "id": "snack-low-ke-4",
+        "title_de": "Snack: Hart gekochtes Ei (0 KE)",
+        "title_en": "Snack: Hard Boiled Egg (0 KE)",
+        "description_de": "Perfekter Protein-Snack ohne Kohlenhydrate",
+        "description_en": "Perfect protein snack without carbs",
+        "ingredients": ["Eier", "Salz", "Pfeffer"],
+        "diet_profiles": ["diabetic", "low_carb", "high_protein", "keto"],
+        "servings": 1,
+        "max_time": 10
+    },
+    {
+        "id": "snack-low-ke-5",
+        "title_de": "Snack: Avocado-Happen (0,3 KE)",
+        "title_en": "Snack: Avocado Bites (0.3 KE)",
+        "description_de": "Gesunde Fette, lange Sättigung",
+        "description_en": "Healthy fats, long-lasting satiety",
+        "ingredients": ["Avocado", "Zitrone", "Salz", "Chili"],
+        "diet_profiles": ["diabetic", "low_carb", "keto", "vegan"],
+        "servings": 1,
+        "max_time": 5
+    },
+
+    # === MAIN MEALS ===
     {
         "id": "quick-dinner-veg",
         "title_de": "Schnelles vegetarisches Abendessen",

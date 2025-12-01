@@ -20,17 +20,29 @@ router = APIRouter(prefix="/faq", tags=["FAQ"])
 @router.get("/categories")
 def get_faq_categories(
     language: str = Query("en", regex="^(en|de)$"),
+    category_type: Optional[str] = Query(None, regex="^(snacks|meals|all)$"),
     current_user: User = Depends(get_current_user)
 ):
     """
-    Get all FAQ recipe categories
+    Get FAQ recipe categories
+
+    - **language**: "en" or "de"
+    - **category_type**: Filter by "snacks", "meals", or "all" (default: all)
 
     Returns list of predefined recipe categories for quick access
     """
     categories = get_all_faq_categories(language)
+
+    # Filter by type
+    if category_type == "snacks":
+        categories = [c for c in categories if c["id"].startswith("snack-")]
+    elif category_type == "meals":
+        categories = [c for c in categories if not c["id"].startswith("snack-")]
+
     return {
         "categories": categories,
-        "count": len(categories)
+        "count": len(categories),
+        "filter": category_type or "all"
     }
 
 

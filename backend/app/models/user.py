@@ -41,6 +41,7 @@ class User(Base):
     recipes = relationship("Recipe", back_populates="user", cascade="all, delete-orphan")
     favorites = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
     diet_profiles = relationship("DietProfile", back_populates="user", cascade="all, delete-orphan")
+    meal_logs = relationship("MealLog", back_populates="user", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<User(username='{self.username}', email='{self.email}', tier='{self.subscription_tier}')>"
