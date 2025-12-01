@@ -170,7 +170,7 @@ class AIRecipeGenerator:
             }
         }
 
-        response = requests.post(url, json=payload, timeout=60)
+        response = requests.post(url, json=payload, timeout=180)
         response.raise_for_status()
 
         result = response.json()
@@ -222,7 +222,7 @@ class AIRecipeGenerator:
         }
 
         # Stream response
-        response = requests.post(url, json=payload, stream=True, timeout=120)
+        response = requests.post(url, json=payload, stream=True, timeout=180)
         response.raise_for_status()
 
         # Yield chunks as they arrive

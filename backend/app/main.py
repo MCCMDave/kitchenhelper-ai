@@ -14,8 +14,10 @@ from app.routes import (
     nutrition,
     admin,
     scanner,
+    faq,
 )
 from app.middleware.logger import APIRequestLoggerMiddleware
+from app.middleware.rate_limit import RateLimitMiddleware
 import os
 
 app = FastAPI(
@@ -37,6 +39,9 @@ app.add_middleware(
 if os.getenv("DEBUG", "False").lower() == "true":
     app.add_middleware(APIRequestLoggerMiddleware)
 
+# Rate Limiting for AI generation (protects Pi from overload)
+app.add_middleware(RateLimitMiddleware)
+
 # ✅ ROUTES EINBINDEN
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
@@ -49,6 +54,7 @@ app.include_router(share.router, prefix="/api")
 app.include_router(nutrition.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(scanner.router, prefix="/api")
+app.include_router(faq.router, prefix="/api")
 
 
 # Startup Event
