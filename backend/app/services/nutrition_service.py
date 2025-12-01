@@ -1,6 +1,6 @@
 # Nutrition Service - OpenFoodFacts API Integration
 import httpx
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 import re
 
 
@@ -100,7 +100,7 @@ class NutritionService:
     }
 
     def __init__(self):
-        self.client = httpx.Client(timeout=10.0)
+        pass  # No persistent client needed - async methods create their own
 
     async def search_product(self, query: str, language: str = "de") -> Optional[Dict[str, Any]]:
         """
@@ -188,7 +188,7 @@ class NutritionService:
                     "source": "fallback_database"
                 }
 
-        # Try OpenFoodFacts API
+        # Try OpenFoodFacts API (sync)
         try:
             params = {
                 "search_terms": ingredient_name,
@@ -198,7 +198,9 @@ class NutritionService:
                 "page_size": 1,
             }
 
-            response = self.client.get(self.SEARCH_URL, params=params)
+            # Create sync client for this call
+            with httpx.Client(timeout=10.0) as client:
+                response = client.get(self.SEARCH_URL, params=params)
 
             if response.status_code == 200:
                 data = response.json()
@@ -220,7 +222,7 @@ class NutritionService:
 
     def calculate_recipe_nutrition(
         self,
-        ingredients: list,
+        ingredients: List[Dict[str, Any]],
         servings: int = 2
     ) -> Dict[str, Any]:
         """

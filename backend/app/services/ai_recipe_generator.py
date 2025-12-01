@@ -5,7 +5,7 @@ AI Recipe Generator with Gemini (Pro) and Ollama (Free) Support
 """
 import os
 import logging
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any, Generator
 import requests
 import json
 
@@ -44,11 +44,11 @@ class AIRecipeGenerator:
         ingredients: List[str],
         count: int = 3,
         servings: int = 2,
-        diet_profiles: List[str] = None,
+        diet_profiles: Optional[List[str]] = None,
         diabetes_unit: str = "KE",
         language: str = "en",
         user_tier: str = "free"
-    ) -> List[Dict]:
+    ) -> List[Dict[str, Any]]:
         """
         Generate recipes using appropriate AI provider based on user tier
 
@@ -106,7 +106,7 @@ class AIRecipeGenerator:
         diet_profiles: Optional[List[str]],
         diabetes_unit: str,
         language: str
-    ) -> List[Dict]:
+    ) -> List[Dict[str, Any]]:
         """Generate recipes using Gemini API"""
         prompt = self._build_prompt(ingredients, count, servings, diet_profiles, diabetes_unit, language)
 
@@ -154,7 +154,7 @@ class AIRecipeGenerator:
         diet_profiles: Optional[List[str]],
         diabetes_unit: str,
         language: str
-    ) -> List[Dict]:
+    ) -> List[Dict[str, Any]]:
         """Generate recipes using local Ollama"""
         prompt = self._build_prompt(ingredients, count, servings, diet_profiles, diabetes_unit, language)
 
@@ -199,7 +199,7 @@ class AIRecipeGenerator:
         diabetes_unit: str,
         language: str,
         user_tier: str = "free"
-    ):
+    ) -> Generator[str, None, None]:
         """
         Stream recipe generation tokens in real-time (SSE-compatible)
         Yields text chunks as they arrive from Ollama

@@ -25,6 +25,30 @@ from app.services.pdf_generator import pdf_generator
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
 
+
+def recipe_to_response(recipe: Recipe) -> RecipeResponse:
+    """
+    Convert Recipe DB model to RecipeResponse schema
+    Handles JSON parsing for ingredients, nutrition, and used_ingredients
+    """
+    return RecipeResponse(
+        id=recipe.id,
+        user_id=recipe.user_id,
+        name=recipe.name,
+        description=recipe.description,
+        difficulty=recipe.difficulty,
+        cooking_time=recipe.cooking_time,
+        method=recipe.method,
+        servings=recipe.servings,
+        used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
+        leftover_tips=recipe.leftover_tips,
+        ingredients=[RecipeIngredient(**ing) for ing in json.loads(recipe.ingredients_json)] if recipe.ingredients_json else [],
+        nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
+        ai_provider=recipe.ai_provider,
+        generated_at=recipe.generated_at
+    )
+
+
 def check_daily_limit(user: User, db: Session) -> bool:
     """Prüfe ob User noch Rezepte generieren darf"""
     today = date.today()
@@ -300,28 +324,8 @@ def get_recipe_history(
         Recipe.user_id == current_user.id
     ).order_by(Recipe.generated_at.desc()).limit(limit).all()
     
-    # Parse JSON fields
-    result = []
-    for recipe in recipes:
-        recipe_response = RecipeResponse(
-            id=recipe.id,
-            user_id=recipe.user_id,
-            name=recipe.name,
-            description=recipe.description,
-            difficulty=recipe.difficulty,
-            cooking_time=recipe.cooking_time,
-            method=recipe.method,
-            servings=recipe.servings,
-            used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
-            leftover_tips=recipe.leftover_tips,
-            ingredients=[RecipeIngredient(**ing) for ing in json.loads(recipe.ingredients_json)] if recipe.ingredients_json else [],
-            nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
-            ai_provider=recipe.ai_provider,
-            generated_at=recipe.generated_at
-        )
-        result.append(recipe_response)
-    
-    return result
+    # Parse JSON fields using helper function
+    return [recipe_to_response(recipe) for recipe in recipes]
 
 @router.get("/{recipe_id}", response_model=RecipeResponse)
 def get_recipe(
@@ -340,23 +344,8 @@ def get_recipe(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Rezept nicht gefunden"
         )
-    
-    return RecipeResponse(
-        id=recipe.id,
-        user_id=recipe.user_id,
-        name=recipe.name,
-        description=recipe.description,
-        difficulty=recipe.difficulty,
-        cooking_time=recipe.cooking_time,
-        method=recipe.method,
-        servings=recipe.servings,
-        used_ingredients=json.loads(recipe.used_ingredients) if recipe.used_ingredients else [],
-        leftover_tips=recipe.leftover_tips,
-        ingredients=[RecipeIngredient(**ing) for ing in json.loads(recipe.ingredients_json)] if recipe.ingredients_json else [],
-        nutrition_per_serving=NutritionInfo(**json.loads(recipe.nutrition_json)) if recipe.nutrition_json else {},
-        ai_provider=recipe.ai_provider,
-        generated_at=recipe.generated_at
-    )
+
+    return recipe_to_response(recipe)
 
 
 @router.get("/{recipe_id}/portions", response_model=RecipeResponse)
