@@ -592,9 +592,17 @@ const translations = {
     fr: {
 
 
+
+
+
+
     },
 
     es: {
+
+
+
+
 
 
     },
@@ -602,9 +610,17 @@ const translations = {
     it: {
 
 
+
+
+
+
     },
 
     pt: {
+
+
+
+
 
 
     },
@@ -612,9 +628,17 @@ const translations = {
     sv: {
 
 
+
+
+
+
     },
 
     no: {
+
+
+
+
 
 
     },
@@ -622,9 +646,17 @@ const translations = {
     da: {
 
 
+
+
+
+
     },
 
     nl: {
+
+
+
+
 
 
     }

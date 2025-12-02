@@ -424,10 +424,21 @@
         });
 
         // Show error
+        let errorTimeout = null;
         function showError(message) {
             const errorEl = document.getElementById('auth-error');
             errorEl.textContent = message;
             errorEl.style.display = 'block';
+
+            // Clear existing timeout
+            if (errorTimeout) {
+                clearTimeout(errorTimeout);
+            }
+
+            // Hide error after 5 seconds
+            errorTimeout = setTimeout(() => {
+                hideError();
+            }, 5000);
         }
 
         // Hide error
@@ -509,8 +520,9 @@
             const passwordConfirm = document.getElementById('register-password-confirm').value;
             const btn = document.getElementById('register-btn');
 
-            // Validate email
-            if (!email || !email.includes('@')) {
+            // Validate email - stricter but allow a@a.a
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
+            if (!email || !emailRegex.test(email)) {
                 showError(i18n.t('error.invalid_email'));
                 return;
             }
