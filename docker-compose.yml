@@ -25,6 +25,10 @@ services:
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash-exp}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://localhost:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2}
+      # Email Service
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
+      - RESEND_REPLY_TO=${RESEND_REPLY_TO}
     restart: unless-stopped
     # Resource limits (optimized for Raspberry Pi)
     mem_limit: 512m
@@ -35,21 +39,3 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
-
-  # Optional: Frontend served via nginx
-  # Uncomment when ready for production
-  # frontend:
-  #   image: nginx:alpine
-  #   container_name: kitchenhelper-frontend
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./frontend:/usr/share/nginx/html:ro
-  #   depends_on:
-  #     - kitchenhelper
-  #   restart: unless-stopped
-
-# Named volumes for better management (optional)
-# volumes:
-#   db-data:
-#   log-data:
