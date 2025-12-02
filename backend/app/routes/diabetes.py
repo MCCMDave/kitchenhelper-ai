@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from sqlalchemy.orm import Session
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -102,7 +102,7 @@ def calculate_insulin(
 
 @router.get("/ke-be/{carbs}")
 def calculate_ke_be(
-    carbs: float = Query(..., ge=0, le=500, description="Carbohydrates in grams"),
+    carbs: float = Path(..., ge=0, le=500, description="Carbohydrates in grams"),
     current_user: User = Depends(get_current_user)
 ):
     """
