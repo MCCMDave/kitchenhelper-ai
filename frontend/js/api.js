@@ -147,6 +147,19 @@ api.removeFavorite = (id) => api.delete(`/favorites/${id}`);
 
 api.checkFavorite = (recipeId) => api.get(`/favorites/check/${recipeId}`);
 
+// ==================== EMAIL API ====================
+api.sendVerificationEmail = (email) => api.post('/email/send-verification', { email });
+
+api.verifyEmail = (token) => api.post('/email/verify', { token });
+
+api.requestPasswordReset = (email) => api.post('/email/request-password-reset', { email });
+
+api.resetPassword = (token, newPassword) => api.post('/email/reset-password', { token, new_password: newPassword });
+
+api.resendVerification = () => api.get('/email/resend-verification');
+
+api.getEmailStatus = () => api.get('/email/status');
+
 // ==================== DIET PROFILES API ====================
 api.getProfiles = (active = null) => {
     const query = active !== null ? `?active=${active}` : '';

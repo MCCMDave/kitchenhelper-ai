@@ -47,7 +47,18 @@ const Auth = {
             // Register user
             await api.register(email, username, password);
             // Then login
-            return await this.login(email, password);
+            const user = await this.login(email, password);
+
+            // Send verification email
+            try {
+                await api.sendVerificationEmail(email);
+                console.log('[Auth] Verification email sent to:', email);
+            } catch (emailError) {
+                console.warn('[Auth] Failed to send verification email:', emailError);
+                // Don't fail registration if email fails
+            }
+
+            return user;
         } catch (error) {
             console.error('[Auth] Register failed:', error);
             throw error;

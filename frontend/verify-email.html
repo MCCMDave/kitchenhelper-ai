@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitchenHelper-AI - E-Mail Verifizierung</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .verification-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: var(--spacing-lg);
+            background: var(--bg-primary);
+        }
+
+        .verification-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xxl);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .verification-icon {
+            font-size: 64px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .verification-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .verification-message {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .verification-status {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-lg);
+            font-weight: 500;
+        }
+
+        .status-loading {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .spinner {
+            border: 3px solid var(--bg-tertiary);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--spacing-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-xl);
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="verification-box">
+            <div id="loadingState">
+                <div class="spinner"></div>
+                <div class="verification-title" data-i18n="verify.verifying">E-Mail wird verifiziert...</div>
+                <div class="verification-message" data-i18n="verify.please_wait">Bitte warten Sie einen Moment.</div>
+            </div>
+
+            <div id="successState" style="display: none;">
+                <div class="verification-icon">✅</div>
+                <div class="verification-title" data-i18n="verify.success_title">E-Mail erfolgreich verifiziert!</div>
+                <div class="verification-message" data-i18n="verify.success_message">
+                    Vielen Dank! Ihre E-Mail-Adresse wurde bestätigt. Sie können sich jetzt anmelden.
+                </div>
+                <a href="index.html" class="btn-primary" data-i18n="verify.go_to_login">Zum Login</a>
+            </div>
+
+            <div id="errorState" style="display: none;">
+                <div class="verification-icon">❌</div>
+                <div class="verification-title" data-i18n="verify.error_title">Verifizierung fehlgeschlagen</div>
+                <div class="verification-message" id="errorMessage"></div>
+                <a href="index.html" class="btn-primary" data-i18n="verify.back_to_login">Zurück zum Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        const loadingState = document.getElementById('loadingState');
+        const successState = document.getElementById('successState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+
+        async function verifyEmail() {
+            if (!token) {
+                showError('Kein Verifizierungs-Token gefunden.');
+                return;
+            }
+
+            try {
+                await api.verifyEmail(token);
+                showSuccess();
+            } catch (error) {
+                console.error('Verification failed:', error);
+                showError(error.message || 'Die Verifizierung ist fehlgeschlagen. Der Link könnte abgelaufen sein.');
+            }
+        }
+
+        function showSuccess() {
+            loadingState.style.display = 'none';
+            successState.style.display = 'block';
+        }
+
+        function showError(message) {
+            loadingState.style.display = 'none';
+            errorState.style.display = 'block';
+            errorMessage.textContent = message;
+        }
+
+        // Initialize i18n and verify
+        document.addEventListener('DOMContentLoaded', () => {
+            i18n.init();
+            verifyEmail();
+        });
+    </script>
+</body>
+</html>
