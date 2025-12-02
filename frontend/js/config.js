@@ -7,16 +7,16 @@ const CONFIG = {
 
         if (hostname === '100.103.86.47') {
             // Tailscale IP
-            return 'http://100.103.86.47:8000/api';
+            return 'http://100.103.86.47:8000';
         } else if (hostname === '192.168.2.54') {
             // Local network IP
-            return 'http://192.168.2.54:8000/api';
+            return 'http://192.168.2.54:8000';
         } else if (hostname.includes('cloudflare') || hostname.includes('.de')) {
             // Cloudflare Tunnel or custom domain
-            return `${window.location.protocol}//${window.location.host}/api`;
+            return `${window.location.protocol}//${window.location.host}`;
         } else {
             // Localhost development
-            return 'http://127.0.0.1:8000/api';
+            return 'http://127.0.0.1:8000';
         }
     })(),
 
