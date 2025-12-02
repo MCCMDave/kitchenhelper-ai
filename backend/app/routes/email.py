@@ -113,7 +113,7 @@ def send_verification_email(
     token = generate_token(user.email, expiry_hours=24)
 
     # Create verification URL (adjust domain for production)
-    base_url = "http://localhost:8000"  # TODO: Get from env
+    base_url = "http://192.168.2.54:8081"  # TODO: Get from env
     verification_url = f"{base_url}/verify-email?token={token}"
 
     try:
@@ -202,7 +202,7 @@ def request_password_reset(
     token = generate_token(user.email, expiry_hours=24)
 
     # Create reset URL
-    base_url = "http://localhost:8000"  # TODO: Get from env
+    base_url = "http://192.168.2.54:8081"  # TODO: Get from env
     reset_url = f"{base_url}/reset-password?token={token}"
 
     try:
@@ -295,7 +295,7 @@ def resend_verification_email(
     token = generate_token(current_user.email, expiry_hours=24)
 
     # Create verification URL
-    base_url = "http://localhost:8000"  # TODO: Get from env
+    base_url = "http://192.168.2.54:8081"  # TODO: Get from env
     verification_url = f"{base_url}/verify-email?token={token}"
 
     try:
