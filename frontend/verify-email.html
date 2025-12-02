@@ -171,8 +171,16 @@
             errorMessage.textContent = message;
         }
 
-        // Initialize i18n and verify
+        // Load saved theme on page load
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('colorTheme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            console.log('[Theme] Loaded:', savedTheme);
+        }
+
+        // Initialize i18n, theme, and verify
         document.addEventListener('DOMContentLoaded', () => {
+            loadSavedTheme();
             i18n.init();
             verifyEmail();
         });
