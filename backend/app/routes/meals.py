@@ -20,7 +20,7 @@ class MealLogCreate(BaseModel):
     """Create new meal log entry"""
     recipe_id: Optional[int] = None
     meal_name: str = Field(..., min_length=1, max_length=200)
-    meal_type: Optional[str] = Field(None, regex="^(breakfast|lunch|dinner|snack)$")
+    meal_type: Optional[str] = Field(None, pattern="^(breakfast|lunch|dinner|snack)$")
     servings: float = Field(1.0, ge=0.1, le=20)
     carbs_grams: float = Field(..., ge=0, le=500)
     calories: Optional[int] = Field(None, ge=0)
