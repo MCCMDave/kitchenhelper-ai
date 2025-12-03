@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressum - KitchenHelper-AI</title>
+    <title data-i18n="imprint.title">Impressum</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/components.css">
@@ -27,6 +27,12 @@
             margin-top: 30px;
             margin-bottom: 15px;
             font-size: 24px;
+        }
+        .impressum-container h3 {
+            color: var(--text);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
         .impressum-container p {
             line-height: 1.8;
@@ -61,11 +67,6 @@
             padding-top: 30px;
             border-top: 1px solid var(--border);
         }
-        .powered-by h3 {
-            color: var(--text);
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
         .tech-list {
             list-style: none;
             padding: 0;
@@ -77,15 +78,32 @@
         .tech-list a {
             color: var(--primary);
         }
+        .disclaimer-box {
+            background: var(--warning-bg, #fff3cd);
+            border: 1px solid var(--warning-border, #ffc107);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .disclaimer-box h3 {
+            margin-top: 0;
+            color: var(--warning-text, #856404);
+        }
+        .disclaimer-box p {
+            color: var(--warning-text, #856404);
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
     <div class="impressum-container">
-        <a href="index.html" class="back-btn">← Zurück zur Startseite</a>
+        <a href="index.html" class="back-btn">
+            ← <span data-i18n="imprint.back">Zurück zur Startseite</span>
+        </a>
 
-        <h1>Impressum</h1>
+        <h1 data-i18n="imprint.title">Impressum</h1>
 
-        <h2>Angaben gemäß § 5 TMG</h2>
+        <h2 data-i18n="imprint.tmg_heading">Angaben gemäß § 5 TMG</h2>
         <p>
             <strong>Melucio-Labs</strong><br>
             David Vaupel<br>
@@ -94,57 +112,142 @@
             Deutschland
         </p>
 
-        <h2>Kontakt</h2>
+        <h2 data-i18n="imprint.contact_heading">Kontakt</h2>
         <p>
-            <strong>E-Mail:</strong> <a href="mailto:info@kitchenhelper-ai.de">info@kitchenhelper-ai.de</a>
+            <strong data-i18n="imprint.email">E-Mail</strong>: <a href="mailto:info@kitchenhelper-ai.de">info@kitchenhelper-ai.de</a>
         </p>
 
-        <h2>Verantwortlich für den Inhalt</h2>
+        <h2 data-i18n="imprint.responsible_heading">Verantwortlich für den Inhalt</h2>
         <p>
             David Vaupel<br>
-            Anschrift wie oben
+            <span data-i18n="imprint.responsible_text">Anschrift wie oben</span>
         </p>
 
-        <h2>Haftungsausschluss</h2>
+        <!-- AI Disclaimer Box -->
+        <div class="disclaimer-box">
+            <h3 data-i18n="imprint.ai_disclaimer_heading">⚠️ KI-generierte Rezepte</h3>
+            <p data-i18n="imprint.ai_disclaimer_text">
+                Die von dieser Anwendung generierten Rezepte werden durch künstliche Intelligenz erstellt.
+                Bitte prüfen Sie Rezepte kritisch und nutzen Sie Ihr eigenes Urteilsvermögen bezüglich
+                Zutaten-Kombinationen, Mengen und Zubereitungsmethoden. Wir übernehmen keine Haftung für
+                die Qualität oder Eignung der generierten Rezepte.
+            </p>
+        </div>
 
-        <h3>Haftung für Inhalte</h3>
-        <p>
-            Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
+        <h2 data-i18n="imprint.disclaimer_heading">Haftungsausschluss</h2>
+
+        <h3 data-i18n="imprint.content_liability_heading">Haftung für Inhalte</h3>
+        <p data-i18n="imprint.content_liability_text">
+            Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit,
+            Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+            Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten
+            nach den allgemeinen Gesetzen verantwortlich.
         </p>
 
-        <h3>Haftung für Links</h3>
-        <p>
-            Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+        <h3 data-i18n="imprint.links_liability_heading">Haftung für Links</h3>
+        <p data-i18n="imprint.links_liability_text">
+            Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen
+            Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
+            Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber
+            der Seiten verantwortlich.
         </p>
 
-        <h2>Datenschutz</h2>
-        <p>
-            Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies stets auf freiwilliger Basis.
+        <h2 data-i18n="imprint.privacy_heading">Datenschutz</h2>
+        <p data-i18n="imprint.privacy_text1">
+            Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich.
+            Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder
+            E-Mail-Adressen) erhoben werden, erfolgt dies stets auf freiwilliger Basis.
         </p>
         <p>
-            <strong>Wichtig:</strong> Wir verwenden lokale Verschlüsselung für Ihre Daten. Im Free-Modus werden Daten serverseitig verschlüsselt (SSE). Im Pro-Modus nutzen wir End-to-End-Verschlüsselung (E2EE), sodass nur Sie Zugriff auf Ihre Rezepte und Präferenzen haben.
+            <strong data-i18n="imprint.privacy_important">Wichtig</strong>:
+            <span data-i18n="imprint.privacy_text2">
+                Wir verwenden lokale Verschlüsselung für Ihre Daten. Im Free-Modus werden Daten serverseitig
+                verschlüsselt (SSE). Im Pro-Modus nutzen wir End-to-End-Verschlüsselung (E2EE), sodass nur
+                Sie Zugriff auf Ihre Rezepte und Präferenzen haben.
+            </span>
         </p>
         <p>
-            Eine ausführliche Datenschutzerklärung finden Sie in der Dokumentation: <a href="docs/DATA-ENCRYPTION.md" target="_blank">DATA-ENCRYPTION.md</a>
+            <span data-i18n="imprint.privacy_text3">Eine ausführliche Datenschutzerklärung finden Sie in der Dokumentation:</span>
+            <a href="docs/DATA-ENCRYPTION.md" target="_blank">DATA-ENCRYPTION.md</a>
         </p>
 
         <div class="powered-by">
-            <h3>🔧 Powered by Open Source</h3>
-            <p>Diese Anwendung nutzt folgende Open-Source-Technologien:</p>
+            <h3>🔧 <span data-i18n="imprint.powered_heading">Powered by Open Source</span></h3>
+            <p data-i18n="imprint.powered_text">Diese Anwendung nutzt folgende Open-Source-Technologien:</p>
             <ul class="tech-list">
-                <li><strong>Ollama</strong> - Lokale AI-Inferenz (<a href="https://ollama.ai" target="_blank">ollama.ai</a>)</li>
-                <li><strong>FastAPI</strong> - Modern Web Framework (<a href="https://fastapi.tiangolo.com" target="_blank">fastapi.tiangolo.com</a>)</li>
-                <li><strong>SQLAlchemy</strong> - SQL Toolkit (<a href="https://www.sqlalchemy.org" target="_blank">sqlalchemy.org</a>)</li>
-                <li><strong>Open Food Facts</strong> - Produktdatenbank (<a href="https://world.openfoodfacts.org" target="_blank">openfoodfacts.org</a>)</li>
+                <li>
+                    <strong>Ollama</strong> -
+                    <span data-i18n="imprint.powered_ollama">Lokale AI-Inferenz</span>
+                    (<a href="https://ollama.ai" target="_blank">ollama.ai</a>)
+                </li>
+                <li>
+                    <strong>FastAPI</strong> -
+                    <span data-i18n="imprint.powered_fastapi">Modern Web Framework</span>
+                    (<a href="https://fastapi.tiangolo.com" target="_blank">fastapi.tiangolo.com</a>)
+                </li>
+                <li>
+                    <strong>SQLAlchemy</strong> -
+                    <span data-i18n="imprint.powered_sqlalchemy">SQL Toolkit</span>
+                    (<a href="https://www.sqlalchemy.org" target="_blank">sqlalchemy.org</a>)
+                </li>
+                <li>
+                    <strong>Open Food Facts</strong> -
+                    <span data-i18n="imprint.powered_openfoodfacts">Produktdatenbank</span>
+                    (<a href="https://world.openfoodfacts.org" target="_blank">openfoodfacts.org</a>)
+                </li>
             </ul>
-            <p style="margin-top: 15px; font-size: 14px;">
+            <p style="margin-top: 15px; font-size: 14px;" data-i18n="imprint.powered_thanks">
                 Vielen Dank an alle Contributors dieser Projekte! 💚
             </p>
         </div>
 
         <p style="margin-top: 40px; text-align: center; color: var(--text-secondary); font-size: 14px;">
-            © 2025 Melucio-Labs · KitchenHelper-AI · Alle Rechte vorbehalten
+            © 2025 Melucio-Labs · KitchenHelper-AI · <span data-i18n="imprint.copyright">Alle Rechte vorbehalten</span>
         </p>
     </div>
+
+    <!-- i18n System -->
+    <script src="js/i18n.js"></script>
+    <script>
+        // Initialize i18n on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get language from localStorage or default to 'de'
+            const savedLanguage = localStorage.getItem('language') || 'de';
+
+            // Apply translations
+            applyTranslations(savedLanguage);
+
+            // Update document lang attribute
+            document.documentElement.lang = savedLanguage;
+        });
+
+        function applyTranslations(lang) {
+            // Get all elements with data-i18n attribute
+            const elements = document.querySelectorAll('[data-i18n]');
+
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = getTranslation(lang, key);
+
+                if (translation) {
+                    // Check if element is title tag
+                    if (element.tagName === 'TITLE') {
+                        element.textContent = translation;
+                    } else {
+                        element.textContent = translation;
+                    }
+                }
+            });
+        }
+
+        function getTranslation(lang, key) {
+            // Access translations object from i18n.js
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
+            }
+            // Fallback to German if translation not found
+            return translations['de'][key] || key;
+        }
+    </script>
 </body>
 </html>
