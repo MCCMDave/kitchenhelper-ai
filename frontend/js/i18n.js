@@ -692,11 +692,7 @@ const translations = {
         'error.passwords_not_match': 'Les mots de passe ne sont pas identiques.',
         'error.registration_failed': 'L\'inscription échouée.',
         'error.reset_code_required': 'S\'il vous plaît, saisissez le code de réinitialisation.',
-        'error.username_invalid': 'Le nom d\'utilisateur ne peut contenir que des lettres, des nombres, un tiret et des tirets.
-
- ou
-
- Le nom d\'utilisateur n\'est autorisé qu\'à contener les caractères lettre, numéro, tiret et tiret.',
+        'error.username_invalid': 'Le nom d\'utilisateur ne peut contenir que des lettres, des nombres, un tiret et des tirets.',
         'error.username_taken': 'Ce nom d\'utilisateur est déjà pris.',
         'error.username_too_short': 'Le nom d\'utilisateur doit contenir au moins 3 caractères.',
 
