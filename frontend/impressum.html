@@ -382,28 +382,14 @@
         // Initialize i18n and theme on page load
         document.addEventListener('DOMContentLoaded', function() {
             ThemeMenu.init();
+
+            // Use i18n system (same as dashboard)
+            i18n.init();
+
+            // Apply saved language
             const savedLanguage = localStorage.getItem('language') || 'de';
-            applyTranslations(savedLanguage);
-            document.documentElement.lang = savedLanguage;
+            i18n.setLanguage(savedLanguage);
         });
-
-        function applyTranslations(lang) {
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                const translation = getTranslation(lang, key);
-                if (translation) {
-                    element.textContent = translation;
-                }
-            });
-        }
-
-        function getTranslation(lang, key) {
-            if (translations && translations[lang] && translations[lang][key]) {
-                return translations[lang][key];
-            }
-            return translations['de'][key] || key;
-        }
     </script>
 </body>
 </html>
