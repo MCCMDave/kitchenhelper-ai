@@ -409,6 +409,158 @@
             text-decoration: underline;
         }
 
+        /* Login Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            animation: fadeIn 0.2s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal h2 {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .modal p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-tab {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .modal-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .modal-form {
+            display: none;
+        }
+
+        .modal-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-error {
+            display: none;
+            background: #ffebee;
+            color: #c62828;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .form-error.active {
+            display: block;
+        }
+
+        .modal .btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -431,6 +583,10 @@
             .screenshot-grid {
                 grid-template-columns: 1fr;
             }
+
+            .modal {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -442,7 +598,7 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#screenshots">Screenshots</a>
-                <a href="index.html" class="btn btn-outline">Login</a>
+                <button onclick="openLoginModal()" class="btn btn-outline">Login</button>
             </div>
         </div>
     </nav>
@@ -453,7 +609,7 @@
             <h1>Dein intelligenter Küchenassistent</h1>
             <p>Verwandle vorhandene Zutaten in kreative Rezepte. Keine Inspiration? Kein Problem – unsere KI hilft dir!</p>
             <div class="hero-cta">
-                <a href="index.html" class="btn btn-white">Jetzt kostenlos starten</a>
+                <button onclick="openLoginModal('register')" class="btn btn-white">Jetzt kostenlos starten</button>
                 <a href="#features" class="btn btn-outline">Mehr erfahren</a>
             </div>
             <div class="hero-stats">
@@ -598,7 +754,7 @@
         <div class="container">
             <h2>Bereit loszulegen?</h2>
             <p>Starte jetzt kostenlos und verwandle deine Küche in ein kreatives Kochlabor!</p>
-            <a href="index.html" class="btn btn-white">Jetzt registrieren – kostenlos</a>
+            <button onclick="openLoginModal('register')" class="btn btn-white">Jetzt registrieren – kostenlos</button>
         </div>
     </section>
 
@@ -609,13 +765,221 @@
             <div style="margin-top: 1rem;">
                 <a href="impressum.html">Impressum</a>
                 <a href="impressum.html">Datenschutz</a>
-                <a href="mailto:studio.del.melucio@gmail.com">Kontakt</a>
+                <a href="mailto:info@kitchenhelper-ai.de">Kontakt</a>
             </div>
         </div>
     </footer>
 
-    <!-- Smooth Scroll -->
+    <!-- Login/Register Modal -->
+    <div id="loginModal" class="modal-overlay" onclick="closeModalOnOutsideClick(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="closeLoginModal()">✕</button>
+            <h2>Willkommen zurück!</h2>
+            <p>Melde dich an oder erstelle ein neues Konto</p>
+
+            <!-- Tabs -->
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchTab('login')">Login</button>
+                <button class="modal-tab" onclick="switchTab('register')">Registrieren</button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="modalError" class="form-error"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="modal-form active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>E-Mail oder Benutzername</label>
+                    <input type="text" id="loginEmail" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>Passwort</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="loginBtn" class="btn btn-primary">Anmelden</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="modal-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>E-Mail</label>
+                    <input type="email" id="registerEmail" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>Benutzername</label>
+                    <input type="text" id="registerUsername" required autocomplete="username" minlength="3">
+                </div>
+                <div class="form-group">
+                    <label>Passwort</label>
+                    <input type="password" id="registerPassword" required autocomplete="new-password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Passwort bestätigen</label>
+                    <input type="password" id="registerPasswordConfirm" required autocomplete="new-password" minlength="6">
+                </div>
+                <button type="submit" id="registerBtn" class="btn btn-primary">Registrieren</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+
+    <!-- Modal Logic -->
     <script>
+        function openLoginModal(tab = 'login') {
+            document.getElementById('loginModal').classList.add('active');
+            switchTab(tab);
+            hideError();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            hideError();
+        }
+
+        function closeModalOnOutsideClick(event) {
+            if (event.target.id === 'loginModal') {
+                closeLoginModal();
+            }
+        }
+
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            event?.target?.classList.add('active');
+
+            // Update forms
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                document.querySelectorAll('.modal-tab')[0].classList.add('active');
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+            } else {
+                document.querySelectorAll('.modal-tab')[1].classList.add('active');
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+            }
+
+            hideError();
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('modalError');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('modalError');
+            errorDiv.classList.remove('active');
+        }
+
+        function setLoading(btn, loading) {
+            if (loading) {
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = 'Lädt...';
+                btn.disabled = true;
+            } else {
+                btn.textContent = btn.dataset.originalText || btn.textContent;
+                btn.disabled = false;
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideError();
+
+            const emailOrUsername = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!emailOrUsername) {
+                showError('Bitte E-Mail oder Benutzername eingeben');
+                return;
+            }
+
+            setLoading(btn, true);
+
+            try {
+                await Auth.login(emailOrUsername, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('[Login] Error:', error);
+                let message = 'Login fehlgeschlagen';
+
+                if (error.message.includes('fetch')) {
+                    message = 'Server nicht erreichbar. Bitte prüfe deine Verbindung.';
+                } else if (error.message) {
+                    message = error.message;
+                }
+
+                showError(message);
+                document.getElementById('loginPassword').value = '';
+                setLoading(btn, false);
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            hideError();
+
+            const email = document.getElementById('registerEmail').value.trim();
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const btn = document.getElementById('registerBtn');
+
+            // Validate email
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
+            if (!email || !emailRegex.test(email)) {
+                showError('Bitte gültige E-Mail-Adresse eingeben');
+                return;
+            }
+
+            // Validate username
+            if (!username || username.length < 3) {
+                showError('Benutzername muss mindestens 3 Zeichen lang sein');
+                return;
+            }
+
+            // Validate password
+            if (!password || password.length < 6) {
+                showError('Passwort muss mindestens 6 Zeichen lang sein');
+                return;
+            }
+
+            // Check password match
+            if (password !== passwordConfirm) {
+                showError('Passwörter stimmen nicht überein');
+                return;
+            }
+
+            setLoading(btn, true);
+
+            try {
+                await Auth.register(email, username, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('[Register] Error:', error);
+                let message = 'Registrierung fehlgeschlagen';
+
+                if (error.message.includes('fetch')) {
+                    message = 'Server nicht erreichbar. Bitte prüfe deine Verbindung.';
+                } else if (error.message) {
+                    message = error.message;
+                }
+
+                showError(message);
+                setLoading(btn, false);
+            }
+        }
+
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -625,6 +989,18 @@
                 }
             });
         });
+
+        // ESC key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLoginModal();
+            }
+        });
+
+        // Check if already logged in
+        if (Auth.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
     </script>
 </body>
 </html>
