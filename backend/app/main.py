@@ -23,6 +23,8 @@ from app.routes import (
 )
 from app.middleware.logger import APIRequestLoggerMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
+from app.middleware.email_verification import EmailVerificationMiddleware
+from app.middleware.https_redirect import HTTPSRedirectMiddleware
 import os
 
 app = FastAPI(
@@ -48,6 +50,9 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
+# HTTPS Redirect (force HTTPS in production, except localhost/local networks)
+app.add_middleware(HTTPSRedirectMiddleware)
+
 # CORS - Secure Configuration
 app.add_middleware(
     CORSMiddleware,
@@ -60,6 +65,9 @@ app.add_middleware(
 # API Request Logger (only in DEBUG mode)
 if os.getenv("DEBUG", "False").lower() == "true":
     app.add_middleware(APIRequestLoggerMiddleware)
+
+# Email Verification (blocks unverified users in production)
+app.add_middleware(EmailVerificationMiddleware)
 
 # Rate Limiting for AI generation (protects Pi from overload)
 app.add_middleware(RateLimitMiddleware)
