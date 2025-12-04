@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 import secrets
+import os
 from app.schemas.user import UserCreate, UserLogin, UserResponse, Token, PasswordResetRequest, PasswordReset
 from app.models.user import User
 from app.utils.database import get_db
@@ -14,6 +15,11 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 # Temporaere Speicherung fuer Reset Tokens (in Production: Redis oder DB)
 reset_tokens = {}
+
+# Check if in DEBUG mode
+def is_debug_mode() -> bool:
+    """Check if app is running in DEBUG mode"""
+    return os.getenv("DEBUG", "False").lower() == "true"
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -156,13 +162,20 @@ def request_password_reset(request: PasswordResetRequest, db: Session = Depends(
         "expires": datetime.utcnow() + timedelta(hours=1)
     }
 
-    # TODO: In Production E-Mail senden
-    print(f"[DEV] Reset Token fuer {request.email}: {token}")
+    # Security: Only return token in DEBUG mode (Development only!)
+    debug_mode = is_debug_mode()
 
-    return {
-        "message": "Reset-Link wurde gesendet! (Dev: Token in Console)",
-        "dev_token": token  # NUR FUER DEVELOPMENT!
-    }
+    if debug_mode:
+        print(f"[DEV] Reset Token fuer {request.email}: {token}")
+        return {
+            "message": "Reset-Link wurde gesendet! (Dev: Token in Console)",
+            "dev_token": token  # NUR IN DEBUG MODE!
+        }
+    else:
+        # Production: Token only via Email (handled by email service)
+        return {
+            "message": "Falls ein Account mit dieser E-Mail existiert, wurde ein Reset-Link gesendet."
+        }
 
 
 @router.post("/reset-password")

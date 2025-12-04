@@ -238,6 +238,37 @@ class AIRecipeGenerator:
         # After streaming completes, parse and return final JSON
         # (This will be handled by the route, not yielded here)
 
+    def _sanitize_input(self, text: str) -> str:
+        """
+        Sanitize user input to prevent prompt injection
+        - Removes newlines and control characters
+        - Removes common injection patterns
+        - Limits length to 50 chars per ingredient
+        """
+        if not text:
+            return ""
+
+        # Remove control characters and excessive whitespace
+        text = ' '.join(text.split())
+
+        # Remove potential injection keywords
+        injection_patterns = [
+            "ignore previous", "ignore above", "ignore all",
+            "new instructions", "system:", "assistant:",
+            "{{", "}}", "<script", "</script", "javascript:",
+            "prompt:", "you are now", "forget everything"
+        ]
+
+        text_lower = text.lower()
+        for pattern in injection_patterns:
+            if pattern in text_lower:
+                # Replace with safe placeholder
+                text = text[:50]  # Truncate suspicious input
+                break
+
+        # Limit length
+        return text[:50]
+
     def _build_prompt(
         self,
         ingredients: List[str],
@@ -248,12 +279,16 @@ class AIRecipeGenerator:
         language: str
     ) -> str:
         """Build recipe generation prompt"""
+        # Sanitize all user inputs
+        safe_ingredients = [self._sanitize_input(ing) for ing in ingredients]
+        safe_diet_profiles = [self._sanitize_input(dp) for dp in (diet_profiles or [])]
+
         lang_text = "German" if language == "de" else "English"
-        diet_text = f"\nDietary restrictions: {', '.join(diet_profiles)}" if diet_profiles else ""
+        diet_text = f"\nDietary restrictions: {', '.join(safe_diet_profiles)}" if safe_diet_profiles else ""
 
         prompt = f"""You are a professional chef assistant. Generate {count} creative and delicious recipes using the following ingredients:
 
-Ingredients: {', '.join(ingredients)}
+Ingredients: {', '.join(safe_ingredients)}
 Servings: {servings}
 Language: {lang_text}{diet_text}
 

@@ -17,8 +17,13 @@ from pydantic import BaseModel
 
 router = APIRouter(prefix="/share", tags=["Sharing"])
 
-# In-memory store for share links (in production, use Redis or DB)
-# Format: {share_id: {data, expires_at, creator_id}}
+# TODO (Security): Migrate to persistent storage for production
+# Current implementation: In-memory store (share links lost on restart)
+# Production options:
+#   1. Redis (recommended for TTL and performance)
+#   2. Database table with expires_at column + background cleanup job
+#   3. SQLite with periodic cleanup (simpler but less scalable)
+# Security: Share links already have TTL (max 30 days) and cleanup on access
 share_store = {}
 
 
