@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     # Email (Resend.com)
     RESEND_API_KEY: str = ""  # Resend API Key (get from resend.com)
     RESEND_FROM_EMAIL: str = "KitchenHelper <noreply@yourdomain.com>"  # Change after domain verification
-    RESEND_REPLY_TO: str = "support@yourdomain.com"  # Support email (optional)
+    RESEND_REPLY_TO: str = "studio.del.melucio@gmail.com"  # Studio email for gaming/entertainment
 
     @property
     def cors_origins(self) -> List[str]:

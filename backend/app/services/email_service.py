@@ -309,11 +309,15 @@ class EmailService:
         KitchenHelper-AI Team
         """
 
+        # Get reply_to from env
+        from app.config import settings
+
         return self.send_email(
             to=to,
             subject="Verifiziere deine E-Mail-Adresse - KitchenHelper-AI",
             html=html_content,
             text=text_content,
+            reply_to=settings.RESEND_REPLY_TO,
             tags=[
                 {"name": "type", "value": "verification"},
                 {"name": "project", "value": "kitchenhelper"}
@@ -459,11 +463,15 @@ class EmailService:
         KitchenHelper-AI Team
         """
 
+        # Get reply_to from env
+        from app.config import settings
+
         return self.send_email(
             to=to,
             subject="Passwort zurücksetzen - KitchenHelper-AI",
             html=html_content,
             text=text_content,
+            reply_to=settings.RESEND_REPLY_TO,
             tags=[
                 {"name": "type", "value": "password_reset"},
                 {"name": "project", "value": "kitchenhelper"}
