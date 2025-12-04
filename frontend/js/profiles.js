@@ -243,7 +243,7 @@ const Profiles = {
         const activeProfiles = this.getActiveProfiles();
 
         if (activeProfiles.length === 0) {
-            badge.innerHTML = '';
+            Sanitize.setHTML(badge, '');
             return;
         }
 
@@ -262,8 +262,8 @@ const Profiles = {
             return info.emoji || '';
         }).join('');
 
-        badge.innerHTML = `
-            <button class="active-profiles-toggle" onclick="Profiles.toggleBadge()" title="${isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden'}">
+        Sanitize.setHTML(badge, `
+            <button class="active-profiles-toggle" onclick="Profiles.toggleBadge()" title="${Sanitize.escapeHTML(isCollapsed ? 'Präferenzen einblenden' : 'Präferenzen ausblenden')}">
                 ${isCollapsed ? '▶' : '▼'}
             </button>
             ${isCollapsed ? `
@@ -277,11 +277,11 @@ const Profiles = {
                         const types = CONFIG.getProfileTypes();
                         const type = types.find(t => t.value === p.profile_type);
                         const name = type ? type.label : p.profile_type;
-                        return `<span class="active-profile-badge" style="background: ${info.color || 'var(--primary)'};" data-name="${name}" title="${name}">${info.emoji || ''}</span>`;
+                        return `<span class="active-profile-badge" style="background: ${Sanitize.escapeHTML(info.color || 'var(--primary)')};" data-name="${Sanitize.escapeHTML(name)}" title="${Sanitize.escapeHTML(name)}">${info.emoji || ''}</span>`;
                     }).join('')}
                 </div>
             `}
-        `;
+        `);
     },
 
     // Toggle badge visibility
@@ -367,7 +367,7 @@ const Profiles = {
             `;
         }).join('');
 
-        container.innerHTML = `
+        Sanitize.setHTML(container, `
             <div class="profiles-intro">
                 <p>${lang === 'de'
                     ? 'Wähle deine Ernährungsprofile. Diese werden bei der Rezeptgenerierung berücksichtigt.'
@@ -376,7 +376,7 @@ const Profiles = {
             <div class="profiles-checkbox-grid">
                 ${checkboxesHtml}
             </div>
-        `;
+        `);
     },
 
     // Toggle profile on/off

@@ -19,12 +19,12 @@ function togglePasswordVisibility(inputId, button) {
 const UI = {
     // ==================== LOADING ====================
     showLoading(element) {
-        element.innerHTML = `
+        Sanitize.setHTML(element, `
             <div class="loading">
                 <div class="spinner"></div>
                 <span>Laden...</span>
             </div>
-        `;
+        `);
     },
 
     hideLoading(element) {
@@ -34,27 +34,27 @@ const UI = {
 
     // ==================== ERROR ====================
     showError(element, message) {
-        element.innerHTML = `
+        Sanitize.setHTML(element, `
             <div class="empty-state">
                 <div class="empty-state-icon">!</div>
-                <p>${message}</p>
+                <p>${Sanitize.escapeHTML(message)}</p>
             </div>
-        `;
+        `);
     },
 
     // ==================== EMPTY STATE ====================
     showEmpty(element, message, icon = '') {
-        element.innerHTML = `
+        Sanitize.setHTML(element, `
             <div class="empty-state">
                 <div class="empty-state-icon">${icon}</div>
-                <p class="empty-state-title">${message}</p>
+                <p class="empty-state-title">${Sanitize.escapeHTML(message)}</p>
             </div>
-        `;
+        `);
     },
 
     // ==================== CLEAR ====================
     clear(element) {
-        element.innerHTML = '';
+        Sanitize.setHTML(element, '');
     },
 
     // ==================== TOAST NOTIFICATIONS ====================
@@ -70,10 +70,10 @@ const UI = {
         // Create toast
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <span>${message}</span>
+        Sanitize.setHTML(toast, `
+            <span>${Sanitize.escapeHTML(message)}</span>
             <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
-        `;
+        `);
 
         container.appendChild(toast);
 
@@ -118,17 +118,17 @@ const UI = {
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
         overlay.id = 'content-modal';
-        overlay.innerHTML = `
+        Sanitize.setHTML(overlay, `
             <div class="modal ${sizeClass}">
                 <div class="modal-header">
-                    <h3 class="modal-title">${title}</h3>
+                    <h3 class="modal-title">${Sanitize.escapeHTML(title)}</h3>
                     <button class="modal-close" onclick="UI.closeModal()">&times;</button>
                 </div>
                 <div class="modal-body">
                     ${content}
                 </div>
             </div>
-        `;
+        `);
 
         document.body.appendChild(overlay);
         document.body.style.overflow = 'hidden';
@@ -172,10 +172,10 @@ const UI = {
         // Create overlay
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
-        overlay.innerHTML = `
+        Sanitize.setHTML(overlay, `
             <div class="modal">
                 <div class="modal-header">
-                    <h3 class="modal-title">${title}</h3>
+                    <h3 class="modal-title">${Sanitize.escapeHTML(title)}</h3>
                     <button class="modal-close" data-action="close">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -243,7 +243,7 @@ const UI = {
         return new Promise((resolve) => {
             const overlay = document.createElement('div');
             overlay.className = 'modal-overlay';
-            overlay.innerHTML = `
+            Sanitize.setHTML(overlay, `
                 <div class="modal">
                     <div class="modal-header">
                         <h3 class="modal-title">Bestätigung</h3>
@@ -253,8 +253,8 @@ const UI = {
                         ${htmlMessage}
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-ghost" data-action="cancel">${cancelText}</button>
-                        <button class="btn btn-primary" data-action="confirm">${confirmText}</button>
+                        <button class="btn btn-ghost" data-action="cancel">${Sanitize.escapeHTML(cancelText)}</button>
+                        <button class="btn btn-primary" data-action="confirm">${Sanitize.escapeHTML(confirmText)}</button>
                     </div>
                 </div>
             `;

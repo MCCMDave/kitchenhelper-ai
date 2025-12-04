@@ -17,16 +17,16 @@ const Recipes = {
         const items = Ingredients.getItems();
 
         if (!items || items.length === 0) {
-            container.innerHTML = `<p style="padding: var(--spacing-md); color: var(--text-muted);">${i18n.t('ingredients.empty')}</p>`;
+            Sanitize.setHTML(container, `<p style="padding: var(--spacing-md); color: var(--text-muted);">${i18n.t('ingredients.empty')}</p>`);
             return;
         }
 
-        container.innerHTML = items.map(item => `
+        Sanitize.setHTML(container, items.map(item => `
             <label class="ingredient-checkbox">
                 <input type="checkbox" value="${item.id}" onchange="Recipes.toggleIngredient(${item.id})">
-                <span>${UI.escapeHtml(item.name)}</span>
+                <span>${Sanitize.escapeHTML(item.name)}</span>
             </label>
-        `).join('');
+        `).join(''));
 
         this.updateSelectedCount();
     },
@@ -80,12 +80,12 @@ const Recipes = {
             ? '🤖 AI generiert Rezept... Dies kann 30-60s dauern.<br><small style="opacity: 0.7;">💡 Mit Pro-Modell: 10x schneller (2-3s)</small>'
             : '🤖 AI generating recipe... This may take 30-60s.<br><small style="opacity: 0.7;">💡 With Pro Model: 10x faster (2-3s)</small>';
 
-        container.innerHTML = `
+        Sanitize.setHTML(container, `
             <div style="text-align: center; padding: var(--spacing-xl); color: var(--text-muted);">
                 <div class="spinner"></div>
                 <p style="margin-top: var(--spacing-md);">${loadingMsg}</p>
             </div>
-        `;
+        `);
 
         try {
             // Get active diet profiles
@@ -136,7 +136,7 @@ const Recipes = {
             ? '🤖 AI schreibt Rezept...'
             : '🤖 AI writing recipe...';
 
-        container.innerHTML = `
+        Sanitize.setHTML(container, `
             <div style="padding: var(--spacing-xl);">
                 <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); color: var(--text-muted);">
                     <div class="spinner" style="width: 20px; height: 20px;"></div>
@@ -251,7 +251,7 @@ const Recipes = {
             return;
         }
 
-        container.innerHTML = this.generatedRecipes.map(recipe => this.renderRecipeCard(recipe)).join('');
+        Sanitize.setHTML(container, this.generatedRecipes.map(recipe => this.renderRecipeCard(recipe)).join(''));
     },
 
     // Load recipe history
@@ -268,7 +268,7 @@ const Recipes = {
                 return;
             }
 
-            container.innerHTML = recipes.map(recipe => this.renderRecipeCard(recipe, true)).join('');
+            Sanitize.setHTML(container, recipes.map(recipe => this.renderRecipeCard(recipe, true)).join(''));
         } catch (error) {
             UI.showError(container, i18n.t('recipes.error_loading') + ': ' + error.message);
         }

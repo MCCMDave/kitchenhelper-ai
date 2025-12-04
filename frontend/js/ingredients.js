@@ -372,8 +372,8 @@ const Ingredients = {
         const categories = CONFIG.getCategories();
         const allCategoriesLabel = i18n.t('ingredients.all_categories');
 
-        filter.innerHTML = `<option value="">${allCategoriesLabel}</option>` +
-            categories.map(c => `<option value="${c}">${getCategoryEmoji(c)} ${c}</option>`).join('');
+        Sanitize.setHTML(filter, `<option value="">${allCategoriesLabel}</option>` +
+            categories.map(c => `<option value="${Sanitize.escapeHTML(c)}">${getCategoryEmoji(c)} ${Sanitize.escapeHTML(c)}</option>`).join(''));
     },
 
     // Load all ingredients
@@ -410,7 +410,7 @@ const Ingredients = {
             return;
         }
 
-        container.innerHTML = nonSpiceItems.map(item => this.renderCard(item)).join('');
+        Sanitize.setHTML(container, nonSpiceItems.map(item => this.renderCard(item)).join(''));
     },
 
     // Render single ingredient card
@@ -512,9 +512,9 @@ const Ingredients = {
                 // Auto-Suggest Dropdown
                 const suggestions = filterSuggestions(value);
                 if (suggestions.length > 0) {
-                    dropdown.innerHTML = suggestions.map(item =>
-                        `<div class="autocomplete-item" data-value="${item}">${item}</div>`
-                    ).join('');
+                    Sanitize.setHTML(dropdown, suggestions.map(item =>
+                        `<div class="autocomplete-item" data-value="${Sanitize.escapeHTML(item)}">${Sanitize.escapeHTML(item)}</div>`
+                    ).join(''));
                     dropdown.style.display = 'block';
 
                     // Add click handlers

@@ -729,13 +729,13 @@
                     ? { username: 'Benutzername', email: 'E-Mail', subscription: 'Abonnement', recipes: 'Rezepte heute', member: 'Mitglied seit' }
                     : { username: 'Username', email: 'Email', subscription: 'Subscription', recipes: 'Recipes today', member: 'Member since' };
 
-                document.getElementById('account-info').innerHTML = `
-                    <p><strong>${labels.username}:</strong> ${user.username}</p>
-                    <p><strong>${labels.email}:</strong> ${user.email}</p>
-                    <p><strong>${labels.subscription}:</strong> ${tierInfo.name}</p>
+                Sanitize.setHTML(document.getElementById('account-info'), `
+                    <p><strong>${labels.username}:</strong> ${Sanitize.escapeHTML(user.username)}</p>
+                    <p><strong>${labels.email}:</strong> ${Sanitize.escapeHTML(user.email)}</p>
+                    <p><strong>${labels.subscription}:</strong> ${Sanitize.escapeHTML(tierInfo.name)}</p>
                     <p><strong>${labels.recipes}:</strong> ${user.daily_recipe_count} / ${user.daily_limit}</p>
-                    <p><strong>${labels.member}:</strong> ${UI.formatDate(user.created_at)}</p>
-                `;
+                    <p><strong>${labels.member}:</strong> ${Sanitize.escapeHTML(UI.formatDate(user.created_at))}</p>
+                `);
             }
         }
 

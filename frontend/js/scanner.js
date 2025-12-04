@@ -187,17 +187,21 @@ const Scanner = {
 
     showProductDetails(product) {
         const lang = i18n.currentLang;
-        const productName = product[`product_name_${lang}`] || product.product_name || i18n.t('scanner.unknown_product');
-        const ingredientsText = product[`ingredients_text_${lang}`] || product.ingredients_text;
+        const productName = Sanitize.escapeHTML(product[`product_name_${lang}`] || product.product_name || i18n.t('scanner.unknown_product'));
+        const ingredientsText = Sanitize.escapeHTML(product[`ingredients_text_${lang}`] || product.ingredients_text || '');
+        const brands = Sanitize.escapeHTML(product.brands || '');
+        const categories = Sanitize.escapeHTML(product.categories || '');
+        const imageUrl = Sanitize.escapeHTML(product.image_url || '');
+        const nutriscoreGrade = product.nutriscore_grade ? Sanitize.escapeHTML(product.nutriscore_grade) : '';
 
         const resultDiv = document.getElementById('scanner-result');
-        resultDiv.innerHTML = `
+        Sanitize.setHTML(resultDiv, `
             <div class="card scanner-product-card">
-                ${product.image_url ? `<img src="${product.image_url}" alt="${productName}" class="scanner-product-image">` : ''}
+                ${imageUrl ? `<img src="${imageUrl}" alt="${productName}" class="scanner-product-image">` : ''}
                 <h3>${productName}</h3>
-                ${product.brands ? `<p><strong>${i18n.t('scanner.brands')}:</strong> ${product.brands}</p>` : ''}
-                ${product.categories ? `<p><strong>${i18n.t('scanner.categories')}:</strong> ${product.categories}</p>` : ''}
-                ${product.nutriscore_grade ? `<p><strong>Nutri-Score:</strong> <span class="nutriscore-${product.nutriscore_grade}">${product.nutriscore_grade.toUpperCase()}</span></p>` : ''}
+                ${brands ? `<p><strong>${i18n.t('scanner.brands')}:</strong> ${brands}</p>` : ''}
+                ${categories ? `<p><strong>${i18n.t('scanner.categories')}:</strong> ${categories}</p>` : ''}
+                ${nutriscoreGrade ? `<p><strong>Nutri-Score:</strong> <span class="nutriscore-${nutriscoreGrade}">${nutriscoreGrade.toUpperCase()}</span></p>` : ''}
 
                 ${ingredientsText ? `
                     <div class="scanner-ingredients">
@@ -207,7 +211,7 @@ const Scanner = {
                 ` : ''}
 
                 <div class="scanner-actions">
-                    <button class="btn btn-primary" onclick="Scanner.addIngredientsFromProduct('${ingredientsText || ''}')">
+                    <button class="btn btn-primary" onclick="Scanner.addIngredientsFromProduct('${ingredientsText}')">
                         ${i18n.t('scanner.add_ingredients')}
                     </button>
                     <button class="btn btn-outline" onclick="Scanner.startScanner()">
@@ -215,7 +219,7 @@ const Scanner = {
                     </button>
                 </div>
             </div>
-        `;
+        `);
         resultDiv.style.display = 'block';
     },
 

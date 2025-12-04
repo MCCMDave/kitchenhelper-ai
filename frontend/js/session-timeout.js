@@ -57,10 +57,10 @@ const SessionTimeout = {
             max-width: 300px;
             animation: slideIn 0.3s ease-out;
         `;
-        warning.innerHTML = `
+        Sanitize.setHTML(warning, `
             <strong>⚠️ Sitzung läuft ab</strong><br>
-            <span style="font-size: 14px;">${message}</span>
-        `;
+            <span style="font-size: 14px;">${Sanitize.escapeHTML(message)}</span>
+        `);
 
         document.body.appendChild(warning);
 

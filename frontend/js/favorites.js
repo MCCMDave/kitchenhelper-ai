@@ -98,7 +98,7 @@ const Favorites = {
         }
 
         console.log('[Favorites] Rendering', itemsToRender.length, 'items');
-        container.innerHTML = itemsToRender.map(fav => this.renderCard(fav)).join('');
+        Sanitize.setHTML(container, itemsToRender.map(fav => this.renderCard(fav)).join(''));
     },
 
     // Render compact favorite card (click opens modal)

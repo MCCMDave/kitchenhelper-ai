@@ -28,7 +28,7 @@ const ProModel = {
                 subscribeBtn.disabled = true;
                 subscribeBtn.style.opacity = '0.6';
             } else {
-                subscribeBtn.innerHTML = '💎 <span data-i18n="pro.upgrade_now">Jetzt upgraden</span>';
+                Sanitize.setHTML(subscribeBtn, '💎 <span data-i18n="pro.upgrade_now">Jetzt upgraden</span>');
                 subscribeBtn.disabled = false;
                 subscribeBtn.style.opacity = '1';
             }
