@@ -107,6 +107,121 @@
     </style>
 </head>
 <body>
+    <!-- Header Actions (Top Right) -->
+    <div style="position: fixed; top: 20px; right: 20px; display: flex; gap: 8px; align-items: center; z-index: 1000;">
+        <!-- Language Dropdown (only DE + EN) -->
+        <div class="lang-menu">
+            <button class="lang-toggle" onclick="i18n.toggleDropdown(event)" title="Sprache / Language">
+                <span class="lang-icon">🌍</span>
+                <span class="lang-toggle-text">DE</span>
+            </button>
+
+            <div class="lang-dropdown" id="lang-dropdown">
+                <button class="lang-option" onclick="i18n.setLanguage('de')">🇩🇪 Deutsch</button>
+                <button class="lang-option" onclick="i18n.setLanguage('en')">🇬🇧 English</button>
+            </div>
+        </div>
+
+        <!-- Theme Dropdown -->
+        <div class="theme-menu">
+            <button class="theme-toggle" onclick="ThemeMenu.toggle(event)" aria-label="Farbschema wählen" title="Farbschema">
+                <span class="theme-icon">🌙</span>
+            </button>
+
+            <div class="theme-dropdown" id="theme-dropdown">
+                <div class="theme-dropdown-grid">
+                    <!-- Light Modes -->
+                    <button class="theme-dot-btn" data-theme="light" onclick="ThemeMenu.setTheme('light')" title="Hell">
+                        <span style="font-size: 14px; margin-right: 4px;">🌞</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #4CAF50"></div>
+                            <div class="theme-dot" style="background: #2196F3"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="sepia" onclick="ThemeMenu.setTheme('sepia')" title="Sepia">
+                        <span style="font-size: 14px; margin-right: 4px;">📜</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #8B7355"></div>
+                            <div class="theme-dot" style="background: #7B8B8E"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="ocean-light" onclick="ThemeMenu.setTheme('ocean-light')" title="Ozean Hell">
+                        <span style="font-size: 14px; margin-right: 4px;">🌊</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #0891B2"></div>
+                            <div class="theme-dot" style="background: #3B82F6"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="forest-light" onclick="ThemeMenu.setTheme('forest-light')" title="Wald Hell">
+                        <span style="font-size: 14px; margin-right: 4px;">🌲</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #059669"></div>
+                            <div class="theme-dot" style="background: #16A34A"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="sunset-light" onclick="ThemeMenu.setTheme('sunset-light')" title="Sonnenuntergang Hell">
+                        <span style="font-size: 14px; margin-right: 4px;">🌅</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #F97316"></div>
+                            <div class="theme-dot" style="background: #EC4899"></div>
+                        </div>
+                    </button>
+
+                    <!-- Dark Modes -->
+                    <button class="theme-dot-btn" data-theme="dark" onclick="ThemeMenu.setTheme('dark')" title="Dunkel">
+                        <span style="font-size: 14px; margin-right: 4px;">🌙</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #66BB6A"></div>
+                            <div class="theme-dot" style="background: #42A5F5"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="nord" onclick="ThemeMenu.setTheme('nord')" title="Nord">
+                        <span style="font-size: 14px; margin-right: 4px;">❄️</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #88C0D0"></div>
+                            <div class="theme-dot" style="background: #81A1C1"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="solarized" onclick="ThemeMenu.setTheme('solarized')" title="Solarized">
+                        <span style="font-size: 14px; margin-right: 4px;">🌃</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #268BD2"></div>
+                            <div class="theme-dot" style="background: #2AA198"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="dracula" onclick="ThemeMenu.setTheme('dracula')" title="Dracula">
+                        <span style="font-size: 14px; margin-right: 4px;">🧛</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #BD93F9"></div>
+                            <div class="theme-dot" style="background: #8BE9FD"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="ocean-dark" onclick="ThemeMenu.setTheme('ocean-dark')" title="Ozean Dunkel">
+                        <span style="font-size: 14px; margin-right: 4px;">🌊</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #06B6D4"></div>
+                            <div class="theme-dot" style="background: #60A5FA"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="forest-dark" onclick="ThemeMenu.setTheme('forest-dark')" title="Wald Dunkel">
+                        <span style="font-size: 14px; margin-right: 4px;">🌲</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #10B981"></div>
+                            <div class="theme-dot" style="background: #22C55E"></div>
+                        </div>
+                    </button>
+                    <button class="theme-dot-btn" data-theme="sunset-dark" onclick="ThemeMenu.setTheme('sunset-dark')" title="Sonnenuntergang Dunkel">
+                        <span style="font-size: 14px; margin-right: 4px;">🌆</span>
+                        <div class="theme-dot-double">
+                            <div class="theme-dot" style="background: #FB923C"></div>
+                            <div class="theme-dot" style="background: #F472B6"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="impressum-container">
         <a href="index.html" class="back-btn">
             ← <span data-i18n="imprint.back">Zurück zur Startseite</span>
@@ -226,43 +341,67 @@
     <!-- i18n System -->
     <script src="js/i18n.js"></script>
     <script>
-        // Initialize i18n on page load
+        // ==================== THEME MENU ====================
+        const ThemeMenu = {
+            init() {
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                this.setTheme(savedTheme);
+            },
+
+            toggle(event) {
+                event.stopPropagation();
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.toggle('show');
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.theme-menu')) {
+                        dropdown.classList.remove('show');
+                    }
+                }, { once: true });
+            },
+
+            setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('colorTheme', theme);
+                const icons = {
+                    'light': '🌞', 'sepia': '📜', 'dark': '🌙',
+                    'nord': '❄️', 'solarized': '🌃', 'dracula': '🧛',
+                    'ocean-light': '🌊', 'ocean-dark': '🌊',
+                    'forest-light': '🌲', 'forest-dark': '🌲',
+                    'sunset-light': '🌅', 'sunset-dark': '🌆'
+                };
+                const icon = document.querySelector('.theme-icon');
+                if (icon) icon.textContent = icons[theme] || '🌙';
+                const dropdown = document.getElementById('theme-dropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                document.querySelectorAll('.theme-dot-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.theme === theme);
+                });
+            }
+        };
+
+        // Initialize i18n and theme on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Get language from localStorage or default to 'de'
+            ThemeMenu.init();
             const savedLanguage = localStorage.getItem('language') || 'de';
-
-            // Apply translations
             applyTranslations(savedLanguage);
-
-            // Update document lang attribute
             document.documentElement.lang = savedLanguage;
         });
 
         function applyTranslations(lang) {
-            // Get all elements with data-i18n attribute
             const elements = document.querySelectorAll('[data-i18n]');
-
             elements.forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 const translation = getTranslation(lang, key);
-
                 if (translation) {
-                    // Check if element is title tag
-                    if (element.tagName === 'TITLE') {
-                        element.textContent = translation;
-                    } else {
-                        element.textContent = translation;
-                    }
+                    element.textContent = translation;
                 }
             });
         }
 
         function getTranslation(lang, key) {
-            // Access translations object from i18n.js
             if (translations && translations[lang] && translations[lang][key]) {
                 return translations[lang][key];
             }
-            // Fallback to German if translation not found
             return translations['de'][key] || key;
         }
     </script>
