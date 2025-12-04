@@ -10,11 +10,11 @@ const CONFIG = {
             // Production: ALWAYS use HTTPS via Cloudflare
             return 'https://api.kitchenhelper-ai.de/api';
         } else if (hostname === '100.103.86.47') {
-            // Tailscale IP: Use HTTPS via Cloudflare
-            return 'https://api.kitchenhelper-ai.de/api';
+            // Tailscale IP: Use local Pi backend (httpOnly cookies work same-site)
+            return 'http://192.168.2.54:8000/api';
         } else if (hostname === '192.168.2.54') {
-            // Local network IP: Use HTTPS via Cloudflare (better security)
-            return 'https://api.kitchenhelper-ai.de/api';
+            // Local network IP: Use local Pi backend (httpOnly cookies work same-site)
+            return 'http://192.168.2.54:8000/api';
         } else {
             // Localhost development: Use local backend
             return 'http://127.0.0.1:8000/api';
