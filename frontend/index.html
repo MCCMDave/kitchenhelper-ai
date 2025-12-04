@@ -3,18 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=landing.html">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.kitchenhelper-ai.de http://127.0.0.1:8000 http://192.168.2.54:8000 http://100.103.86.47:8000 https://world.openfoodfacts.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <title>KitchenHelper-AI - Login</title>
+    <title>Weiterleitung... - KitchenHelper-AI</title>
+    <script>
+        // Immediate redirect with fallback
+        window.location.replace('landing.html');
+    </script>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+        }
+        .redirect-message {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .redirect-message h1 { margin-bottom: 1rem; }
+        .redirect-message a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
-    <div class="auth-page">
+    <div class="redirect-message">
+        <h1>🔄 Weiterleitung...</h1>
+        <p>Du wirst automatisch zur Startseite weitergeleitet.</p>
+        <p><a href="landing.html">Falls nicht, klicke hier</a></p>
+    </div>
+
+    <!-- Original content hidden (kept for compatibility) -->
+    <div class="auth-page" style="display: none;">
         <div class="auth-box">
             <!-- Header Actions Container -->
             <div style="position: absolute; top: var(--spacing-md); right: var(--spacing-md); display: flex; gap: 8px; align-items: center;">
