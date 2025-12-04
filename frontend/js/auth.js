@@ -62,7 +62,13 @@ const Auth = {
     },
 
     // Logout
-    logout() {
+    async logout() {
+        try {
+            // Call logout endpoint to clear httpOnly cookie
+            await api.logout();
+        } catch (error) {
+            console.warn('[Auth] Logout API call failed, clearing local storage anyway');
+        }
         api.clearToken();
         window.location.href = 'index.html';
     },

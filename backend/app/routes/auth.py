@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
@@ -89,14 +89,14 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(credentials: UserLogin, db: Session = Depends(get_db)):
+def login(credentials: UserLogin, response: Response, db: Session = Depends(get_db)):
     """
     User einloggen mit E-Mail ODER Benutzername
 
     - **email_or_username**: E-Mail-Adresse oder Benutzername
     - **password**: Passwort
 
-    Returns JWT Access Token
+    Returns JWT Access Token in httpOnly Cookie
     """
     import time
 
@@ -132,8 +132,28 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
 
+    # Set httpOnly cookie (secure XSS protection)
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=not is_debug_mode(),  # HTTPS in production, HTTP in debug
+        samesite="lax",
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        path="/"
+    )
+
     print(f"[OK] User logged in: {user.username}")
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/logout")
+def logout(response: Response):
+    """
+    User ausloggen - löscht httpOnly Cookie
+    """
+    response.delete_cookie(key="access_token", path="/")
+    return {"message": "Successfully logged out"}
 
 
 @router.post("/request-password-reset")

@@ -29,6 +29,7 @@ class APIClient {
                 'Content-Type': 'application/json',
                 ...(token && { 'Authorization': `Bearer ${token}` })
             },
+            credentials: 'include',  // Send httpOnly cookies
             ...options
         };
 
@@ -103,6 +104,8 @@ api.register = (email, username, password) =>
 
 api.login = (emailOrUsername, password) =>
     api.post('/auth/login', { email_or_username: emailOrUsername, password });
+
+api.logout = () => api.post('/auth/logout', {});
 
 // ==================== USERS API ====================
 api.getMe = () => api.get('/users/me');
@@ -193,6 +196,7 @@ api.exportShoppingListText = async (recipeIds = [], favoriteIds = [], scaleFacto
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',  // Send httpOnly cookies
         body: JSON.stringify({
             recipe_ids: recipeIds,
             favorite_ids: favoriteIds,
@@ -210,6 +214,7 @@ api.exportShoppingListJson = async (recipeIds = [], favoriteIds = [], scaleFacto
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',  // Send httpOnly cookies
         body: JSON.stringify({
             recipe_ids: recipeIds,
             favorite_ids: favoriteIds,

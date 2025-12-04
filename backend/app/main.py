@@ -53,13 +53,14 @@ app.add_middleware(SecurityHeadersMiddleware)
 # HTTPS Redirect (force HTTPS in production, except localhost/local networks)
 app.add_middleware(HTTPSRedirectMiddleware)
 
-# CORS - Secure Configuration
+# CORS - Secure Configuration (supports httpOnly cookies)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,  # Nur definierte Origins (aus .env)
-    allow_credentials=True,
+    allow_credentials=True,  # Required for httpOnly cookies
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type", "Authorization", "Cookie"],
+    expose_headers=["Set-Cookie"],
 )
 
 # API Request Logger (only in DEBUG mode)
