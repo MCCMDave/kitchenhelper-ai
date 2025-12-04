@@ -1,21 +1,22 @@
 // KitchenHelper-AI Configuration
 const CONFIG = {
-    // API Settings - Auto-detect environment
+    // API Settings - Auto-detect environment with HTTPS enforcement
     API_BASE_URL: (() => {
         // Check if accessing via Tailscale, Pi IP, or localhost
         const hostname = window.location.hostname;
 
-        if (hostname === '100.103.86.47') {
-            // Tailscale IP
-            return 'http://100.103.86.47:8000/api';
+        // SECURITY: Enforce HTTPS for production domains
+        if (hostname.includes('.de') || hostname.includes('cloudflare')) {
+            // Production: ALWAYS use HTTPS via Cloudflare
+            return 'https://api.kitchenhelper-ai.de/api';
+        } else if (hostname === '100.103.86.47') {
+            // Tailscale IP: Use HTTPS via Cloudflare
+            return 'https://api.kitchenhelper-ai.de/api';
         } else if (hostname === '192.168.2.54') {
-            // Local network IP
-            return 'http://192.168.2.54:8000/api';
-        } else if (hostname.includes('cloudflare') || hostname.includes('.de')) {
-            // Cloudflare Tunnel or custom domain
-            return `${window.location.protocol}//${window.location.host}/api`;
+            // Local network IP: Use HTTPS via Cloudflare (better security)
+            return 'https://api.kitchenhelper-ai.de/api';
         } else {
-            // Localhost development
+            // Localhost development: Use local backend
             return 'http://127.0.0.1:8000/api';
         }
     })(),

@@ -24,7 +24,6 @@ const Auth = {
     // Login (mit Email oder Username)
     async login(emailOrUsername, password) {
         try {
-            console.log('[Auth] Login attempt:', emailOrUsername);
             const response = await api.login(emailOrUsername, password);
             api.setToken(response.access_token);
 
@@ -32,10 +31,9 @@ const Auth = {
             const user = await api.getMe();
             this.saveUser(user);
 
-            console.log('[Auth] Login successful:', user.username);
             return user;
         } catch (error) {
-            console.error('[Auth] Login failed:', error);
+            console.error('[Auth] Login failed');
             throw error;
         }
     },
@@ -43,7 +41,6 @@ const Auth = {
     // Register (mit Username statt Name)
     async register(email, username, password) {
         try {
-            console.log('[Auth] Register attempt:', { email, username });
             // Register user
             await api.register(email, username, password);
             // Then login
@@ -52,15 +49,14 @@ const Auth = {
             // Send verification email
             try {
                 await api.sendVerificationEmail(email);
-                console.log('[Auth] Verification email sent to:', email);
             } catch (emailError) {
-                console.warn('[Auth] Failed to send verification email:', emailError);
+                console.warn('[Auth] Failed to send verification email');
                 // Don't fail registration if email fails
             }
 
             return user;
         } catch (error) {
-            console.error('[Auth] Register failed:', error);
+            console.error('[Auth] Register failed');
             throw error;
         }
     },

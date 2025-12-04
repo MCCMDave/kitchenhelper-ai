@@ -92,6 +92,11 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 
     Returns JWT Access Token
     """
+    import time
+
+    # Rate Limiting: Simulate delay to prevent brute-force (0.5s minimum)
+    time.sleep(0.5)
+
     login_input = credentials.email_or_username.lower().strip()
 
     # Versuche zuerst per Email zu finden
@@ -101,6 +106,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     if not user:
         user = db.query(User).filter(User.username == login_input).first()
 
+    # Security: Gleicher Error-Text ob User existiert oder Passwort falsch (verhindert Email-Enumeration)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

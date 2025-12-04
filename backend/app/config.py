@@ -1,6 +1,8 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 from typing import List
+import secrets
+import sys
 
 class Settings(BaseSettings):
     """App-Konfiguration"""
@@ -11,15 +13,15 @@ class Settings(BaseSettings):
     # JWT
     JWT_SECRET_KEY: str = "your-super-secret-key-CHANGE-THIS-IN-PRODUCTION"
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60  # 1 Stunde (Balance: UX vs Security)
 
     # App
     APP_NAME: str = "KitchenHelper-AI"
     APP_VERSION: str = "1.0.0"
-    DEBUG: bool = True
+    DEBUG: bool = False  # Sicherer Default - In .env auf True setzen für Development
 
     # CORS - Allowed Origins (comma-separated in .env)
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:8000,http://127.0.0.1:8000"
+    ALLOWED_ORIGINS: str = "https://kitchenhelper-ai.de,https://kitchen.kitchenhelper-ai.de,http://192.168.2.54:8081,http://100.103.86.47:8081,http://localhost:8081,http://127.0.0.1:8081"
 
     # AI Providers
     GOOGLE_AI_API_KEY: str = ""  # Gemini API Key (Pro users)
@@ -44,7 +46,23 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings():
     """Settings Singleton - wird nur einmal geladen"""
-    return Settings()
+    settings_instance = Settings()
+
+    # Security Warning: Check for default JWT_SECRET_KEY
+    if settings_instance.JWT_SECRET_KEY == "your-super-secret-key-CHANGE-THIS-IN-PRODUCTION":
+        print("\n" + "="*70)
+        print("⚠️  SECURITY WARNING: Using default JWT_SECRET_KEY!")
+        print("="*70)
+        print("CRITICAL: Change JWT_SECRET_KEY in .env file before deployment!")
+        print("Generate a secure key with: python -c 'import secrets; print(secrets.token_urlsafe(32))'")
+        print("="*70 + "\n")
+
+        # Exit in production mode (wenn DEBUG=False)
+        if not settings_instance.DEBUG:
+            print("❌ FATAL: Cannot start in production with default JWT_SECRET_KEY!")
+            sys.exit(1)
+
+    return settings_instance
 
 # Exportiere für einfachen Import
 settings = get_settings()
