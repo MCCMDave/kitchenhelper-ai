@@ -17,6 +17,7 @@ const translations = {
         'auth.logout': 'Abmelden',
         'auth.demo_hint': 'Demo-Account: Registriere dich kostenlos!',
         'auth.subtitle': 'Dein KI-Rezeptgenerator',
+        'auth.backToHome': 'Zurück zur Startseite',
 
         // Password Reset
         'reset.title': 'Passwort zurücksetzen',
@@ -339,6 +340,7 @@ const translations = {
         'auth.logout': 'Logout',
         'auth.demo_hint': 'Demo account: Sign up for free!',
         'auth.subtitle': 'Your AI Recipe Generator',
+        'auth.backToHome': 'Back to Homepage',
 
         // Password Reset
         'reset.title': 'Reset Password',
@@ -665,6 +667,7 @@ const translations = {
         'auth.password_repeat': 'Répétez le mot de passe.',
         'auth.register': 'Inscription',
         'auth.subtitle': 'Votre générateur de recette artificielle',
+        'auth.backToHome': 'Retour à la page d\'accueil',
         'auth.username': 'Nom d\'utilisateur',
         'auth.username_hint': 'Trois à vingt caractères, lettres, nombres, tiret et souche uniquement.',
 
@@ -918,9 +921,7 @@ const translations = {
         'settings.theme_nord': 'Nord',
         'settings.theme_ocean-dark': 'Océan Noir',
         'settings.theme_ocean-light': 'Lumière de l\'océan',
-        'settings.theme_sepia': 'Brun
-
-(Sepia means "sepia" in English, but it\'s more accurately translated to "sepiar" or "chêne verts" in French, however, \'Brun\' is a common and popular translation.)',
+        'settings.theme_sepia': 'Brun',
         'settings.theme_solarized': 'Solariisé',
         'settings.theme_sunset-dark': 'Coucher de soleil sombre.',
         'settings.theme_sunset-light': 'Lumière du coucher de soleil',
@@ -961,6 +962,7 @@ const translations = {
         'auth.password_repeat': 'Repita la contraseña',
         'auth.register': 'Regístrate',
         'auth.subtitle': 'Generador de Recetas de Inteligencia Artificial',
+        'auth.backToHome': 'Volver a la página de inicio',
         'auth.username': 'Nombre de usuario',
         'auth.username_hint': '3-20 caracteres, letras, números, -, y _ solo.',
 
@@ -1255,6 +1257,7 @@ const translations = {
         'auth.password_repeat': 'Ripeti la password.',
         'auth.register': 'Iscriviti',
         'auth.subtitle': 'Generatore di Ricette AI',
+        'auth.backToHome': 'Torna alla homepage',
         'auth.username': 'Utente',
         'auth.username_hint': 'Tramite solo caratteri letterari (a, b, c), numeri (0-9) e simboli speciali ( -, _).',
 
@@ -1551,6 +1554,7 @@ const translations = {
         'auth.password_repeat': 'Repita a senha',
         'auth.register': 'Inscreva-se',
         'auth.subtitle': 'Geração de Receitas com Inteligência Artificial',
+        'auth.backToHome': 'Voltar para a página inicial',
         'auth.username': 'Nome do Usuário',
         'auth.username_hint': '3-20 caracteres, letras, números, - e _ apenas',
 
