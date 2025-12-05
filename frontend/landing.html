@@ -111,6 +111,76 @@
             color: white;
         }
 
+        /* Language & Theme Dropdowns */
+        .lang-menu, .theme-menu {
+            position: relative;
+        }
+
+        .lang-toggle, .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-toggle:hover, .theme-toggle:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .lang-dropdown, .theme-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        .lang-dropdown.show, .theme-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option, .theme-option {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-option:hover, .theme-option:hover {
+            background: var(--bg-gray);
+        }
+
+        .theme-dropdown-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+
         /* Hero Section */
         .hero {
             padding: 8rem 2rem 4rem;
@@ -877,7 +947,6 @@
             <p>&copy; 2025 KitchenHelper-AI. Alle Rechte vorbehalten.</p>
             <div style="margin-top: 1rem;">
                 <a href="impressum.html">Impressum</a>
-                <a href="impressum.html">Datenschutz</a>
                 <a href="mailto:info@kitchenhelper-ai.de">Kontakt</a>
             </div>
         </div>
