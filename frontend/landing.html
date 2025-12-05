@@ -594,11 +594,124 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">🍳 KitchenHelper-AI</div>
+            <div class="logo" onclick="scrollToTop()" style="cursor: pointer;">🍳 KitchenHelper-AI</div>
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#screenshots">Screenshots</a>
                 <button onclick="openLoginModal()" class="btn btn-outline">Login</button>
+
+                <!-- Language Dropdown -->
+                <div class="lang-menu">
+                    <button class="lang-toggle" onclick="i18n.toggleDropdown(event)" title="Sprache / Language">
+                        <span class="lang-icon">🌍</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <button class="lang-option" onclick="i18n.setLanguage('de')">🇩🇪 Deutsch</button>
+                        <button class="lang-option" onclick="i18n.setLanguage('en')">🇬🇧 English</button>
+                        <button class="lang-option" onclick="i18n.setLanguage('fr')">🇫🇷 Français</button>
+                        <button class="lang-option" onclick="i18n.setLanguage('es')">🇪🇸 Español</button>
+                        <button class="lang-option" onclick="i18n.setLanguage('it')">🇮🇹 Italiano</button>
+                        <button class="lang-option" onclick="i18n.setLanguage('pt')">🇵🇹 Português</button>
+                    </div>
+                </div>
+
+                <!-- Theme Dropdown -->
+                <div class="theme-menu">
+                    <button class="theme-toggle" onclick="ThemeMenu.toggle(event)" aria-label="Farbschema wählen" title="Farbschema">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <div class="theme-dropdown" id="theme-dropdown">
+                        <div class="theme-dropdown-grid">
+                            <!-- Light Modes -->
+                            <button class="theme-dot-btn" data-theme="light" onclick="ThemeMenu.setTheme('light')" title="Hell">
+                                <span style="font-size: 14px; margin-right: 4px;">🌞</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #4CAF50"></div>
+                                    <div class="theme-dot" style="background: #2196F3"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="sepia" onclick="ThemeMenu.setTheme('sepia')" title="Sepia">
+                                <span style="font-size: 14px; margin-right: 4px;">📜</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #8B7355"></div>
+                                    <div class="theme-dot" style="background: #7B8B8E"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="ocean-light" onclick="ThemeMenu.setTheme('ocean-light')" title="Ozean Hell">
+                                <span style="font-size: 14px; margin-right: 4px;">🌊</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #0891B2"></div>
+                                    <div class="theme-dot" style="background: #3B82F6"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="forest-light" onclick="ThemeMenu.setTheme('forest-light')" title="Wald Hell">
+                                <span style="font-size: 14px; margin-right: 4px;">🌲</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #059669"></div>
+                                    <div class="theme-dot" style="background: #16A34A"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="sunset-light" onclick="ThemeMenu.setTheme('sunset-light')" title="Sonnenuntergang Hell">
+                                <span style="font-size: 14px; margin-right: 4px;">🌅</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #F97316"></div>
+                                    <div class="theme-dot" style="background: #EC4899"></div>
+                                </div>
+                            </button>
+
+                            <!-- Dark Modes -->
+                            <button class="theme-dot-btn" data-theme="dark" onclick="ThemeMenu.setTheme('dark')" title="Dunkel">
+                                <span style="font-size: 14px; margin-right: 4px;">🌙</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #66BB6A"></div>
+                                    <div class="theme-dot" style="background: #42A5F5"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="nord" onclick="ThemeMenu.setTheme('nord')" title="Nord">
+                                <span style="font-size: 14px; margin-right: 4px;">❄️</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #88C0D0"></div>
+                                    <div class="theme-dot" style="background: #81A1C1"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="solarized" onclick="ThemeMenu.setTheme('solarized')" title="Solarized">
+                                <span style="font-size: 14px; margin-right: 4px;">🌃</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #268BD2"></div>
+                                    <div class="theme-dot" style="background: #2AA198"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="dracula" onclick="ThemeMenu.setTheme('dracula')" title="Dracula">
+                                <span style="font-size: 14px; margin-right: 4px;">🧛</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #BD93F9"></div>
+                                    <div class="theme-dot" style="background: #8BE9FD"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="ocean-dark" onclick="ThemeMenu.setTheme('ocean-dark')" title="Ozean Dunkel">
+                                <span style="font-size: 14px; margin-right: 4px;">🌊</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #06B6D4"></div>
+                                    <div class="theme-dot" style="background: #60A5FA"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="forest-dark" onclick="ThemeMenu.setTheme('forest-dark')" title="Wald Dunkel">
+                                <span style="font-size: 14px; margin-right: 4px;">🌲</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #10B981"></div>
+                                    <div class="theme-dot" style="background: #22C55E"></div>
+                                </div>
+                            </button>
+                            <button class="theme-dot-btn" data-theme="sunset-dark" onclick="ThemeMenu.setTheme('sunset-dark')" title="Sonnenuntergang Dunkel">
+                                <span style="font-size: 14px; margin-right: 4px;">🌆</span>
+                                <div class="theme-dot-double">
+                                    <div class="theme-dot" style="background: #FB923C"></div>
+                                    <div class="theme-dot" style="background: #F472B6"></div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -794,7 +907,12 @@
                 </div>
                 <div class="form-group">
                     <label>Passwort</label>
-                    <input type="password" id="loginPassword" required autocomplete="current-password">
+                    <div class="password-input-wrapper">
+                        <input type="password" id="loginPassword" required autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" id="loginBtn" class="btn btn-primary">Anmelden</button>
             </form>
@@ -811,11 +929,21 @@
                 </div>
                 <div class="form-group">
                     <label>Passwort</label>
-                    <input type="password" id="registerPassword" required autocomplete="new-password" minlength="6">
+                    <div class="password-input-wrapper">
+                        <input type="password" id="registerPassword" required autocomplete="new-password" minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Passwort bestätigen</label>
-                    <input type="password" id="registerPasswordConfirm" required autocomplete="new-password" minlength="6">
+                    <div class="password-input-wrapper">
+                        <input type="password" id="registerPasswordConfirm" required autocomplete="new-password" minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)" title="Passwort anzeigen">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" id="registerBtn" class="btn btn-primary">Registrieren</button>
             </form>
@@ -823,9 +951,12 @@
     </div>
 
     <!-- Dependencies -->
+    <link rel="stylesheet" href="css/main.css">
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/ui/theme-menu.js"></script>
 
     <!-- Modal Logic -->
     <script>
@@ -877,6 +1008,29 @@
         function hideError() {
             const errorDiv = document.getElementById('modalError');
             errorDiv.classList.remove('active');
+        }
+
+        function togglePassword(button) {
+            const wrapper = button.closest('.password-input-wrapper');
+            const input = wrapper.querySelector('input');
+            const icon = button.querySelector('.toggle-icon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+                button.classList.add('visible');
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+                button.classList.remove('visible');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
         function setLoading(btn, loading) {
