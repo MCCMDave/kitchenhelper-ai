@@ -664,7 +664,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo" onclick="scrollToTop()" style="cursor: pointer;">🍳 KitchenHelper-AI</div>
+            <div class="logo">🍳 KitchenHelper-AI</div>
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#screenshots">Screenshots</a>
@@ -1025,7 +1025,49 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/i18n.js"></script>
-    <script src="js/ui/theme-menu.js"></script>
+
+    <!-- Theme Menu (Inline) -->
+    <script>
+        const ThemeMenu = {
+            init() {
+                const savedTheme = localStorage.getItem('colorTheme') || 'light';
+                this.setTheme(savedTheme);
+            },
+
+            toggle(event) {
+                event.stopPropagation();
+                const dropdown = document.getElementById('theme-dropdown');
+                dropdown.classList.toggle('show');
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.theme-menu')) {
+                        dropdown.classList.remove('show');
+                    }
+                }, { once: true });
+            },
+
+            setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('colorTheme', theme);
+                const icons = {
+                    'light': '🌞', 'sepia': '📜', 'dark': '🌙',
+                    'nord': '❄️', 'solarized': '🌃', 'dracula': '🧛',
+                    'ocean-light': '🌊', 'ocean-dark': '🌊',
+                    'forest-light': '🌲', 'forest-dark': '🌲',
+                    'sunset-light': '🌅', 'sunset-dark': '🌆'
+                };
+                const icon = document.querySelector('.theme-icon');
+                if (icon) icon.textContent = icons[theme] || '🌙';
+                const dropdown = document.getElementById('theme-dropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                document.querySelectorAll('.theme-dot-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.theme === theme);
+                });
+            }
+        };
+
+        // Initialize ThemeMenu on page load
+        document.addEventListener('DOMContentLoaded', () => ThemeMenu.init());
+    </script>
 
     <!-- Modal Logic -->
     <script>
