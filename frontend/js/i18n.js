@@ -1333,9 +1333,7 @@ const translations = {
         'ingredients.expired': 'Scaduto',
         'ingredients.expires': 'Scadere',
         'ingredients.expiry': 'Data di scadenza',
-        'ingredients.hint_permanent': 'Epicure
-
-(Edulcoranti)',
+        'ingredients.hint_permanent': 'Epicure (Edulcoranti)',
         'ingredients.name': 'Nome',
         'ingredients.no_category': 'Categoria non specificata',
         'ingredients.no_expiry': 'Non scadenza di data.',
