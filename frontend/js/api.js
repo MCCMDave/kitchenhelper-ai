@@ -6,30 +6,34 @@ class APIClient {
     }
 
     // Token Management
+    // NOTE: JWT tokens are stored in httpOnly cookies (backend)
+    // We don't store them in localStorage anymore (XSS protection)
     getToken() {
-        return localStorage.getItem(CONFIG.TOKEN_KEY);
+        // Token is in httpOnly cookie, sent automatically with credentials: 'include'
+        return null; // Deprecated - keeping for backward compatibility
     }
 
     setToken(token) {
-        localStorage.setItem(CONFIG.TOKEN_KEY, token);
+        // DEPRECATED: Token is now in httpOnly cookie
+        // No longer storing in localStorage for security
+        // Keeping empty method for backward compatibility
     }
 
     clearToken() {
-        localStorage.removeItem(CONFIG.TOKEN_KEY);
+        // Only clear user data, token is handled by backend cookie
         localStorage.removeItem(CONFIG.USER_KEY);
     }
 
     // Generic Request Method
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
-        const token = this.getToken();
 
         const config = {
             headers: {
-                'Content-Type': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
+                'Content-Type': 'application/json'
+                // No Authorization header - using httpOnly cookie instead
             },
-            credentials: 'include',  // Send httpOnly cookies
+            credentials: 'include',  // Send httpOnly cookies (JWT token)
             ...options
         };
 
@@ -189,14 +193,12 @@ api.generateShoppingList = (recipeIds = [], favoriteIds = [], scaleFactor = 1.0)
     });
 
 api.exportShoppingListText = async (recipeIds = [], favoriteIds = [], scaleFactor = 1.0) => {
-    const token = api.getToken();
     const response = await fetch(`${CONFIG.API_BASE_URL}/shopping-list/export/text`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
-        credentials: 'include',  // Send httpOnly cookies
+        credentials: 'include',  // httpOnly cookie auth
         body: JSON.stringify({
             recipe_ids: recipeIds,
             favorite_ids: favoriteIds,
@@ -207,12 +209,10 @@ api.exportShoppingListText = async (recipeIds = [], favoriteIds = [], scaleFacto
 };
 
 api.exportShoppingListJson = async (recipeIds = [], favoriteIds = [], scaleFactor = 1.0) => {
-    const token = api.getToken();
     const response = await fetch(`${CONFIG.API_BASE_URL}/shopping-list/export/json`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
         credentials: 'include',  // Send httpOnly cookies
         body: JSON.stringify({

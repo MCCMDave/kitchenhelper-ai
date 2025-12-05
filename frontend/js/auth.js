@@ -2,8 +2,10 @@
 
 const Auth = {
     // Check if user is authenticated
+    // NOTE: We check if user data exists in localStorage
+    // Actual JWT is in httpOnly cookie (more secure)
     isAuthenticated() {
-        return !!api.getToken();
+        return !!this.getCurrentUser();
     },
 
     // Get current user from localStorage

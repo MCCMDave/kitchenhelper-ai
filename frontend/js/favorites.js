@@ -262,14 +262,11 @@ const Favorites = {
             console.log('[Favorites] Exporting recipe:', recipeId);
             UI.info(i18n.t('favorites.pdf_creating'));
 
-            const token = api.getToken();
             const response = await fetch(
                 `${CONFIG.API_BASE_URL}/recipes/${recipeId}/export/pdf`,
                 {
                     method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    credentials: 'include'  // httpOnly cookie auth
                 }
             );
 
