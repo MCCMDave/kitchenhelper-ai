@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     RESEND_API_KEY: str = ""  # Resend API Key (get from resend.com)
     RESEND_FROM_EMAIL: str = "KitchenHelper <noreply@yourdomain.com>"  # Change after domain verification
     RESEND_REPLY_TO: str = "studio.del.melucio@gmail.com"  # Studio email for gaming/entertainment
+    FRONTEND_BASE_URL: str = "http://192.168.2.54:8081"  # Frontend URL for email links
 
     @property
     def cors_origins(self) -> List[str]:
