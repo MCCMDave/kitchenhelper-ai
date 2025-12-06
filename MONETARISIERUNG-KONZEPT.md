@@ -158,7 +158,7 @@
 ✅ **White-Label:** Eigenes Branding für Praxen
 ✅ **Custom Präferenzen:** Eigene Diät-Regeln (z.B. "Typ-1 Kind, 8 Jahre, 180g KH/Tag")
 ✅ **Insulin-Bedarfs-Rechner:** Basierend auf BE + individuellem Faktor
-✅ **Prioritäts-Support:** 24h Response-Time
+✅ **Support:** Email (gleich wie alle anderen, aber mit Erfahrung bevorzugt behandelt)
 
 **Rezept-DB Inhalt (50.000+ Rezepte):**
 - 10.000 Low-Carb Rezepte (alle Varianten)
@@ -220,7 +220,7 @@
 | **Team-Features** | ❌ | ❌ | ❌ | ✅ (5 User) |
 | **Patienten-Management** | ❌ | ❌ | ❌ | ✅ |
 | **White-Label** | ❌ | ❌ | ❌ | ✅ |
-| **Support** | Community | Email | Priority | 24h |
+| **Support** | Community | Email | Email | Email |
 
 ---
 
@@ -473,18 +473,31 @@ Katja:  6.801€/Monat (~81.600€/Jahr)
 
 ---
 
-### 3. **Business-Lizenz** (für Diabetologen-Praxen)
+### 3. **Business-Tier** (für Diabetologen-Praxen, Kliniken)
+
+**Zusätzlicher Tier über PRO:**
+
 ```
-Einzelpraxis (1-3 Ärzte):        49€/Monat
-Gruppenpraxis (4-10 Ärzte):      99€/Monat
-Klinik (10+ Ärzte):             299€/Monat
+BUSINESS (Einzelpraxis):        49€/Monat (1-3 Mitarbeiter)
+BUSINESS+ (Gruppenpraxis):      99€/Monat (4-10 Mitarbeiter)
+ENTERPRISE (Klinik):           299€/Monat (10+ Mitarbeiter)
 ```
 
-**Features:**
-- Unbegrenzte Patienten
-- Custom Rezept-Import (Praxis-eigene Rezepte)
-- Export für Krankenakten
-- White-Label mit Praxis-Logo
+**Features (zusätzlich zu PRO):**
+- ✅ **Unbegrenzte Team-Mitglieder** (statt 5)
+- ✅ **Unbegrenzte Patienten**
+- ✅ **Custom Rezept-Import** (Praxis-eigene Rezepte in DB)
+- ✅ **Export für Krankenakten** (FHIR-kompatibel)
+- ✅ **White-Label mit eigenem Logo**
+- ✅ **Steuerlich absetzbar** (Betriebsausgabe)
+- ✅ **Rechnungen mit Umsatzsteuer**
+- ✅ **Service-Level Agreement (SLA): 99,9% Uptime**
+- ✅ **Prioritäts-Support: 24h Response** (nur für BUSINESS+)
+
+**Warum separat von PRO?**
+- PRO (9,99€): Einzelpersonen (Berater, Coaches)
+- BUSINESS (49€+): Firmen/Praxen (steuerlich absetzbar!)
+- Firmen zahlen gerne mehr, wenn sie Rechnung brauchen
 
 ---
 

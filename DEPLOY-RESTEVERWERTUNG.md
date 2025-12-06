@@ -10,15 +10,14 @@ git pull origin main
 
 ### 2. DB-Migration ausführen
 ```bash
-# SQLite DB finden
-find ~/kitchenhelper-ai -name "*.db"
+# WICHTIG: Aus dem richtigen Verzeichnis!
+cd ~/kitchenhelper-ai
 
-# Migration ausführen (Pfad anpassen!)
-sqlite3 ~/kitchenhelper-ai/backend/data/kitchen.db < ~/kitchenhelper-ai/backend/migrate_add_quantity_unit.sql
+# Migration ausführen
+sqlite3 backend/data/kitchen.db < backend/migrate_add_quantity_unit.sql
 
-# Verify
-sqlite3 ~/kitchenhelper-ai/backend/data/kitchen.db "PRAGMA table_info(ingredients);"
-# Sollte quantity und unit zeigen!
+# Verify (sollte quantity und unit zeigen!)
+sqlite3 backend/data/kitchen.db "PRAGMA table_info(ingredients);"
 ```
 
 ### 3. Backend neustarten
