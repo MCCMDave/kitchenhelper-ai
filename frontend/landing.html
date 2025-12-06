@@ -136,8 +136,8 @@
 
         .lang-dropdown, .theme-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
+            top: calc(100% + 8px); /* Consistent 8px spacing below button */
+            right: 0; /* Always align to right edge */
             background: white;
             border-radius: 12px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
@@ -146,8 +146,9 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
-            transition: all 0.3s;
-            min-width: 180px;
+            transition: all 0.3s ease;
+            min-width: 200px; /* Fixed width for consistency */
+            white-space: nowrap; /* Prevent text wrapping */
         }
 
         .lang-dropdown.show, .theme-dropdown.show {
