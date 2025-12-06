@@ -1,0 +1,477 @@
+/* ==================== MOBILE OPTIMIZATIONS ==================== */
+
+/* Tablet & Below (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Typography */
+    :root {
+        --font-size-base: 16px;   /* Mindestgröße für iOS Safari (verhindert Auto-Zoom) */
+        --font-size-sm: 14px;
+        --font-size-lg: 18px;
+        --font-size-xl: 20px;
+        --font-size-2xl: 24px;
+        --font-size-3xl: 28px;
+    }
+
+    /* Spacing - etwas enger auf Tablet */
+    :root {
+        --spacing-md: 0.875rem;
+        --spacing-lg: 1.25rem;
+        --spacing-xl: 1.75rem;
+    }
+
+    /* Container */
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Header */
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-sm) 0;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: var(--font-size-xl);
+    }
+
+    /* Navigation Tabs */
+    .tabs {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        min-width: 80px;
+        white-space: nowrap;
+    }
+
+    .nav-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    /* Page Header */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .page-header-actions {
+        width: 100%;
+    }
+
+    .page-header-actions .btn {
+        flex: 1;
+    }
+
+    /* Buttons - größer für Touch */
+    .btn {
+        min-height: 44px;  /* iOS Human Interface Guidelines */
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-base);
+    }
+
+    .btn-sm {
+        min-height: 38px;
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .btn-lg {
+        min-height: 52px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    /* Cards - volle Breite auf Tablet */
+    .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+
+    /* Auth Box */
+    .auth-box {
+        padding: var(--spacing-lg);
+        max-width: 100%;
+    }
+
+    /* Recipe Nutrition - 3 Spalten */
+    .recipe-nutrition {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Ingredient Checkboxes - 2 Spalten */
+    .ingredient-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    /* Spice Grid - 2 Spalten */
+    .spice-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    /* Profiles Checkbox Grid - 1 Spalte */
+    .profiles-checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Modals - volle Breite */
+    .modal {
+        width: 95%;
+        max-width: 95%;
+    }
+
+    .modal-large {
+        width: 95%;
+        max-width: 95%;
+    }
+
+    /* Dropdowns - bessere Touch-Größe */
+    .lang-option,
+    .theme-dot-btn,
+    .user-dropdown button {
+        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+}
+
+/* Smartphone (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Typography - noch größer auf Smartphone */
+    :root {
+        --font-size-base: 16px;
+        --font-size-sm: 14px;
+        --font-size-lg: 18px;
+        --font-size-xl: 22px;
+        --font-size-2xl: 26px;
+        --font-size-3xl: 32px;
+    }
+
+    /* Spacing - enger auf Smartphone */
+    :root {
+        --spacing-sm: 0.375rem;
+        --spacing-md: 0.75rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+        --spacing-2xl: 2rem;
+    }
+
+    /* Container - weniger Padding */
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* Header - kompakter */
+    .header-content {
+        padding: var(--spacing-xs) 0;
+    }
+
+    .logo {
+        font-size: var(--font-size-lg);
+    }
+
+    .user-tier-badge {
+        display: none; /* Verstecke Badge auf kleinen Screens */
+    }
+
+    /* Buttons - volle Breite */
+    .btn-block,
+    .page-header-actions .btn {
+        width: 100%;
+    }
+
+    /* Cards - 1 Spalte */
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    /* Recipe Nutrition - 2 Spalten */
+    .recipe-nutrition {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    .nutrition-value {
+        font-size: var(--font-size-base);
+    }
+
+    .nutrition-label {
+        font-size: 10px;
+    }
+
+    /* Ingredient Checkboxes - 1 Spalte */
+    .ingredient-checkboxes {
+        grid-template-columns: 1fr;
+    }
+
+    /* Spice Grid - 1 Spalte */
+    .spice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Recipe Card - kompakter */
+    .recipe-card {
+        font-size: var(--font-size-sm);
+    }
+
+    .recipe-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .recipe-meta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    /* Ingredient Card - kompakter */
+    .ingredient-card {
+        padding: var(--spacing-md);
+    }
+
+    .ingredient-name {
+        font-size: var(--font-size-base);
+    }
+
+    .ingredient-actions {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .ingredient-actions .btn {
+        width: 100%;
+    }
+
+    /* Tabs - scrollbar verstecken */
+    .tabs,
+    .nav-tabs {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .tabs::-webkit-scrollbar,
+    .nav-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Auth Page - weniger Padding */
+    .auth-page {
+        padding: var(--spacing-md);
+    }
+
+    .auth-box {
+        padding: var(--spacing-md);
+    }
+
+    .auth-title {
+        font-size: var(--font-size-xl);
+    }
+
+    /* Modals - volle Höhe */
+    .modal {
+        max-height: 95vh;
+    }
+
+    .modal-body {
+        max-height: 70vh;
+    }
+
+    /* Theme Dropdown Grid - 3 Spalten */
+    .theme-dropdown-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    /* User Avatar - kleiner */
+    .user-emoji {
+        font-size: 18px;
+    }
+
+    /* Favorite Card - kompakter */
+    .favorite-header {
+        padding: var(--spacing-sm);
+    }
+
+    .favorite-title {
+        font-size: var(--font-size-sm);
+    }
+
+    .favorite-remove-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+
+    /* Profile Card - kompakter */
+    .profile-card {
+        padding: var(--spacing-md);
+    }
+
+    .profile-name {
+        font-size: var(--font-size-base);
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .profile-actions .btn {
+        width: 100%;
+    }
+
+    /* Settings - kompakter */
+    .settings-section {
+        padding: var(--spacing-md);
+    }
+
+    .settings-title {
+        font-size: var(--font-size-lg);
+    }
+
+    /* Form Inputs - größer für Touch */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important; /* Verhindert iOS Auto-Zoom */
+        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    /* Language Toggle - kompakter */
+    .lang-toggle {
+        padding: 4px 8px;
+        font-size: var(--font-size-xs);
+    }
+
+    .lang-icon {
+        font-size: 14px;
+    }
+
+    /* Spice Checkbox - kompakter */
+    .spice-checkbox {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .spice-name {
+        font-size: 12px;
+    }
+
+    .spice-icon {
+        font-size: 1rem;
+    }
+}
+
+/* Extra Small Screens (max-width: 360px) */
+@media (max-width: 360px) {
+    /* Ultra kompakt für sehr kleine Screens */
+    :root {
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.375rem;
+        --spacing-md: 0.625rem;
+        --spacing-lg: 0.875rem;
+        --spacing-xl: 1.25rem;
+    }
+
+    .logo {
+        font-size: var(--font-size-base);
+    }
+
+    .page-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
+
+    /* Recipe Nutrition - 2 Spalten, noch kompakter */
+    .nutrition-value {
+        font-size: var(--font-size-sm);
+    }
+
+    .nutrition-label {
+        font-size: 9px;
+    }
+}
+
+/* Landscape Phones (max-height: 500px) */
+@media (max-height: 500px) and (orientation: landscape) {
+    /* Kompakterer Header im Landscape */
+    .header-content {
+        padding: var(--spacing-xs) 0;
+    }
+
+    /* Modals - weniger Padding */
+    .modal {
+        max-height: 90vh;
+    }
+
+    .modal-body {
+        max-height: 60vh;
+    }
+
+    /* Auth Page - kompakter */
+    .auth-page {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* Touch Optimizations (für alle Touch-Devices) */
+@media (hover: none) and (pointer: coarse) {
+    /* Größere Click-Targets */
+    button,
+    .btn,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Hover-Effekte entfernen (funktionieren nicht auf Touch) */
+    .btn:hover,
+    .card:hover,
+    .ingredient-card:hover {
+        transform: none;
+    }
+
+    /* Active-States statt Hover */
+    .btn:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+
+    .card:active {
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Scrollbars verstecken (Touch-Scrolling) */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: var(--radius-full);
+    }
+}
