@@ -22,6 +22,7 @@ from app.utils.auth import get_current_user
 from app.services.mock_recipe_generator import mock_generator
 from app.services.ai_recipe_generator import ai_generator
 from app.services.pdf_generator import pdf_generator
+from app.services.ingredient_service import reduce_ingredient_quantity
 
 router = APIRouter(prefix="/recipes", tags=["Recipes"])
 
@@ -481,3 +482,52 @@ def export_recipe_as_pdf(
             "Content-Disposition": f'attachment; filename="{filename}"'
         }
     )
+
+
+@router.post("/{recipe_id}/mark-cooked")
+async def mark_recipe_as_cooked(
+    recipe_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Als gekocht markieren - reduziert Zutatenmengen"""
+
+    recipe = db.query(Recipe).filter(
+        Recipe.id == recipe_id,
+        Recipe.user_id == current_user.id
+    ).first()
+
+    if not recipe:
+        raise HTTPException(404, "Rezept nicht gefunden")
+
+    if not recipe.ingredients_json:
+        raise HTTPException(400, "Keine Zutaten vorhanden")
+
+    # Parse Zutaten
+    try:
+        ingredients = json.loads(recipe.ingredients_json)
+    except:
+        raise HTTPException(400, "Ungültige Zutatendaten")
+
+    # Reduziere Mengen
+    results = []
+    for ing in ingredients:
+        name = ing.get("ingredient") or ing.get("name")
+        quantity = ing.get("quantity") or ing.get("amount")
+        unit = ing.get("unit")
+
+        if name and quantity and unit:
+            result = await reduce_ingredient_quantity(
+                user_id=current_user.id,
+                ingredient_name=name,
+                used_quantity=float(quantity),
+                used_unit=unit,
+                db=db
+            )
+            results.append(result)
+
+    return {
+        "message": "Rezept als gekocht markiert",
+        "recipe_name": recipe.name,
+        "ingredients_updated": results
+    }

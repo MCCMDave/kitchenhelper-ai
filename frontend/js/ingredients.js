@@ -418,6 +418,9 @@ const Ingredients = {
         const isExpired = item.expiry_date && UI.isExpired(item.expiry_date);
         const expiryClass = isExpired ? 'expired' : '';
         const emoji = getCategoryEmoji(item.category);
+        const quantityDisplay = item.quantity && item.unit
+            ? `<span class="ingredient-quantity">${item.quantity} ${item.unit}</span>`
+            : '';
 
         return `
             <div class="ingredient-card" data-id="${item.id}">
@@ -425,6 +428,7 @@ const Ingredients = {
                     <span class="ingredient-name">
                         <span class="category-emoji">${emoji}</span>
                         ${UI.escapeHtml(item.name)}
+                        ${quantityDisplay}
                     </span>
                     ${item.category ? `<span class="ingredient-category">${UI.escapeHtml(item.category)}</span>` : ''}
                 </div>
@@ -449,6 +453,23 @@ const Ingredients = {
             title: i18n.t('ingredients.add'),
             fields: [
                 { name: 'name', label: i18n.t('ingredients.name'), required: true, placeholder: i18n.t('ingredients.placeholder'), id: 'add-ingredient-name' },
+                { name: 'quantity', label: '🔢 Menge', type: 'number', placeholder: '500', step: '0.01' },
+                {
+                    name: 'unit',
+                    label: '📏 Einheit',
+                    type: 'select',
+                    options: [
+                        { value: '', label: '- Keine -' },
+                        { value: 'g', label: 'Gramm (g)' },
+                        { value: 'kg', label: 'Kilogramm (kg)' },
+                        { value: 'ml', label: 'Milliliter (ml)' },
+                        { value: 'l', label: 'Liter (l)' },
+                        { value: 'stück', label: 'Stück' },
+                        { value: 'tl', label: 'Teelöffel (TL)' },
+                        { value: 'el', label: 'Esslöffel (EL)' },
+                        { value: 'bund', label: 'Bund' }
+                    ]
+                },
                 {
                     name: 'category',
                     label: i18n.t('ingredients.category'),
@@ -556,6 +577,24 @@ const Ingredients = {
             title: i18n.t('ingredients.edit'),
             fields: [
                 { name: 'name', label: i18n.t('ingredients.name'), required: true, value: item.name },
+                { name: 'quantity', label: '🔢 Menge', type: 'number', value: item.quantity || '', step: '0.01' },
+                {
+                    name: 'unit',
+                    label: '📏 Einheit',
+                    type: 'select',
+                    value: item.unit || '',
+                    options: [
+                        { value: '', label: '- Keine -' },
+                        { value: 'g', label: 'Gramm (g)' },
+                        { value: 'kg', label: 'Kilogramm (kg)' },
+                        { value: 'ml', label: 'Milliliter (ml)' },
+                        { value: 'l', label: 'Liter (l)' },
+                        { value: 'stück', label: 'Stück' },
+                        { value: 'tl', label: 'Teelöffel (TL)' },
+                        { value: 'el', label: 'Esslöffel (EL)' },
+                        { value: 'bund', label: 'Bund' }
+                    ]
+                },
                 {
                     name: 'category',
                     label: i18n.t('ingredients.category'),
@@ -581,6 +620,8 @@ const Ingredients = {
         try {
             const payload = {};
             if (data.name) payload.name = data.name;
+            if (data.quantity !== undefined) payload.quantity = data.quantity ? parseFloat(data.quantity) : null;
+            if (data.unit !== undefined) payload.unit = data.unit || null;
             if (data.category !== undefined) payload.category = data.category || null;
             if (data.expiry_date !== undefined) payload.expiry_date = data.expiry_date || null;
             if (data.is_permanent !== undefined) payload.is_permanent = data.is_permanent;
@@ -726,6 +767,8 @@ const Ingredients = {
         try {
             const payload = {
                 name: data.name,
+                quantity: data.quantity ? parseFloat(data.quantity) : null,
+                unit: data.unit || null,
                 category: data.category || null,
                 expiry_date: data.expiry_date || null,
                 is_permanent: data.is_permanent || false

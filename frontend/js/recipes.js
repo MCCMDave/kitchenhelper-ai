@@ -369,8 +369,49 @@ const Recipes = {
                         </div>
                     ` : ''}
                 </div>
+                <div class="recipe-actions" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-md); margin-top: var(--spacing-md); display: flex; gap: var(--spacing-sm);">
+                    <button class="btn btn-primary" onclick="Recipes.markAsCooked(${recipe.id})" style="flex: 1;">
+                        ✅ Als gekocht markieren
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.open('/recipes/${recipe.id}/export/pdf', '_blank')" style="flex: 1;">
+                        📄 PDF
+                    </button>
+                </div>
             </div>
         `;
+    },
+
+    // Mark recipe as cooked - reduces ingredient quantities
+    async markAsCooked(recipeId) {
+        const confirmed = confirm('Rezept als gekocht markieren? Dies reduziert die verwendeten Zutatenmengen.');
+        if (!confirmed) return;
+
+        try {
+            const response = await api.request(`/recipes/${recipeId}/mark-cooked`, {
+                method: 'POST'
+            });
+
+            console.log('[Recipes] Mark cooked response:', response);
+
+            // Success message with details
+            const updates = response.ingredients_updated || [];
+            const reduced = updates.filter(u => u.status === 'reduced').length;
+            const deleted = updates.filter(u => u.status === 'deleted').length;
+
+            let message = `✅ ${response.recipe_name} als gekocht markiert!\n\n`;
+            if (reduced > 0) message += `📉 ${reduced} Zutaten reduziert\n`;
+            if (deleted > 0) message += `🗑️ ${deleted} Zutaten aufgebraucht`;
+
+            alert(message);
+
+            // Reload ingredients to show updated quantities
+            if (typeof Ingredients !== 'undefined' && Ingredients.load) {
+                await Ingredients.load();
+            }
+        } catch (error) {
+            console.error('[Recipes] Mark cooked error:', error);
+            UI.error('Fehler: ' + error.message);
+        }
     },
 
     // Toggle favorite
