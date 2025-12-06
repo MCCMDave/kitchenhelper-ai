@@ -475,29 +475,32 @@ Katja:  6.801€/Monat (~81.600€/Jahr)
 
 ### 3. **Business-Tier** (für Diabetologen-Praxen, Kliniken)
 
-**Zusätzlicher Tier über PRO:**
+**Zusätzlicher Tier über PRO (sozial verträglich!):**
 
 ```
-BUSINESS (Einzelpraxis):        49€/Monat (1-3 Mitarbeiter)
-BUSINESS+ (Gruppenpraxis):      99€/Monat (4-10 Mitarbeiter)
-ENTERPRISE (Klinik):           299€/Monat (10+ Mitarbeiter)
+BUSINESS (Einzelpraxis):        19,99€/Monat (bis 10 Mitarbeiter)
+BUSINESS+ (Gruppenpraxis):      39,99€/Monat (bis 50 Mitarbeiter)
+ENTERPRISE (Klinik):            79,99€/Monat (unbegrenzt)
 ```
 
 **Features (zusätzlich zu PRO):**
-- ✅ **Unbegrenzte Team-Mitglieder** (statt 5)
+- ✅ **Unbegrenzte Team-Mitglieder** (statt 5 bei PRO)
 - ✅ **Unbegrenzte Patienten**
-- ✅ **Custom Rezept-Import** (Praxis-eigene Rezepte in DB)
-- ✅ **Export für Krankenakten** (FHIR-kompatibel)
-- ✅ **White-Label mit eigenem Logo**
-- ✅ **Steuerlich absetzbar** (Betriebsausgabe)
-- ✅ **Rechnungen mit Umsatzsteuer**
+- ✅ **Rechnungen mit Umsatzsteuer** (steuerlich absetzbar!)
 - ✅ **Service-Level Agreement (SLA): 99,9% Uptime**
-- ✅ **Prioritäts-Support: 24h Response** (nur für BUSINESS+)
+- ✅ **Prioritäts-Support: 24-48h Response**
+- ✅ **Custom Rezept-Import** (Praxis-eigene Rezepte)
+- ✅ **White-Label Option** (+50€/Monat)
 
-**Warum separat von PRO?**
-- PRO (9,99€): Einzelpersonen (Berater, Coaches)
-- BUSINESS (49€+): Firmen/Praxen (steuerlich absetzbar!)
-- Firmen zahlen gerne mehr, wenn sie Rechnung brauchen
+**Warum niedrigere Preise?**
+- PRO (9,99€): Einzelpersonen
+- BUSINESS (19,99€): Kleine Praxen (erschwinglich!)
+- Praxen können es steuerlich absetzen
+- Fokus: Diabetiker helfen, nicht reich werden
+
+**Vergleich zu anderen SaaS:**
+- Doctolib: ~100€/Monat (zu teuer!)
+- KitchenHelper: 19,99€/Monat (erschwinglich)
 
 ---
 
