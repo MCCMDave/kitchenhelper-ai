@@ -6,9 +6,13 @@ import enum
 
 class SubscriptionTier(str, enum.Enum):
     """Subscription Levels"""
-    DEMO = "demo"
+    FREE = "free"
     BASIC = "basic"
     PREMIUM = "premium"
+    PRO = "pro"
+    BUSINESS_SOLO = "business_solo"
+    BUSINESS_TEAM = "business_team"
+    BUSINESS_PRAXIS = "business_praxis"
 
 class User(Base):
     """User Model"""
@@ -22,11 +26,14 @@ class User(Base):
     
     # Subscription
     subscription_tier = Column(
-        Enum(SubscriptionTier), 
-        default=SubscriptionTier.DEMO,
+        Enum(SubscriptionTier),
+        default=SubscriptionTier.FREE,
         nullable=False
     )
     stripe_customer_id = Column(String, nullable=True)
+
+    # Admin Override (alle Features kostenlos)
+    is_admin = Column(Boolean, default=False, nullable=False)
     
     # Email Verification
     email_verified = Column(Boolean, default=False, nullable=False)
@@ -53,9 +60,70 @@ class User(Base):
     @property
     def daily_limit(self) -> int:
         """Tageslimit basierend auf Tier"""
+        if self.is_admin:
+            return 999999  # Admin = unbegrenzt
+
         limits = {
-            SubscriptionTier.DEMO: 3,
-            SubscriptionTier.BASIC: 50,
-            SubscriptionTier.PREMIUM: 999999  # "Unbegrenzt"
+            SubscriptionTier.FREE: 999999,  # Unbegrenzt (aber langsam)
+            SubscriptionTier.BASIC: 999999,
+            SubscriptionTier.PREMIUM: 999999,
+            SubscriptionTier.PRO: 999999,
+            SubscriptionTier.BUSINESS_SOLO: 999999,
+            SubscriptionTier.BUSINESS_TEAM: 999999,
+            SubscriptionTier.BUSINESS_PRAXIS: 999999
         }
-        return limits.get(self.subscription_tier, 3)
+        return limits.get(self.subscription_tier, 999999)
+
+    @property
+    def max_favorites(self) -> int:
+        """Favoriten-Limit basierend auf Tier"""
+        if self.is_admin:
+            return 999999
+
+        limits = {
+            SubscriptionTier.FREE: 10,
+            SubscriptionTier.BASIC: 999999,
+            SubscriptionTier.PREMIUM: 999999,
+            SubscriptionTier.PRO: 999999,
+            SubscriptionTier.BUSINESS_SOLO: 999999,
+            SubscriptionTier.BUSINESS_TEAM: 999999,
+            SubscriptionTier.BUSINESS_PRAXIS: 999999
+        }
+        return limits.get(self.subscription_tier, 10)
+
+    def has_feature(self, feature: str) -> bool:
+        """Prüft ob User Zugriff auf Feature hat"""
+        if self.is_admin:
+            return True  # Admin hat alle Features
+
+        feature_access = {
+            # FREE Tier
+            "recipe_generation": [SubscriptionTier.FREE, SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "basic_nutrition": [SubscriptionTier.FREE, SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "be_calculation": [SubscriptionTier.FREE, SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "pdf_export_favorites": [SubscriptionTier.FREE, SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+
+            # BASIC Tier+
+            "recipe_db": [SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "gi_gl": [SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "pdf_export_all": [SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "shopping_lists": [SubscriptionTier.BASIC, SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+
+            # PREMIUM Tier+
+            "meal_planning": [SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "carb_budget": [SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "advanced_filters": [SubscriptionTier.PREMIUM, SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+
+            # PRO Tier+
+            "api_access": [SubscriptionTier.PRO, SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "team_sharing": [SubscriptionTier.PRO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "white_label": [SubscriptionTier.PRO, SubscriptionTier.BUSINESS_PRAXIS],
+
+            # BUSINESS Tiers
+            "sla_guarantee": [SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "priority_support": [SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+            "invoice_billing": [SubscriptionTier.BUSINESS_SOLO, SubscriptionTier.BUSINESS_TEAM, SubscriptionTier.BUSINESS_PRAXIS],
+        }
+
+        allowed_tiers = feature_access.get(feature, [])
+        return self.subscription_tier in allowed_tiers
