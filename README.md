@@ -114,9 +114,33 @@ For complete documentation, API details, and development guides:
 - [**Development Shortcuts**](docs/SHORTCUTS.md)
 - [**Project Status**](docs/STATUS-REPORT.md)
 
-## 📄 License
+## 📜 License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is dual-licensed under **AGPL-3.0** (GNU Affero General Public License v3.0).
+
+### What this means:
+- ✅ **Free to use, modify, and distribute**
+- ✅ **Modifications must be open-source (AGPL)**
+- ✅ **SaaS deployments must share source code**
+- ❌ **Cannot use for closed-source commercial products**
+
+### Want to use KitchenHelper-AI commercially without AGPL?
+
+We offer **Commercial Licenses** for businesses that need:
+- Closed-source deployment
+- White-label / custom branding
+- No source code sharing requirement
+- Priority support & SLA
+
+**Licensing Options:**
+- **AGPL-3.0 License:** Free (open-source, modifications must be public)
+- **Commercial License:** €5,000/year (closed-source allowed)
+- **White-Label License:** €10,000/year (custom branding, no attribution)
+- **Enterprise License:** Custom pricing (contact us)
+
+For commercial licensing inquiries, please contact: **[your-email@example.com]**
+
+See the [LICENSE](LICENSE) file for full AGPL-3.0 terms.
 
 ## 🤝 Contributing
 
