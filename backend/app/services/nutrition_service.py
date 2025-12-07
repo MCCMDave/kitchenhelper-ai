@@ -291,9 +291,78 @@ class NutritionService:
             # Calculate KE/BE (1 KE = 10g carbs, 1 BE = 12g carbs)
             "ke": round((total["carbs"] / servings) / 10, 1),
             "be": round((total["carbs"] / servings) / 12, 1),
+            # Estimate GI/GL (BASIC Tier+)
+            "gi": self._estimate_gi(ingredients),
+            "gl": round((self._estimate_gi(ingredients) * (total["carbs"] / servings)) / 100, 1),
         }
 
         return per_serving
+
+    def _estimate_gi(self, ingredients: List[Dict[str, Any]]) -> int:
+        """
+        Schätzt Glykämischen Index (GI) für Rezept
+
+        Returns:
+            GI (0-100): <55 niedrig, 55-69 mittel, >70 hoch
+        """
+        # GI-Werte für häufige Zutaten
+        gi_db = {
+            # Niedrig (GI < 55)
+            'gemüse': 15, 'vegetable': 15, 'salat': 10, 'lettuce': 10,
+            'tofu': 15, 'linsen': 30, 'lentils': 30, 'bohnen': 35, 'beans': 35,
+            'quinoa': 53, 'tomate': 15, 'tomato': 15, 'paprika': 15, 'pepper': 15,
+            'zwiebel': 15, 'onion': 15, 'knoblauch': 15, 'garlic': 15,
+            'brokkoli': 10, 'broccoli': 10, 'spinat': 10, 'spinach': 10,
+            'gurke': 15, 'cucumber': 15, 'zucchini': 15, 'pilze': 10, 'mushroom': 10,
+
+            # Proteine (GI ≈ 0)
+            'hähnchen': 0, 'chicken': 0, 'rind': 0, 'beef': 0,
+            'schwein': 0, 'pork': 0, 'lachs': 0, 'salmon': 0,
+            'ei': 0, 'egg': 0, 'fisch': 0, 'fish': 0,
+
+            # Milchprodukte (niedrig)
+            'milch': 31, 'milk': 31, 'käse': 0, 'cheese': 0,
+            'joghurt': 36, 'yogurt': 36, 'quark': 30,
+
+            # Mittel (GI 55-69)
+            'reis': 64, 'rice': 64, 'vollkornbrot': 69, 'wholegrain bread': 69,
+            'banane': 62, 'banana': 62, 'honig': 58, 'honey': 58,
+
+            # Hoch (GI > 70)
+            'kartoffel': 85, 'potato': 85, 'weißbrot': 75, 'white bread': 75,
+            'zucker': 100, 'sugar': 100, 'glukose': 100, 'glucose': 100,
+        }
+
+        total_carbs = 0.0
+        weighted_gi = 0.0
+
+        for ingredient in ingredients:
+            name = ingredient.get("name", "").lower()
+            amount_str = ingredient.get("amount", "100g")
+
+            # Parse Menge
+            amount_match = re.search(r'(\d+(?:\.\d+)?)', amount_str)
+            amount = float(amount_match.group(1)) if amount_match else 100
+
+            # Finde GI-Wert
+            gi_value = 50  # Default: mittel
+            for key, gi in gi_db.items():
+                if key in name:
+                    gi_value = gi
+                    break
+
+            # Hole Nährwerte
+            nutrition = self.get_nutrition_sync(name)
+            carb_amount = nutrition.get("carbs", 0) * (amount / 100)
+
+            # Gewichte GI nach Kohlenhydrat-Anteil
+            weighted_gi += gi_value * carb_amount
+            total_carbs += carb_amount
+
+        if total_carbs == 0:
+            return 0
+
+        return round(weighted_gi / total_carbs)
 
 
 # Global instance
