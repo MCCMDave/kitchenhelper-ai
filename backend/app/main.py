@@ -20,6 +20,8 @@ from app.routes import (
     diabetes,
     meals,
     email,
+    recipe_db_routes,
+    stripe_routes,
 )
 from app.middleware.logger import APIRequestLoggerMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
@@ -89,6 +91,8 @@ app.include_router(faq.router, prefix="/api")
 app.include_router(diabetes.router, prefix="/api")
 app.include_router(meals.router, prefix="/api")
 app.include_router(email.router, prefix="/api")
+app.include_router(recipe_db_routes.router, prefix="/api")
+app.include_router(stripe_routes.router, prefix="/api")
 
 
 # Startup Event

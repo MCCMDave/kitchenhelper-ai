@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     RESEND_FROM_EMAIL: str = "KitchenHelper <noreply@yourdomain.com>"  # Change after domain verification
     RESEND_REPLY_TO: str = "studio.del.melucio@gmail.com"  # Studio email for gaming/entertainment
     FRONTEND_BASE_URL: str = "http://192.168.2.54:8081"  # Frontend URL for email links
+    FRONTEND_URL: str = "http://192.168.2.54:8081"  # Alias for compatibility
+
+    # Stripe (Payment)
+    STRIPE_SECRET_KEY: str = ""  # Stripe Secret Key (get from stripe.com)
+    STRIPE_PUBLISHABLE_KEY: str = ""  # Stripe Publishable Key
+    STRIPE_WEBHOOK_SECRET: str = ""  # Stripe Webhook Secret (for webhook signature verification)
 
     @property
     def cors_origins(self) -> List[str]:
